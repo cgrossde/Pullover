@@ -1,0 +1,22 @@
+{
+  "name": "pullover",
+  "version": "0.1.0",
+  "description": "A pushover desktop client",
+  "main": "index.html",
+  "author": "Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)",
+  "license": "GPL",
+  "dependencies": {
+    "moment": "^2.8.4",
+    "obs": "^0.11.2",
+    "promise": "^6.0.1",
+    "request": "^2.48.0"
+  },
+  "window": {
+    "title": "Pullover",
+    "icon": "images/icon_big.png",
+    "toolbar": false,
+    "frame": false,
+    "width": 450,
+    "height": 330
+  }
+}

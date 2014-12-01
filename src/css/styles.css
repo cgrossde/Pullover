@@ -1,0 +1,129 @@
+body {
+	/*background-color: #02A3EF;*/
+	background-color: #fafafa;
+	-webkit-user-select: none;
+}
+
+#modal {
+	z-index: 1000;
+	position: absolute;
+	top: 44px;
+	width: 450px;
+	height: 286px;
+	background-color: rgba(0,0,0,0.8);
+}
+
+.modal-info {
+	z-index: 1000;
+	margin: 60px 50px 0 50px;
+	background-color: #EEE;
+	border-radius: 5px;
+	padding: 10px 0;
+}
+
+h3.modal-title {
+	color: #333;
+	margin-bottom: 10px;
+}
+
+.modal-spinner {
+	z-index: 1000;
+	position: absolute;
+	top: 160px;
+	left: 209px;
+	margin: 0;
+}
+
+.app-container {
+	height: 286px;
+	overflow: hidden;
+}
+
+div.titlebar {
+	background-color: #02A3EF;
+	-webkit-app-region: drag;
+	position: relative;
+	cursor: pointer;
+}
+
+img.logo {
+	margin: 7px;
+	height: 30px;
+}
+
+.close-button, .status-button, .info-button {
+	font-size: 25px;
+	top: 7px;
+	cursor: pointer;
+}
+
+.close-button {
+	position: absolute;
+	right: 7px;
+	border: 0;
+	padding: 0;
+	background: transparent;
+}
+
+.info-button {
+	position: absolute;
+	right: 43px;
+}
+
+.status-button {
+	position: absolute;
+	right: 83px;
+}
+
+.status-button span.glyphicon-signal {
+	/*color: #0FFF3C;*/
+	color: #12EA3B;
+}
+
+.status-button span.glyphicon-signal:active {
+	color: #14FF41;
+}
+
+.status-button span.glyphicon-flash {
+	color: #FF0000;
+}
+
+.status-button span.glyphicon-flash:active {
+	color: #FF3C3C;
+}
+
+.status-exit-button {
+	margin-bottom: 10px;
+}
+
+.show-devtools-button, .logout-button {
+	cursor: pointer;
+}
+
+.goto-login-link, .goto-deviceRegistration-link, .reconnect-link {
+	cursor: pointer;
+}
+
+h1,h2,h3 {
+	color: #02A3EF;
+	margin-top: 15px;
+}
+
+#login, #deviceRegistration, #status, #info, #modal {
+	text-align: center;
+	width: 450px;
+	overflow: hidden;
+}
+
+#status table th {
+	width: 170px;
+}
+
+input.form-control {
+	display: inline;
+	-webkit-user-select: text;
+}
+
+button.login-button, button.deviceRegistration-button, button.status-exit-button {
+	width: 100%;
+}

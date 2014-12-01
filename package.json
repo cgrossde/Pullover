@@ -1,0 +1,14 @@
+{
+  "name": "pullover-build",
+  "version": "0.1.0",
+  "description": "Builds the pushover desktop client",
+  "main": "build.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)",
+  "license": "GPL",
+  "dependencies": {
+    "node-webkit-builder": "^0.3.0"
+  }
+}
