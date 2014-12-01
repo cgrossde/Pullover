@@ -1,6 +1,8 @@
 # Pullover
 *The unofficial multi-platform Pushover desktop client.*
 
+![Pullover Demo](https://raw.githubusercontent.com/cgrossde/Pullover/master/res/Demo.gif)
+
 ## Why was this App created?
 
 I discovered Pushover in mid November 2014 and was really excited. The only thing missing was a decent desktop client. At the time there was only a rudimentary Notification Center integration for Mac. But I was missing the following features:
@@ -11,16 +13,16 @@ I discovered Pushover in mid November 2014 and was really excited. The only thin
 
 ## Installation - prebuilt binaries
 
-Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a demo period if you want to try it out first). Without this license Pullover will not work.
+Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trail period if you want to try it out first). **Without this license Pullover will not work.**
 
 Then download the precompiled binarys:
 
-- **Windows (v0.1.0):** []
-- **Mac 10.8+ (v0.1.0):** []
-- **Linux x32 (v0.1.0):** []
-- **Linux x64 (v0.1.0):** []
+- **Windows (v0.1.0):** [Pullover_0.1.0_win.zip](https://www.dropbox.com/s/ad6z5dpjieugy32/Pullover_0.1.0_win.zip?dl=1)
+- **Mac 10.8+ (v0.1.0):** [Pullover.app](https://www.dropbox.com/sh/42pl10kjqw7q7ha/AADRP7MBfh1Z85u5NnpzhFfDa?dl=1)
+- **Linux x32 (v0.1.0):** [Pullover_0.1.0_linux32.zip](https://www.dropbox.com/s/y4lvd63dqapojty/Pullover_0.1.0_linux32.zip?dl=1)
+- **Linux x64 (v0.1.0):** [Pullover_0.1.0_linux64.zip](https://www.dropbox.com/s/fy572wm7lsffknn/Pullover_0.1.0_linux64.zip?dl=1)
 
-**Please note:** This App is an alpha version. For now only the Mac version is tested since that's my main operating system. However it should also run under Windows / Linux. If you find bugs or the app crashes under Win/Linux please create an issue and I will look into it.
+**Please note:** This App is in an **early alpha** state. For now only the Mac version is tested since that's my main operating system. However it should also run under Windows / Linux. If you find bugs or the app crashes under Win/Linux please create an issue and I will look into it.
 
 ## Build your own
 
@@ -56,18 +58,18 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 
 ## License
 
-Pullover - The unofficial Pushover desktop client
-Copyright (C) 2014  Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Pullover - The unofficial Pushover desktop client
+    Copyright (C) 2014  Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.

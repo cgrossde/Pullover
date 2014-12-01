@@ -121,8 +121,6 @@ function notify(title, text, url, iconPath) {
 	}
 }
 
-notify('NFL-Release', 'Pats vs Broncos 720p', 'http://pushover.net', 'images/nfl3.png');
-
 function showLogin() {
 	if($('#login').is(':hidden')) {
 		hideUiComponents();
