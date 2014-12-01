@@ -9,6 +9,7 @@
   "author": "Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)",
   "license": "GPL",
   "dependencies": {
+    "archiver": "^0.13.0",
     "node-webkit-builder": "^0.3.0"
   }
 }

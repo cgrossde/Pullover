@@ -2,8 +2,11 @@
 var os = require('os');
 var obs = require('obs');
 var gui = require('nw.gui');
+var http = require('https');
+var semver = require('semver');
 var moment = require('moment');
 var openClient = require('./lib/pushover-client');
+var packageInfo = require('./package');
 
 // Setup window, menubar and tray
 var win = gui.Window.get();
@@ -630,6 +633,32 @@ function hideModal() {
 	$('.modal-additional-button').remove();
 }
 
+function versionCheck() {
+	var repoUrl = "https://raw.githubusercontent.com/cgrossde/Pullover/master/package.json";
+	http.get(repoUrl, function(res) {
+		var body = '';
+
+	    res.on('data', function(chunk) {
+	        body += chunk;
+	    });
+
+	    res.on('end', function() {
+	        var latestInfo = JSON.parse(body);
+	        console.log("Got response: ", latestInfo);
+	        if(semver.lt(packageInfo.version, latestInfo.version)) {
+	        	notify('Pullver Update','New Update available: v' + latestInfo.version + '. You are using v' + packageInfo.version);
+	        	$('.info-version').text(packageInfo.version + ' (outdated)')
+	        	.parent().after('<tr>'+
+                  '<th>Latest Version</th>'+
+                  '<td>'+latestInfo.version+'</td>'+
+                '</tr>');
+	        }
+	    });
+	}).on('error', function(e) {
+	      console.log("Version check failed: ", e);
+	});
+}
+
 // Login to Pushover
 $(document).ready(function() {
 	// Show app-container
@@ -661,12 +690,16 @@ $(document).ready(function() {
 	$('.github-issue-link').on('click', function() {
 		gui.Shell.openExternal('https://github.com/cgrossde/Pullover/issues');
 	});
+	// App version
+	$('.info-version').text(packageInfo.version);
 
 	// If not logged in or device not registered, show app window
 	// else just leave it in tray
 	if(! isLoggedIn || ! isDeviceRegistered()) {
 		showWindow();
 	}
+	// Update checker
+	versionCheck();
 	hideModal();
 	// Start App
 	app();
