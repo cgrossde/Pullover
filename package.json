@@ -1,6 +1,6 @@
 {
   "name": "pullover-build",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Builds the pushover desktop client",
   "main": "build.js",
   "scripts": {

@@ -154,10 +154,6 @@ function showInfo() {
 		hideUiComponents();
 		$('#info').fadeIn();
 	}
-	var onClickFunction = function() {
-		$('.info-button').off().on('click', app);
-	};
-	$('.info-button').off().on('click', onClickFunction);
 }
 
 function showDeviceRegistration() {

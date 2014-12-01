@@ -13,7 +13,7 @@ I discovered Pushover in mid November 2014 and was really excited. The only thin
 
 ## Installation - prebuilt binaries
 
-Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trail period if you want to try it out first). **Without this license Pullover will not work.**
+Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
 Then download the precompiled binarys:
 
