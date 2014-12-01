@@ -20,6 +20,7 @@ var reconnectCountdown = null;
 var lastConnect = null;			// Date of last reconnect
 var connectionTimeout = 1000*35;	// After x seconds without keepAlive from server we asume
 									// to be offline(updateStatus) and try to reconnect
+var webSocketClosedByApp = false;			// Try to check if webSocket was closed because of invalid device
 // Connection status
 var CONN_DISCONNECTED = 0;
 var CONN_CONNECTED = 1;
@@ -366,6 +367,7 @@ function openWebSocket() {
 		lastConnect = moment().toISOString();
 		curReconnects++;
 		console.log('SOCKET: CREATE NEW');
+		webSocketClosedByApp = false;
 		webSocket = new WebSocket('wss://client.pushover.net/push:443');
 
 		webSocket.onopen = function () {
@@ -393,11 +395,17 @@ function openWebSocket() {
 			connectionStatus(CONN_DISCONNECTED);
 			console.log('SOCKET CLOSED');
 			webSocket = null;
-			// Reconnect
-			reconnectWebSocket();
+			if(! webSocketClosedByApp) {
+				console.log('Websocket was closed by API ENDPOINT !!! ');
+				webSocketClosedByAPIEndpoint();
+			} else {
+				// Reconnect
+				reconnectWebSocket();
+			}
 		};
 
 		webSocket.onerror = function(event) {
+			webSocketClosedByApp = true;
 			connectionStatus(CONN_DISCONNECTED);
 			console.log('SOCKET ERROR', event);
 			webSocket = null;
@@ -405,6 +413,29 @@ function openWebSocket() {
 			reconnectWebSocket();
 		};
   	}
+}
+
+function webSocketClosedByAPIEndpoint() {
+	// Notify user that he might have to relogin
+	// and stop reconnects
+	showModal('Login failed', 'Login was rejected by Pushover API. This device might have been removed from your account.</br>' +
+		'Please try to relogin.', 'danger', [
+			{
+				text: 'Logout',
+				func: logout
+			},
+			{
+				text: 'Reconnect',
+				func: forceReconnect
+			}
+		]);
+	// Stop reconnects
+	disableCountdown();
+	clearTimeout(reconnectLater);
+	reconnectLater = false;
+	closeWebSocket();
+	// Show pushover window
+	showWindow();
 }
 
 
@@ -463,6 +494,7 @@ function forceReconnect() {
 
 function closeWebSocket() {
 	if (webSocket !== null) {
+		webSocketClosedByApp = true;
 		webSocket.close();
 		webSocket = null;
 	}
@@ -573,20 +605,33 @@ function showSpinner() {
 	$('.modal-spinner').fadeIn();
 }
 
-function showModal(title, text, type) {
+function showModal(title, text, type, addButtonArray) {
+	$('.modal-additional-button').remove();
 	var textClass = (type) ? 'modal-text text-'+type : 'modal-text';
 	$('#modal').hide().fadeIn();
 	$('.modal-info').show();
 	$('.modal-spinner').hide();
 	$('.modal-title').text(title);
-	$('.modal-text').text(text).removeClass().addClass(textClass);
+	$('.modal-text').html(text).removeClass().addClass(textClass);
 	$('.modal-button').off().on('click', hideModal);
+	if(addButtonArray !== undefined) {
+		$(addButtonArray).each(function(index, button) {
+			$('.modal-button').parent()
+			.append('<button type="button" class="btn btn-default modal-additional-button modal-additional-button'+index+'">'+button.text+'</button>')
+			.find('.modal-additional-button'+index)
+			.on('click', function() {
+				button.func();
+				hideModal();
+			});
+		});
+	}
 }
 
 function hideModal() {
 	$('#modal').fadeOut();
 	$('.modal-info').hide();
 	$('.modal-spinner').hide();
+	$('.modal-additional-button').remove();
 }
 
 // Login to Pushover
@@ -611,6 +656,15 @@ $(document).ready(function() {
 	// Set initial connection status to disconnected
 	connectionStatus(CONN_DISCONNECTED);
 	updateSyncStatus();
+
+	// Github link
+	$('.github-link').on('click', function() {
+		gui.Shell.openExternal('https://github.com/cgrossde/Pullover');
+	});
+	// Issue link
+	$('.github-issue-link').on('click', function() {
+		gui.Shell.openExternal('https://github.com/cgrossde/Pullover/issues');
+	});
 
 	// If not logged in or device not registered, show app window
 	// else just leave it in tray
