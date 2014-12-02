@@ -59,6 +59,7 @@ img.logo {
 	font-size: 25px;
 	top: 7px;
 	cursor: pointer;
+	-webkit-app-region: no-drag;
 }
 
 .close-button {

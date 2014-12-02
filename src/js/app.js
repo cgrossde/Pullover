@@ -111,12 +111,23 @@ function quitApp() {
 
 // Notification function
 // Usage: notify('NFL-Release', 'Pats vs Broncos 720p usw', 'http://google.com', 'images/nfl3.png');
-function notify(title, text, url, iconPath) {
+function notify(title, text, url, iconPath, retryOnError) {
+	var retryOnError = (retryOnError !== undefined) ? retryOnError : true;
 	var options = {};
 	options.body = text;
 	if(iconPath) options.icon = iconPath;
 
 	var notice = new Notification(title, options);
+	notice.onerror = function(error) {
+		console.log('ERROR displaying notification (retry='+retryOnError+')', error);
+		if(retryOnError) {
+			// Try one more time in 1 sec
+			setTimeout(function() {
+				console.log('Notification retry');
+				notify(title, text, url, iconPath, false);
+			}, 1000);
+		}
+	};
 
 	if(url !== null) {
 		notice.onclick = function(event) {
@@ -340,7 +351,7 @@ function getMessages() {
 				var title = message.title || message.app;
 				var url = (message.url) ? message.url : null;
 				var iconPath = 'https://api.pushover.net/icons/' + message.icon + '.png';
-				notify(title, message.message, url, iconPath);
+				notify(title, message.message, url, iconPath, true);
 			});
 			// Acknowledge receiving messages
 			var options = {
@@ -646,7 +657,10 @@ function versionCheck() {
 	        var latestInfo = JSON.parse(body);
 	        console.log("Got response: ", latestInfo);
 	        if(semver.lt(packageInfo.version, latestInfo.version)) {
-	        	notify('Pullver Update','New Update available: v' + latestInfo.version + '. You are using v' + packageInfo.version);
+	        	notify('Pullver Update',
+	        		'New Update available: v' + latestInfo.version + '. You are using v' + packageInfo.version,
+	        		'https://github.com/cgrossde/Pullover'
+	        	);
 	        	$('.info-version').text(packageInfo.version + ' (outdated)')
 	        	.parent().after('<tr>'+
                   '<th>Latest Version</th>'+

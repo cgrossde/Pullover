@@ -6,7 +6,6 @@ var nwOptions = {
     files: './src/**/**', // use the glob format
     buildDir: './bin',
     macIcns: './res/icon.icns',
-    macCredits: './res/credits.html',
     winIco: './res/icon.ico',
     macPlist: {
         CFBundleIdentifier: 'de.chris-labs.pullover',

@@ -17,10 +17,10 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 
 Then download the precompiled binarys:
 
-- **Windows (v0.1.1):** [Pullover_0.1.1_win.zip](http://sourceforge.net/projects/pullover/files/0.1.1/Pullover_0.1.1_win.zip/download)
-- **Mac 10.8+ (v0.1.1):** [Pullover.app](http://sourceforge.net/projects/pullover/files/0.1.1/Pullover_0.1.1_osx.zip/download)
-- **Linux x32 (v0.1.1):** [Pullover_0.1.1_linux32.zip](http://sourceforge.net/projects/pullover/files/0.1.1/Pullover_0.1.1_linux32.zip/download)
-- **Linux x64 (v0.1.1):** [Pullover_0.1.1_linux64.zip](http://sourceforge.net/projects/pullover/files/0.1.1/Pullover_0.1.1_linux64.zip/download)
+- **Windows (v0.1.2):** [Pullover_0.1.2_win.zip](http://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_win.zip/download)
+- **Mac 10.8+ (v0.1.2):** [Pullover.app](http://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_osx.zip/download)
+- **Linux x32 (v0.1.2):** [Pullover_0.1.2_linux32.zip](http://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_linux32.zip/download)
+- **Linux x64 (v0.1.2):** [Pullover_0.1.2_linux64.zip](http://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_linux64.zip/download)
 
 **Please note:** This App is in an **early alpha** state. For now only the Mac version is tested since that's my main operating system. However it should also run under Windows / Linux. If you find bugs or the app crashes under Win/Linux please create an issue and I will look into it.
 
