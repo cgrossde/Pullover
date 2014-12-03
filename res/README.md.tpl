@@ -1,4 +1,4 @@
-# Pullover v0.1.2
+# Pullover v{{version}}
 *The unofficial multi-platform Pushover desktop client.*
 
 ![Pullover Demo](https://raw.githubusercontent.com/cgrossde/Pullover/master/res/Demo.gif)
@@ -16,11 +16,8 @@ I discovered Pushover in mid November 2014 and was really excited. The only thin
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
 Then download the precompiled binarys:
-
-* **Windows (v0.1.2):** [Pullover_0.1.2_win.zip](https://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_win.zip/download)
-* **Mac OS 10.8+ (v0.1.2):** [Pullover_0.1.2_osx.zip](https://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_osx.zip/download)
-* **Linux x64 (v0.1.2):** [Pullover_0.1.2_linux64.zip](https://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_linux64.zip/download)
-* **Linux x32 (v0.1.2):** [Pullover_0.1.2_linux32.zip](https://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_linux32.zip/download)
+{% for download in downloads %}
+* **{{download.platformName}} (v{{version}}):** [{{download.fileName}}]({{download.url}}){% endfor %}
 
 **Please note:** This App is in an **early alpha** state. For now only the Mac version is tested since that's my main operating system. However it should also run under Windows / Linux. If you find bugs or the app crashes under Win/Linux please create an issue and I will look into it.
 
