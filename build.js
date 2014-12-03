@@ -29,18 +29,6 @@ program
         updateReadme(files);
     });
   });
-program
-    .command('updateReadme')
-    .description('Updates readme')
-    .action(function() {
-        var files = [
-            "Pullover_0.1.2_linux32.zip",
-            "Pullover_0.1.2_linux64.zip",
-            "Pullover_0.1.2_osx.zip",
-            "Pullover_0.1.2_win.zip"
-        ];
-        updateReadme(files);
-    });
 
 program.parse(process.argv);
 
