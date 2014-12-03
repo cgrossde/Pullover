@@ -1,4 +1,4 @@
-# Pullover v{{version}}
+# Pullover
 *The unofficial multi-platform Pushover desktop client.*
 
 ![Pullover Demo](https://raw.githubusercontent.com/cgrossde/Pullover/master/res/Demo.gif)
@@ -22,12 +22,16 @@ Then download the precompiled binarys:
 **Please note:** This App is in an **early alpha** state. For now only the Mac version is tested since that's my main operating system. However it should also run under Windows / Linux. If you find bugs or the app crashes under Win/Linux please create an issue and I will look into it.
 
 ## Build your own
+You can create all builds with Mac OS if you have `wine` installed.
 
 1. Install dependencies of the build process: `npm install`
 2. Install dependencies of Pullover: `cd src && npm install`
-3. Open `build.js` and adapt `platforms:` to your preference
-4. Return to root dir and build binaries with: `node build.js`
-5. If the build process was successful, you can find the binaries in `bin`
+3. Open `config/buildConf.json.sample` and adapt `platforms:` to your preference
+4. Rename `config/buildConf.json.sample` to `config/buildConf.json`
+5. Return to root dir and build binaries with: `node build build`
+6. If the build process was successful, you can find the binaries in `bin/pullover/[platform]`
+7. If you want to package them (`.zip`/`.dmg`), execute `node build createDist`
+8. The distributables will be placed in `bin/deploy`
 
 ### Development
 

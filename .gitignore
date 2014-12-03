@@ -3,4 +3,4 @@ cache
 bin
 *.nw
 npm-debug.log
-buildConf.json
+config/buildConf.json

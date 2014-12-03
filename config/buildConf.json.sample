@@ -1,0 +1,25 @@
+{
+	"nwbuild": {
+		"platforms": ["osx", "win", "linux32"],
+	    "files": "./src/**/**",
+	    "buildDir": "./bin",
+	    "macIcns": "./res/icon.icns",
+	    "winIco": "./res/icon.ico",
+	    "macPlist": {
+	        "CFBundleIdentifier": "de.chris-labs.pullover",
+	        "CFBundleDisplayName": "Pullover",
+	        "CFBundleName": "Pullover"
+	    }
+	},
+	"sourceforge": {
+		"sftp": {
+			"port": 22,
+			"host": "frs.sourceforge.net",
+			"username": "",
+			"password": ""
+		},
+		"project": ""
+	},
+
+	"deployDir": "./bin/deploy"
+}

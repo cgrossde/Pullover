@@ -1,0 +1,14 @@
+{
+	"title": "Pullover",
+
+	"icon": "../res/icon.icns",
+
+	"background": "../res/dmg_bg.png",
+
+	"icon-size": 80,
+
+	"contents": [
+		{ "x": 127, "y": 220, "type": "file", "path": "../bin/pullover/osx/pullover.app" },
+		{ "x": 326, "y": 217, "type": "link", "path": "/Applications" }
+	]
+ }
