@@ -6,8 +6,32 @@ var http = require('https');
 var semver = require('semver');
 var moment = require('moment');
 var Promise = require('promise');
+var Autostart = require('./lib/autostart');
+var autostart = new Autostart('Pullover');
 var openClient = require('./lib/pushover-client');
 var packageInfo = require('./package');
+
+// Catch uncaught exceptions
+// HTML/JS
+window.addEventListener('error' ,function(errEvent){
+    var m;
+    m = 'uncaughtException: '  +
+        errEvent.message + '\nfilename:"' +
+        (errEvent.filename ? errEvent.filename : 'app.js') +
+        '", line:' + errEvent.lineno;
+    // show any errors early
+    document.write('<pre><h2>' +
+        m + '</h2><div style="color:white;background-color:red">' +
+        errEvent.error.stack + '</div></pre>'
+    );
+    alert(m);
+});
+// Process
+process.on('uncaughtException' ,function(err){
+        console.error('uncaughtException:', err);
+        console.error(err.stack);
+        alert(l10n.uncaughtException  + err);
+    });
 
 // Setup window, menubar and tray
 var win = gui.Window.get();
@@ -176,6 +200,10 @@ function showSettings() {
 		hideUiComponents();
 		$('#settings').fadeIn();
 	}
+	autostart.isSet().then(function(active) {
+		console.log('Autorun is: ' + active);
+		$('.stettings-startup').prop('checked', active);
+	});
 }
 
 function showDeviceRegistration() {
@@ -681,108 +709,20 @@ function versionCheck() {
 
 function runOnStartupToggle() {
 	var checked = $('.stettings-startup').prop('checked');
-	if(os.platform() === 'darwin') {
+	if(autostart.isPlatformSupported() === false) {
 		showModal("Not supported", "This operation is not supported for your platform ("+os.platform()+")");
-	}
-
-	else if(os.platform().indexOf('win') === 0) {
+	} else {
 		showSpinner();
-	    if(checked) {
-	    	winRegAutorunEnable().then(hideModal);
-	    } else {
-	    	winRegAutorunDisable().then(hideModal);
-	    }
-	}
-
-	else {
-		showModal("Not supported", "This operation is not supported for your platform ("+os.platform()+")");
+		autostart.isSet().then(function(autostartEnabled) {
+			if(autostartEnabled) {
+				autostart.disable(hideModal);
+			} else {
+				autostart.enable(hideModal);
+			}
+		});
 	}
 }
 
-function isAutorunSet() {
-	return new Promise(function(resolve, reject) {
-		if(os.platform() === 'darwin') {
-			resolve(false);
-		}
-
-		else if(os.platform().indexOf('win') === 0) {
-			winRegIsAutorunSet().then(resolve);
-		}
-
-		else {
-			resolve(false);
-		}
-	});
-}
-
-// Helper function to execute and log out child process
-var spawnProcess = function(command, args, options, callback) {
-    var spawn = require('child_process').spawn;
-    var process = spawn(command, args, options),
-        err = false,
-		text = '',
-		errText = '';
-
-    process.stdout.on('data', function(data) {
-		text += data.toString();
-    });
-
-    process.stderr.on('data', function(data) {
-        err = true;
-        errText += data.toString();
-    });
-
-    if (typeof callback === 'function') {
-        process.on('exit', function(exitCode) {
-
-            if (err || exitCode !== 0) {
-                return callback(true, errText);
-            } else {
-            	return callback(false, text);
-            }
-        });
-    }
-};
-
-function winRegIsAutorunSet() {
-	return new Promise(function(resolve, reject) {
-		spawnProcess('cmd',
-			['/C','REG', 'QUERY', 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run','/v','Pullover'],
-			{}, function(err, res) {
-				if(err) {
-					resolve(false);
-				} else {
-					resolve(true);
-				}
-		});
-	});
-}
-
-function winRegAutorunEnable() {
-	return new Promise(function(resolve, reject) {
-		spawnProcess('cmd', ['/C','REG', 'ADD', 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run','/f','/v','Pullover','/t','REG_SZ','/d', process.execPath],
-			{}, function(err, res) {
-				if(err) {
-					resolve(false);
-				} else {
-					resolve(true);
-				}
-		});
-	});
-}
-
-function winRegAutorunDisable() {
-	return new Promise(function(resolve, reject) {
-		spawnProcess('cmd', ['/C','REG', 'DELETE', 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run','/f','/v','Pullover'],
-			{}, function(err, res) {
-				if(err) {
-					resolve(false);
-				} else {
-					resolve(true);
-				}
-		});
-	});
-}
 
 // Login to Pushover
 $(document).ready(function() {
@@ -820,10 +760,6 @@ $(document).ready(function() {
 
 	// Run on startup
 	$('.stettings-startup').on('change', runOnStartupToggle);
-	isAutorunSet().then(function(active) {
-		console.log('Autorun is: ' + active);
-		$('.stettings-startup').prop('checked', active);
-	});
 
 	// If not logged in or device not registered, show app window
 	// else just leave it in tray
@@ -838,3 +774,5 @@ $(document).ready(function() {
 	// Start App
 	app();
 });
+
+

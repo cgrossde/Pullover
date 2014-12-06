@@ -6,6 +6,7 @@
   "author": "Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)",
   "license": "GPL",
   "dependencies": {
+    "applescript": "^0.2.1",
     "moment": "^2.8.4",
     "obs": "^0.11.2",
     "promise": "^6.0.1",
