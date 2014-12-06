@@ -28,7 +28,7 @@ var connectionTimeout = 1000*35;	// After x seconds without keepAlive from serve
 									// to be offline(updateStatus) and try to reconnect
 var webSocketClosedByApp = false;	// Try to check if webSocket was closed because of invalid device
 var webSocketRetryAfterAPIClose = true;
-var notifyTimeout = 750;			// Don't show all messages at once, or some will not be seen
+var notifyTimeout = 1500;			// Don't show all messages at once, or some will not be seen
 // Connection status
 var CONN_DISCONNECTED = 0;
 var CONN_CONNECTED = 1;
