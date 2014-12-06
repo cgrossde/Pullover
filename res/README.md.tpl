@@ -35,12 +35,10 @@ You can create all builds with Mac OS if you have `wine` installed.
 
 ### Development
 
-There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install `node-webkit-builder` and run Pullover directy:
+There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install `node-webkit-builder` and run the `build` script:
 
     npm install -g node-webkit-builder
-    nwbuild -r src
-
-You might need to run `sudo nwbuild -r src` once, because the cache directory where `nwbuild` stores it's copy of `node-webkit` is not writable to your user.
+    node build run
 
 ## Contributing
 

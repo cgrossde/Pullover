@@ -1,4 +1,4 @@
-# Pullover v0.1.2
+# Pullover
 *The unofficial multi-platform Pushover desktop client.*
 
 ![Pullover Demo](https://raw.githubusercontent.com/cgrossde/Pullover/master/res/Demo.gif)
@@ -17,29 +17,30 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 
 Then download the precompiled binarys:
 
-* **Windows (v0.1.2):** [Pullover_0.1.2_win.zip](https://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_win.zip/download)
-* **Mac OS 10.8+ (v0.1.2):** [Pullover_0.1.2_osx.zip](https://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_osx.zip/download)
-* **Linux x64 (v0.1.2):** [Pullover_0.1.2_linux64.zip](https://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_linux64.zip/download)
-* **Linux x32 (v0.1.2):** [Pullover_0.1.2_linux32.zip](https://sourceforge.net/projects/pullover/files/0.1.2/Pullover_0.1.2_linux32.zip/download)
+* **Windows (v0.2.0):** [Pullover_0.2.0_Installer.exe](https://sourceforge.net/projects/pullover/files/0.2.0/Pullover_0.2.0_Installer.exe/download)
+* **Mac OS 10.8+ (v0.2.0):** [Pullover.dmg](https://sourceforge.net/projects/pullover/files/0.2.0/Pullover.dmg/download)
+* **Linux x32 (v0.2.0):** [Pullover_0.2.0_linux32.zip](https://sourceforge.net/projects/pullover/files/0.2.0/Pullover_0.2.0_linux32.zip/download)
 
 **Please note:** This App is in an **early alpha** state. For now only the Mac version is tested since that's my main operating system. However it should also run under Windows / Linux. If you find bugs or the app crashes under Win/Linux please create an issue and I will look into it.
 
 ## Build your own
+You can create all builds with Mac OS if you have `wine` installed.
 
 1. Install dependencies of the build process: `npm install`
 2. Install dependencies of Pullover: `cd src && npm install`
-3. Open `build.js` and adapt `platforms:` to your preference
-4. Return to root dir and build binaries with: `node build.js`
-5. If the build process was successful, you can find the binaries in `bin`
+3. Open `config/buildConf.json.sample` and adapt `platforms:` to your preference
+4. Rename `config/buildConf.json.sample` to `config/buildConf.json`
+5. Return to root dir and build binaries with: `node build build`
+6. If the build process was successful, you can find the binaries in `bin/pullover/[platform]`
+7. If you want to package them (`.zip`/`.dmg`), execute `node build createDist`
+8. The distributables will be placed in `bin/deploy`
 
 ### Development
 
-There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install `node-webkit-builder` and run Pullover directy:
+There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install `node-webkit-builder` and run the `build` script:
 
     npm install -g node-webkit-builder
-    nwbuild -r src
-
-You might need to run `sudo nwbuild -r src` once, because the cache directory where `nwbuild` stores it's copy of `node-webkit` is not writable to your user.
+    node build run
 
 ## Contributing
 
