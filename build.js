@@ -43,12 +43,6 @@ program
     .description('Run app')
     .action(runApp);
 
-// TEST Windows installer
-program
-    .command('winInst')
-    .description('Windows installer')
-    .action(createWindowsInstaller);
-
 program.parse(process.argv);
 
 
@@ -90,50 +84,51 @@ function createDistributables() {
     return new Promise(function(resolve, reject) {
         var deploymentPath = buildConf.deployDir;
         var version = packageInfo.version;
-        // Zip files for deployment to sourceforge
-        if(! fs.existsSync(deploymentPath)){
+        // Clear deploy folder
+        del([buildConf.deployDir], function() {
+            // Create deploy folder
             fs.mkdirSync(deploymentPath);
-        }
-        console.log('Start packaging for distribution ...');
-        async.map(buildConf.nwbuild.platforms, function(platform, done) {
-            var path = './bin/pullover/' + platform;
-            // DMG?
-            if(platform === 'osx') {
-                createDMG().then(done);
-                return;
-            }
-            // Windows installer?
-            else if(platform === 'win') {
-                createWindowsInstaller().then(done);
-                return;
-            }
-            // Zip everything else
-            var zipName = 'Pullover_' + version + '_' + platform + '.zip';
+            console.log('Start packaging for distribution ...');
+            async.map(buildConf.nwbuild.platforms, function(platform, done) {
+                var path = './bin/pullover/' + platform;
+                // DMG?
+                if(platform === 'osx') {
+                    createDMG().then(done);
+                    return;
+                }
+                // Windows installer?
+                else if(platform === 'win') {
+                    createWindowsInstaller().then(done);
+                    return;
+                }
+                // Zip everything else
+                var zipName = 'Pullover_' + version + '_' + platform + '.zip';
 
-            var zipPath = deploymentPath + '/' + zipName;
-            if(fs.existsSync(zipPath)){
-                console.log(zipPath + ' already existed. Deleting it.');
-                fs.unlinkSync(zipPath);
-            }
-            var output = fs.createWriteStream(zipPath);
-            var archive = archiver('zip');
-            output.on('close', function () {
-                console.log(zipName + ' done. ' + Math.floor(archive.pointer() / 1024 / 1024) + ' MB');
-                done();
+                var zipPath = deploymentPath + '/' + zipName;
+                if(fs.existsSync(zipPath)){
+                    console.log(zipPath + ' already existed. Deleting it.');
+                    fs.unlinkSync(zipPath);
+                }
+                var output = fs.createWriteStream(zipPath);
+                var archive = archiver('zip');
+                output.on('close', function () {
+                    console.log(zipName + ' done. ' + Math.floor(archive.pointer() / 1024 / 1024) + ' MB');
+                    done();
+                });
+                archive.on('error', function(err){
+                    throw err;
+                });
+                archive.pipe(output);
+                archive.bulk([
+                    { expand: true, cwd: path, src: ['**'], dest: '.'}
+                ]);
+                archive.finalize();
+            }, function(err) {
+                // All zipped
+                console.log('ALL DONE');
+                resolve();
             });
-            archive.on('error', function(err){
-                throw err;
-            });
-            archive.pipe(output);
-            archive.bulk([
-                { expand: true, cwd: path, src: ['**'], dest: '.'}
-            ]);
-            archive.finalize();
-        }, function(err) {
-            // All zipped
-            console.log('ALL DONE');
-            resolve();
-        });
+        })
     }).catch(function (error) {
         console.log('DIST CREATION PROCESS FAILED');
         console.error(error);
@@ -180,7 +175,7 @@ function deployToSourceforge(localDir, remoteDir) {
                     });
                 });
             });
-        }).connect(buildConf.sourceforge);
+        }).connect(buildConf.sourceforge.sftp);
     }).then(function(result) {
         conn.end();
         return result;
@@ -204,8 +199,8 @@ function updateReadme(files) {
                         packageInfo.version + '/';
 
         function getPlatformName(file) {
-            if(/_win/.test(file)) return "Windows";
-            else if (/_osx/.test(file)) return "Mac OS 10.8+";
+            if(/.exe/.test(file)) return "Windows";
+            else if (/.dmg/.test(file)) return "Mac OS 10.8+";
             else if (/_linux32/.test(file)) return "Linux x32";
             else if (/_linux64/.test(file)) return "Linux x64";
             else return "Unkown";
