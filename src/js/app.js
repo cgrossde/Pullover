@@ -11,28 +11,6 @@ var autostart = new Autostart('Pullover');
 var openClient = require('./lib/pushover-client');
 var packageInfo = require('./package');
 
-// Catch uncaught exceptions
-// HTML/JS
-window.addEventListener('error' ,function(errEvent){
-    var m;
-    m = 'uncaughtException: '  +
-        errEvent.message + '\nfilename:"' +
-        (errEvent.filename ? errEvent.filename : 'app.js') +
-        '", line:' + errEvent.lineno;
-    // show any errors early
-    document.write('<pre><h2>' +
-        m + '</h2><div style="color:white;background-color:red">' +
-        errEvent.error.stack + '</div></pre>'
-    );
-    alert(m);
-});
-// Process
-process.on('uncaughtException' ,function(err){
-        console.error('uncaughtException:', err);
-        console.error(err.stack);
-        alert(l10n.uncaughtException  + err);
-    });
-
 // Setup window, menubar and tray
 var win = gui.Window.get();
 var tray;
@@ -49,6 +27,7 @@ var lastConnect = null;				// Date of last reconnect
 var connectionTimeout = 1000*35;	// After x seconds without keepAlive from server we asume
 									// to be offline(updateStatus) and try to reconnect
 var webSocketClosedByApp = false;	// Try to check if webSocket was closed because of invalid device
+var notifyTimeout = 750;			// Don't show all messages at once, or some will not be seen
 // Connection status
 var CONN_DISCONNECTED = 0;
 var CONN_CONNECTED = 1;
@@ -381,13 +360,17 @@ function getMessages() {
 		// Parse response
 		if(response.messages !== undefined && response.messages.length > 0) {
 			console.log('New messages: ' + response.messages.length);
+			localStorage.messagesReceived = (localStorage.messagesReceived === undefined) ? response.messages.length : parseInt(localStorage.messagesReceived) + response.messages.length;
+			updateMessagesReceived();
 			// Send push notifications
 			$(response.messages).each(function(index, message) {
 				// function notify(title, text, url, iconPath) {
 				var title = message.title || message.app;
 				var url = (message.url) ? message.url : null;
 				var iconPath = 'https://api.pushover.net/icons/' + message.icon + '.png';
-				notify(title, message.message, url, iconPath, true);
+				setTimeout(function() {
+					notify(title, message.message, url, iconPath, true);
+				}, notifyTimeout * index);
 			});
 			// Acknowledge receiving messages
 			var options = {
@@ -695,11 +678,18 @@ function versionCheck() {
 	        		'New Update available: v' + latestInfo.version + ".\nYou are using v" + packageInfo.version,
 	        		'https://github.com/cgrossde/Pullover/releases/latest'
 	        	);
+	        	// Show update in about/info
+	        	$('#info .updateAvailable').remove();
 	        	$('.info-version').text(packageInfo.version + ' (outdated)')
-	        	.parent().after('<tr>'+
+	        	.parent().after('<tr class="updateAvailable">'+
                   '<th>Latest Version</th>'+
-                  '<td>'+latestInfo.version+'</td>'+
-                '</tr>');
+                  '<td>'+latestInfo.version+' (<a href="#" class="whatsNew">What\'s new?</a>)</td>'+
+                '</tr>')
+                .parent()
+                .find('.whatsNew')
+                .on('click', function() {
+                	gui.Shell.openExternal('https://github.com/cgrossde/Pullover/releases/latest');
+                });
 	        }
 	    });
 	}).on('error', function(e) {
@@ -723,6 +713,13 @@ function runOnStartupToggle() {
 	}
 }
 
+function updateMessagesReceived() {
+	if(localStorage.messagesReceived !== undefined) {
+		$('.messages-received').text(localStorage.messagesReceived);
+	} else {
+		$('.messages-received').text('none');
+	}
+}
 
 // Login to Pushover
 $(document).ready(function() {
@@ -768,6 +765,10 @@ $(document).ready(function() {
 	} else {
 		hideWindow();
 	}
+
+	// Set message counter
+	updateMessagesReceived();
+
 	// Update checker
 	versionCheck();
 	hideModal();
