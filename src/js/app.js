@@ -27,6 +27,7 @@ var lastConnect = null;				// Date of last reconnect
 var connectionTimeout = 1000*35;	// After x seconds without keepAlive from server we asume
 									// to be offline(updateStatus) and try to reconnect
 var webSocketClosedByApp = false;	// Try to check if webSocket was closed because of invalid device
+var webSocketRetryAfterAPIClose = true;
 var notifyTimeout = 750;			// Don't show all messages at once, or some will not be seen
 // Connection status
 var CONN_DISCONNECTED = 0;
@@ -426,7 +427,13 @@ function openWebSocket() {
 			webSocket = null;
 			if(! webSocketClosedByApp) {
 				console.log('Websocket was closed by API ENDPOINT !!! ');
-				webSocketClosedByAPIEndpoint();
+				if(webSocketRetryAfterAPIClose) {
+					console.log('Try one more time');
+					webSocketRetryAfterAPIClose = false;
+					reconnectWebSocket();
+				} else {
+					webSocketClosedByAPIEndpoint();
+				}
 			} else {
 				// Reconnect
 				reconnectWebSocket();
@@ -574,6 +581,7 @@ function parseCommand(message) {
 	}
 	// Keep alive
 	else if(message === "#") {
+		webSocketRetryAfterAPIClose = true;
 		lastSync(moment().toISOString());
 	} else {
 		console.log('Unkown command: ', message);
