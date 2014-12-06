@@ -1,4 +1,5 @@
-var fs = require('fs');
+var fs = require('fs.extra');
+var del = require('del');
 var swig  = require('swig');
 var async = require('async');
 var appdmg = require('appdmg');
@@ -8,6 +9,7 @@ var archiver = require('archiver');
 var NwBuilder = require('node-webkit-builder');
 var Connection = require('ssh2');
 var packageInfo = require('./src/package');
+var childProcess = require('child_process');
 
 var buildConf = require('./config/buildConf');
 var dmgConf = require('./config/dmgConf');
@@ -15,30 +17,48 @@ var dmgConf = require('./config/dmgConf');
 // Console app
 // build
 program
-  .version(packageInfo.version)
-  .command('build')
-  .description('Build binaries')
-  .action(build);
+    .version(packageInfo.version)
+    .command('build')
+    .description('Build binaries')
+    .action(build);
 // Create distributables .zip / .dmg
 program
-  .command('createDist')
-  .description('Create distributables (.zip/.dmg)')
-  .action(createDistributables);
+    .command('createDist')
+    .description('Create distributables (.zip/.dmg)')
+    .action(createDistributables);
 // Upload to sourceforge
 program
-  .command('upload')
-  .description('Upload to Sourceforge')
-  .action(function() {
-    deployToSourceforge(buildConf.deployDir, packageInfo.version)
-    .then(function(files) {
-        console.log('UPLOAD DONE');
-        console.log('Updating README.md');
-        updateReadme(files);
+    .command('upload')
+    .description('Upload to Sourceforge')
+    .action(function() {
+        deployToSourceforge(buildConf.deployDir, packageInfo.version)
+        .then(function(files) {
+            console.log('UPLOAD DONE');
+            console.log('Updating README.md');
+            updateReadme(files);
+        });
     });
-  });
+program
+    .command('run')
+    .description('Run app')
+    .action(runApp);
+
+// TEST Windows installer
+program
+    .command('winInst')
+    .description('Windows installer')
+    .action(createWindowsInstaller);
 
 program.parse(process.argv);
 
+
+function runApp() {
+    var nw = new NwBuilder(buildConf.nwbuild);
+    // Enable output to console
+    nw.on('stdout', function(data) {process.stdout.write(data.toString()); });
+    nw.on('stderr', function(data) {process.stdout.write(data.toString()); });
+    return nw.run();
+}
 
 /**
  * Bundle App with node-webkit for different platforms
@@ -59,6 +79,13 @@ function build() {
     });
 }
 
+/**
+ * Create installer (.dmg/.exe/.zip) for different platforms
+ * Mac can build for all three platforms. Install makensis (brew install makensis)
+ * and wine first.
+ *
+ * @return {promise}
+ */
 function createDistributables() {
     return new Promise(function(resolve, reject) {
         var deploymentPath = buildConf.deployDir;
@@ -70,8 +97,14 @@ function createDistributables() {
         console.log('Start packaging for distribution ...');
         async.map(buildConf.nwbuild.platforms, function(platform, done) {
             var path = './bin/pullover/' + platform;
+            // DMG?
             if(platform === 'osx') {
                 createDMG().then(done);
+                return;
+            }
+            // Windows installer?
+            else if(platform === 'win') {
+                createWindowsInstaller().then(done);
                 return;
             }
             // Zip everything else
@@ -154,6 +187,11 @@ function deployToSourceforge(localDir, remoteDir) {
     });
 }
 
+/**
+ * Update readme with links to latest release downloads
+ * @param  {array} files Filenames
+ * @return {promise}
+ */
 function updateReadme(files) {
     return new Promise(function(resolve, reject) {
         if(files === undefined || files.length === 0) return;
@@ -198,6 +236,10 @@ function updateReadme(files) {
     });
 }
 
+/**
+ * Create a Mac .dmg
+ * @return {promise}
+ */
 function createDMG() {
     return new Promise(function(resolve, reject) {
         var targetPath = buildConf.deployDir + '/Pullover.dmg';
@@ -214,6 +256,60 @@ function createDMG() {
         ee.on('error', function (err) {
             console.log('ERROR creating DMG', err);
             reject(err);
+        });
+    });
+}
+
+/**
+ * Create a windows installer,
+ * wine and makensis needed
+ * @return {promise}
+ */
+function createWindowsInstaller() {
+    return new Promise(function(resolve, reject) {
+        var buildDir = './bin/tmp';
+        var filename = 'Pullover_' + packageInfo.version + '_Installer.exe';
+        if(fs.existsSync(buildDir)){
+            // Clear tmp dir
+            del([buildDir], createWindowsInstaller);
+            return;
+        } else {
+            fs.mkdirSync(buildDir);
+        }
+
+        // Create installer template
+        var template = swig.compileFile('./res/windowsInstaller/windowsInstaller.nsis.tpl');
+        var templateVars = {
+            name: packageInfo.name,
+            prettyName: 'Pullover',
+            version: packageInfo.version,
+            src: "../pullover/win",
+            dest: "../deploy/" + filename,
+            icon: "../../res/icon.ico",
+            setupIcon: "../../res/icon.ico",
+            banner: "../../res/windowsInstaller/winInst_header.bmp"
+        };
+        // Copy icon to win source
+        if(! fs.existsSync('./bin/pullover/win/icon.ico')){
+            fs.writeFileSync('./bin/pullover/win/icon.ico', fs.readFileSync('./res/icon.ico'));
+        }
+
+        // Copy installer files
+        fs.copyRecursive('./res/windowsInstaller', buildDir, function(err) {
+            // Write installer instructions
+            fs.writeFile('./bin/tmp/installer.nsis', template(templateVars), function(err) {
+                if(err) reject(err);
+                // Note: NSIS have to be added to PATH!
+                var nsis = childProcess.spawn('makensis', ['./bin/tmp/installer.nsis']);
+                //nsis.stdout.pipe(process.stdout);
+                nsis.stdout.on('data', function() { process.stdout.write('.')});
+                nsis.stderr.pipe(process.stderr);
+                nsis.on('close', function () {
+                    console.log("\nWindows installer done");
+                    // Clear tmp and return
+                    del([buildDir], resolve);
+                });
+            });
         });
     });
 }

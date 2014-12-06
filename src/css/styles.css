@@ -55,7 +55,7 @@ img.logo {
 	height: 30px;
 }
 
-.close-button, .status-button, .info-button {
+.close-button, .status-button, .info-button, .settings-button {
 	font-size: 25px;
 	top: 7px;
 	cursor: pointer;
@@ -70,14 +70,19 @@ img.logo {
 	background: transparent;
 }
 
-.info-button {
+.settings-button {
 	position: absolute;
 	right: 43px;
 }
 
-.status-button {
+.info-button {
 	position: absolute;
 	right: 83px;
+}
+
+.status-button {
+	position: absolute;
+	right: 123px;
 }
 
 .status-button span.glyphicon-signal {
@@ -114,7 +119,7 @@ h1,h2,h3 {
 	margin-top: 15px;
 }
 
-#login, #deviceRegistration, #status, #info, #modal {
+#login, #deviceRegistration, #status, #info, #modal, #settings {
 	text-align: center;
 	width: 450px;
 	overflow: hidden;

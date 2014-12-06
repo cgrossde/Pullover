@@ -8,7 +8,7 @@
 	"icon-size": 80,
 
 	"contents": [
-		{ "x": 127, "y": 220, "type": "file", "path": "../bin/pullover/osx/pullover.app" },
-		{ "x": 326, "y": 217, "type": "link", "path": "/Applications" }
+		{ "x": 127, "y": 190, "type": "file", "path": "../bin/pullover/osx/pullover.app" },
+		{ "x": 326, "y": 187, "type": "link", "path": "/Applications" }
 	]
  }

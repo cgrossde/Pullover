@@ -5,6 +5,7 @@ var gui = require('nw.gui');
 var http = require('https');
 var semver = require('semver');
 var moment = require('moment');
+var Promise = require('promise');
 var openClient = require('./lib/pushover-client');
 var packageInfo = require('./package');
 
@@ -20,10 +21,10 @@ var curReconnects = 0;				// Reconnect counter
 var reconnectWaitTime = 1000*60*5;	// Wait-time for next reconnect after maxReconnects was reached
 var reconnectLater = false;			// Are we waiting for a reconnect?
 var reconnectCountdown = null;
-var lastConnect = null;			// Date of last reconnect
+var lastConnect = null;				// Date of last reconnect
 var connectionTimeout = 1000*35;	// After x seconds without keepAlive from server we asume
 									// to be offline(updateStatus) and try to reconnect
-var webSocketClosedByApp = false;			// Try to check if webSocket was closed because of invalid device
+var webSocketClosedByApp = false;	// Try to check if webSocket was closed because of invalid device
 // Connection status
 var CONN_DISCONNECTED = 0;
 var CONN_CONNECTED = 1;
@@ -167,6 +168,13 @@ function showInfo() {
 	if($('#info').is(':hidden')) {
 		hideUiComponents();
 		$('#info').fadeIn();
+	}
+}
+
+function showSettings() {
+	if($('#settings').is(':hidden')) {
+		hideUiComponents();
+		$('#settings').fadeIn();
 	}
 }
 
@@ -565,12 +573,10 @@ function parseCommand(message) {
 // Controls app-flow
 var app = function() {
 	// uiComponents
-	uiComponents = ['#login', '#deviceRegistration', '#status', '#info'];
+	uiComponents = ['#login', '#deviceRegistration', '#status', '#info', '#settings'];
 	hideUiComponents();
 	// Toggle status button
 	$('.status-button').off().on('click', showStatus);
-	// Toggle info button
-	$('.info-button').off().on('click', showInfo);
 	// Do we need to login?
 	if(! isLoggedIn()) {
 		$('.loggedIn').hide();
@@ -658,8 +664,8 @@ function versionCheck() {
 	        console.log("Got response: ", latestInfo);
 	        if(semver.lt(packageInfo.version, latestInfo.version)) {
 	        	notify('Pullver Update',
-	        		'New Update available: v' + latestInfo.version + '. You are using v' + packageInfo.version,
-	        		'https://github.com/cgrossde/Pullover'
+	        		'New Update available: v' + latestInfo.version + ".\nYou are using v" + packageInfo.version,
+	        		'https://github.com/cgrossde/Pullover/releases/latest'
 	        	);
 	        	$('.info-version').text(packageInfo.version + ' (outdated)')
 	        	.parent().after('<tr>'+
@@ -673,15 +679,120 @@ function versionCheck() {
 	});
 }
 
+function runOnStartupToggle() {
+	var checked = $('.stettings-startup').prop('checked');
+	if(os.platform() === 'darwin') {
+		showModal("Not supported", "This operation is not supported for your platform ("+os.platform()+")");
+	}
+
+	else if(os.platform().indexOf('win') === 0) {
+		showSpinner();
+	    if(checked) {
+	    	winRegAutorunEnable().then(hideModal);
+	    } else {
+	    	winRegAutorunDisable().then(hideModal);
+	    }
+	}
+
+	else {
+		showModal("Not supported", "This operation is not supported for your platform ("+os.platform()+")");
+	}
+}
+
+function isAutorunSet() {
+	return new Promise(function(resolve, reject) {
+		if(os.platform() === 'darwin') {
+			resolve(false);
+		}
+
+		else if(os.platform().indexOf('win') === 0) {
+			winRegIsAutorunSet().then(resolve);
+		}
+
+		else {
+			resolve(false);
+		}
+	});
+}
+
+// Helper function to execute and log out child process
+var spawnProcess = function(command, args, options, callback) {
+    var spawn = require('child_process').spawn;
+    var process = spawn(command, args, options),
+        err = false,
+		text = '',
+		errText = '';
+
+    process.stdout.on('data', function(data) {
+		text += data.toString();
+    });
+
+    process.stderr.on('data', function(data) {
+        err = true;
+        errText += data.toString();
+    });
+
+    if (typeof callback === 'function') {
+        process.on('exit', function(exitCode) {
+
+            if (err || exitCode !== 0) {
+                return callback(true, errText);
+            } else {
+            	return callback(false, text);
+            }
+        });
+    }
+};
+
+function winRegIsAutorunSet() {
+	return new Promise(function(resolve, reject) {
+		spawnProcess('cmd',
+			['/C','REG', 'QUERY', 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run','/v','Pullover'],
+			{}, function(err, res) {
+				if(err) {
+					resolve(false);
+				} else {
+					resolve(true);
+				}
+		});
+	});
+}
+
+function winRegAutorunEnable() {
+	return new Promise(function(resolve, reject) {
+		spawnProcess('cmd', ['/C','REG', 'ADD', 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run','/f','/v','Pullover','/t','REG_SZ','/d', process.execPath],
+			{}, function(err, res) {
+				if(err) {
+					resolve(false);
+				} else {
+					resolve(true);
+				}
+		});
+	});
+}
+
+function winRegAutorunDisable() {
+	return new Promise(function(resolve, reject) {
+		spawnProcess('cmd', ['/C','REG', 'DELETE', 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run','/f','/v','Pullover'],
+			{}, function(err, res) {
+				if(err) {
+					resolve(false);
+				} else {
+					resolve(true);
+				}
+		});
+	});
+}
+
 // Login to Pushover
 $(document).ready(function() {
 	// Show app-container
 	$('.app-container').removeClass('hide');
-	// Setup status button
+	// Setup tobpar buttons
 	$('.status-button').on('click', showStatus);
-	$('.status-exit-button').on('click', app);
-	// Close button
 	$('.close-button').on('click', hideWindow);
+	$('.info-button').on('click', showInfo);
+	$('.settings-button').on('click', showSettings);
 	// Setup dev-tools button
 	$('.show-devtools-button').on('click', function() {
 		win.showDevTools();
@@ -707,10 +818,19 @@ $(document).ready(function() {
 	// App version
 	$('.info-version').text(packageInfo.version);
 
+	// Run on startup
+	$('.stettings-startup').on('change', runOnStartupToggle);
+	isAutorunSet().then(function(active) {
+		console.log('Autorun is: ' + active);
+		$('.stettings-startup').prop('checked', active);
+	});
+
 	// If not logged in or device not registered, show app window
 	// else just leave it in tray
 	if(! isLoggedIn || ! isDeviceRegistered()) {
 		showWindow();
+	} else {
+		hideWindow();
 	}
 	// Update checker
 	versionCheck();
