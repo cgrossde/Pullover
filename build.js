@@ -59,17 +59,24 @@ function runApp() {
  * @return {promise}
  */
 function build() {
-    var nw = new NwBuilder(buildConf.nwbuild);
-    console.log('BUILD...');
-    // Log stuff you want
-    nw.on('error',  console.log);
+    return new Promise(function(resolve, reject) {
+        var nw = new NwBuilder(buildConf.nwbuild);
+        console.log('BUILD...');
+        // Log stuff you want
+        nw.on('error',  console.log);
 
-    // Build returns a promise
-    return nw.build().then(function () {
-        console.log('Build done.');
-    }).catch(function (error) {
-        console.log('BUILD PROCESS FAILED');
-        console.error(error);
+        // Delete src/node_modules/ws/build to make it cross platform (there are fallbacks)
+        del(['src/node_modules/ws/build'], function() {
+            // Build returns a promise
+            nw.build().then(function () {
+                console.log('Build done.');
+                resolve();
+            }).catch(function (error) {
+                console.log('BUILD PROCESS FAILED');
+                console.error(error);
+                reject();
+            });
+        });
     });
 }
 
@@ -199,8 +206,8 @@ function updateReadme(files) {
                         packageInfo.version + '/';
 
         function getPlatformName(file) {
-            if(/.exe/.test(file)) return "Windows";
-            else if (/.dmg/.test(file)) return "Mac OS 10.8+";
+            if(/\.exe/.test(file)) return "Windows";
+            else if (/\.dmg/.test(file)) return "Mac OS 10.8+";
             else if (/_linux32/.test(file)) return "Linux x32";
             else if (/_linux64/.test(file)) return "Linux x64";
             else return "Unkown";
@@ -300,9 +307,32 @@ function createWindowsInstaller() {
                 nsis.stdout.on('data', function() { process.stdout.write('.')});
                 nsis.stderr.pipe(process.stderr);
                 nsis.on('close', function () {
-                    console.log("\nWindows installer done");
-                    // Clear tmp and return
-                    del([buildDir], resolve);
+                    console.log("\nWindows installer created");
+                    // Sign installer
+                    var signInstall = childProcess.spawn('signcode',
+                        [   '-spc', 'res/cert.spc',
+                            '-v', 'res/cert.pvk',
+                            '-a', 'sha1', '-$', 'individual',
+                            '-i', 'https://github.com/cgrossde/Pullover',
+                            '-t', 'http://timestamp.verisign.com/scripts/timstamp.dll',
+                            '-tr', '10',
+                            'bin/deploy/' + filename
+                        ]);
+                    signInstall.stdout.on('data', function(data) {
+                        process.stdout.write(data);
+                        // It's a hack -.-
+                        if(data.toString().indexOf('.pvk:') !== -1) {
+                            console.log('Entering password');
+                            signInstall.stdin.write(buildConf.certPassword + '\n');
+                        }
+
+                    });
+                    signInstall.stderr.pipe(process.stdout)
+                    signInstall.on('close', function() {
+                        console.log('Installer signed');
+                        // Clear tmp and return
+                        del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
+                    })
                 });
             });
         });

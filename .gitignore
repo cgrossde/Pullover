@@ -4,3 +4,5 @@ bin
 *.nw
 npm-debug.log
 config/buildConf.json
+res/cert.spc
+res/cert.pvk
