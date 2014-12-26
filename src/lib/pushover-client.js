@@ -443,22 +443,25 @@ OpenClient.prototype.connect = function(optionsOverride, callback) {
 			self.emit('disconnected');
 			// Was it closed by OpenClient or Endpoint?
 			if (! self.closedByOpenClient) {
+				console.log('Not closed by client');
 				// Possibly closed by API-Endpoint
 				// Try to reconnect once
 				if (self.retryAfterAPIdisconnect) {
+					console.log('retryAfterAPIdisconnect');
 					self.retryAfterAPIdisconnect = false;
-					self.reconnect();
+					self.forceReconnect();
 				}
 				else {
 					// Still closed by endpoint, possibly wrong credentials
 					// => emit event
+					console.log('closedByEndpoint');
 					self.emit('closedByEndpoint');
 				}
 			}
-			// else { // Closed by OpenClient
-			// 	// Just log to console for now
-			// 	console.log('Connection closed (by OpenClient)');
-			// }
+			else { // Closed by OpenClient
+				// Just log to console for now
+				console.log('Connection closed (by OpenClient)');
+			}
 		});
 
 		self.webSocket.on('error', function(event) {

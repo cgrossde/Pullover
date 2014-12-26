@@ -159,7 +159,7 @@ function showSettings() {
 		$('#settings').fadeIn();
 	}
 	autorun.isSet().then(function(active) {
-		$('.stettings-startup').prop('checked', active);
+		$('.settings-startup').prop('checked', active);
 	});
 }
 
@@ -256,6 +256,7 @@ function showStatus() {
 }
 
 function updateSyncStatus() {
+	console.log('Conn-status:', connectionStatus());
 	var timeSinceLastSync = 'never';
 	if (openClient !== null && openClient.lastInteractionDate() !== null) {
 		timeSinceLastSync = moment(openClient.lastInteractionDate()).fromNow();
@@ -390,6 +391,14 @@ function showReloginModal(title, text, type) {
 	disableCountdown();
 	// Show pushover window
 	showWindow();
+	// Hide again if reconnect happens in the meantime
+	if(openClient) {
+		openClient.once('connected', function() {
+			console.log('Relogin modal hidden');
+			hideModal();
+			hideWindow();
+		});
+	}
 }
 
 function enableCountdown(secRemaining) {
@@ -506,6 +515,7 @@ function hideModal() {
 }
 
 function versionCheck() {
+	console.log('versionCheck');
 	var repoUrl = 'https://raw.githubusercontent.com/cgrossde/Pullover/master/package.json';
 	http.get(repoUrl, function(res) {
 		var body = '';
@@ -572,6 +582,14 @@ function updateMessagesReceived() {
 	}
 }
 
+function toggleUpdateCheck() {
+	if($('.settings-updatecheck').prop('checked')) {
+		localStorage.updateCheck = true;
+	} else {
+		localStorage.updateCheck = false;
+	}
+}
+
 // Login to Pushover
 $(document).ready(function() {
 	//win.showDevTools();
@@ -608,7 +626,10 @@ $(document).ready(function() {
 	$('.info-version').text(packageInfo.version);
 
 	// Run on startup
-	$('.stettings-startup').on('change', runOnStartupToggle);
+	$('.settings-startup').on('change', runOnStartupToggle);
+
+	// Update check
+	$('.settings-updatecheck').on('change', toggleUpdateCheck);
 
 	// If not logged in or device not registered, show app window
 	// else just leave it in tray
@@ -623,7 +644,10 @@ $(document).ready(function() {
 	updateMessagesReceived();
 
 	// Update checker
-	versionCheck();
+	if(localStorage.updateCheck !== undefined && localStorage.updateCheck === 'true') {
+		$('.settings-updatecheck').prop('checked', true);
+		versionCheck();
+	}
 	hideModal();
 
 	// Init openClient
