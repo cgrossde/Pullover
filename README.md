@@ -17,11 +17,11 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 
 Then download the precompiled binarys:
 
-* **Windows (v0.2.1):** [Pullover_0.2.1_Installer.exe](https://sourceforge.net/projects/pullover/files/0.2.1/Pullover_0.2.1_Installer.exe/download)
-* **Mac OS 10.8+ (v0.2.1):** [Pullover.dmg](https://sourceforge.net/projects/pullover/files/0.2.1/Pullover.dmg/download)
-* **Linux x32 (v0.2.1):** [Pullover_0.2.1_linux32.zip](https://sourceforge.net/projects/pullover/files/0.2.1/Pullover_0.2.1_linux32.zip/download)
+* **Windows (v0.3.0):** [Pullover_0.3.0_Installer.exe](https://sourceforge.net/projects/pullover/files/0.3.0/Pullover_0.3.0_Installer.exe/download)
+* **Mac OS 10.8+ (v0.3.0):** [Pullover.dmg](https://sourceforge.net/projects/pullover/files/0.3.0/Pullover.dmg/download)
+* **Linux x32 (v0.3.0):** [Pullover_0.3.0_linux32.zip](https://sourceforge.net/projects/pullover/files/0.3.0/Pullover_0.3.0_linux32.zip/download)
 
-**Please note:** This App is in an **early alpha** state. For now only the Mac version is tested since that's my main operating system. However it should also run under Windows / Linux. If you find bugs or the app crashes under Win/Linux please create an issue and I will look into it.
+**Please note:** This App is in an **early alpha** state. For now only the Mac and Windows versions are tested. However it should also run under Linux. If you find bugs or the app crashes please create an issue and I will look into it.
 
 ## Build your own
 You can create all builds with Mac OS if you have `wine` installed.
@@ -51,7 +51,7 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 * Add option to start Pullover on system start [DONE]
 * Resize icon size for OS X
 * Allow to pause notifications
-* Create better looking notifications for Windows [INPROGRESS]
+* Create better looking notifications for Windows [DONE]
 * Create a history for Windows and Linux [INPROGRESS]
 * Improve codebase [INPROGRESS]
 * Create an installer for Windows

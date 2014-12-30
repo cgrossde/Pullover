@@ -58,7 +58,9 @@ var OpenClient = function(options) {
 		deviceName: null,
 		email: null,
 		password: null,
-		userKey: null					// Not used yet (get's returned together with secret on login)
+		userKey: null,								// Not used yet (get's returned together with secret on login)
+
+		debug: false									// If true, log every method call to console
 	});
 
 	// Prevent default action (exit) if no listener for error events
@@ -67,11 +69,10 @@ var OpenClient = function(options) {
 	// Define some internal vars
 	this.webSocket = null;						// null = disconnected
 	this.lastConnect = null;					// Limit connects to one every x sec (options.timeBetweenConnects)
-	this.reconnectCountdown	= null;		// Timer if waiting for next reconnect
 	this.curReconnects = 0;						// Count reconnects
-	this.reconnectLater	= false;			// If true, OpenClient is already waiting for a reconnect
+	this.reconnectLater	= false;			// If not false, OpenClient is already waiting for a reconnect
 	this.keepAliveTimeout = null;			// Timer that will trigger the connection timeout
-	this.closedByOpenClient	= false;			// To detect if socket was closed by API-Endpoint or by
+	this.closedByOpenClient	= true;			// To detect if socket was closed by API-Endpoint or by
 																				// a close()/reconnect() ...
 	this.retryAfterAPIdisconnect = true;	// Try to reconnect once after socket was closed by endpoint.
 																				// This is not always due to wrong credentials but could also
@@ -84,6 +85,13 @@ util.inherits(OpenClient, EventEmitter);
 // Export
 module.exports = OpenClient;
 
+
+OpenClient.prototype.log = function() {
+	if(this.options.debug) {
+		console.log.apply(console, arguments);
+	}
+}
+
 /**
  * Login with email and password to get secret for further calls
  *
@@ -92,6 +100,7 @@ module.exports = OpenClient;
  * @return {Promise}  If no callback given, return promise
  */
 OpenClient.prototype.login = function(optionsOverride, callback) {
+	this.log('OpenClient.prototype.login');
 	var self = this;
 	var options = (optionsOverride) ? _.defaults(optionsOverride, self.options) : self.options;
 	return new Promise(function(resolve, reject) {
@@ -151,6 +160,7 @@ OpenClient.prototype.login = function(optionsOverride, callback) {
  * @return {Promise}  If no callback given, return promise
  */
 OpenClient.prototype.registerDevice = function(optionsOverride, callback) {
+	this.log('OpenClient.prototype.registerDevice');
 	var self = this;
 	var options = (optionsOverride) ? _.defaults(optionsOverride, self.options) : self.options;
 	return new Promise(function(resolve, reject) {
@@ -267,6 +277,7 @@ function validateDeviceName(deviceName) {
  * @return {Promise}  If no callback given, return promise
  */
 OpenClient.prototype.fetchNotifications = function(optionsOverride, callback) {
+	this.log('OpenClient.prototype.fetchNotifications');
 	var self = this;
 	var options = (optionsOverride) ? _.defaults(optionsOverride, self.options) : self.options;
 	return new Promise(function(resolve, reject) {
@@ -336,6 +347,7 @@ OpenClient.prototype.fetchNotifications = function(optionsOverride, callback) {
  * @return {Promise}  If no callback given, return promise
  */
 OpenClient.prototype.acknowledgeNotification = function(optionsOverride, callback) {
+	this.log('OpenClient.prototype.acknowledgeNotification');
 	var self = this;
 	var options = (optionsOverride) ? _.defaults(optionsOverride, self.options) : self.options;
 	return new Promise(function(resolve, reject) {
@@ -389,6 +401,7 @@ OpenClient.prototype.acknowledgeNotification = function(optionsOverride, callbac
  * @return {Promise}  If no callback given, return promise
  */
 OpenClient.prototype.connect = function(optionsOverride, callback) {
+	this.log('OpenClient.prototype.connect');
 	var self = this;
 	var options = (optionsOverride) ? _.defaults(optionsOverride, self.options) : self.options;
 	return new Promise(function(resolve, reject) {
@@ -443,24 +456,24 @@ OpenClient.prototype.connect = function(optionsOverride, callback) {
 			self.emit('disconnected');
 			// Was it closed by OpenClient or Endpoint?
 			if (! self.closedByOpenClient) {
-				console.log('Not closed by client');
+				self.log('Not closed by client');
 				// Possibly closed by API-Endpoint
 				// Try to reconnect once
 				if (self.retryAfterAPIdisconnect) {
-					console.log('retryAfterAPIdisconnect');
+					self.log('retryAfterAPIdisconnect');
 					self.retryAfterAPIdisconnect = false;
 					self.forceReconnect();
 				}
 				else {
 					// Still closed by endpoint, possibly wrong credentials
 					// => emit event
-					console.log('closedByEndpoint');
+					self.log('closedByEndpoint');
 					self.emit('closedByEndpoint');
 				}
 			}
 			else { // Closed by OpenClient
 				// Just log to console for now
-				console.log('Connection closed (by OpenClient)');
+				self.log('Connection closed (by OpenClient)');
 			}
 		});
 
@@ -488,6 +501,7 @@ OpenClient.prototype.connect = function(optionsOverride, callback) {
  * @param  {string} command
  */
 OpenClient.prototype._parseCommand = function(command) {
+	this.log('OpenClient.prototype._parseCommand');
 	// New messages
 	if (command === '!') {
 		this._resetKeepAlive();
@@ -519,6 +533,7 @@ OpenClient.prototype._parseCommand = function(command) {
  * @return {Boolean} False if no websocket was opened, else true
  */
 OpenClient.prototype.disconnect = function() {
+	this.log('OpenClient.prototype.disconnect');
 	if (this.webSocket !== null) {
 		this.closedByOpenClient = true;
 		this.webSocket.close();
@@ -536,6 +551,7 @@ OpenClient.prototype.disconnect = function() {
  * @return {Number} Seconds until reconnect
  */
 OpenClient.prototype.reconnect = function() {
+	this.log('OpenClient.prototype.reconnect');
 	// maxReconnects not reached?
 	if (this.curReconnects <= this.options.maxReconnects) {
 		var secSinceLastConnect = 0;
@@ -576,7 +592,7 @@ OpenClient.prototype.reconnect = function() {
  * Forces a reconnect now, without waiting
  */
 OpenClient.prototype.forceReconnect = function() {
-	console.log('forceReconnect');
+	this.log('OpenClient.prototype.forceReconnect');
 	this.emit('reconnecting');
 	this._stopKeepAlive();
 	this._stopReconnectCountdown();
@@ -589,6 +605,7 @@ OpenClient.prototype.forceReconnect = function() {
  * @return {Boolean}
  */
 OpenClient.prototype.isReconnecting = function() {
+	this.log('OpenClient.prototype.isReconnecting');
 	if (this.reconnectLater === false) return false;
 	else return true;
 };
@@ -600,6 +617,7 @@ OpenClient.prototype.isReconnecting = function() {
  * @return {Boolean}
  */
 OpenClient.prototype.secondsTillReconnect = function() {
+	this.log('OpenClient.prototype.secondsTillReconnect');
 	if (this.isReconnecting()) return getTimeLeft(this.reconnectLater);
 	else return false;
 };
@@ -609,6 +627,7 @@ OpenClient.prototype.secondsTillReconnect = function() {
  * @return {Date}
  */
 OpenClient.prototype.lastInteractionDate = function() {
+	this.log('OpenClient.prototype.lastInteractionDate');
 	return this.lastInteraction;
 };
 
@@ -622,7 +641,7 @@ OpenClient.prototype.lastInteractionDate = function() {
  * @return {Number}          Time in seconds until reconnect will happen
  */
 OpenClient.prototype._tryReconnectLater = function(waitTime) {
-	console.log('_tryReconnectLater', waitTime);
+	this.log('OpenClient.prototype._tryReconnectLater', waitTime);
 	// Only reconnect later if not already reconnecting
 	if (this.reconnectLater === false) {
 		// Try again later
@@ -646,7 +665,8 @@ OpenClient.prototype._tryReconnectLater = function(waitTime) {
  * @private
  */
 OpenClient.prototype._stopReconnectCountdown = function() {
-	clearTimeout(this.reconnectCountdown);
+	this.log('OpenClient.prototype._stopReconnectCountdown');
+	clearTimeout(this.reconnectLater);
 	this.reconnectLater = false;
 };
 
@@ -657,6 +677,7 @@ OpenClient.prototype._stopReconnectCountdown = function() {
  * @private
  */
 OpenClient.prototype._resetKeepAlive = function() {
+	this.log('OpenClient.prototype._resetKeepAlive');
 	this.lastInteraction = new Date();
 	this.emit('keepAlive');
 	this._stopKeepAlive();
@@ -672,6 +693,7 @@ OpenClient.prototype._resetKeepAlive = function() {
  * @private
  */
 OpenClient.prototype._stopKeepAlive = function() {
+	this.log('OpenClient.prototype._stopKeepAlive');
 	clearTimeout(this.keepAliveTimeout);
 };
 
@@ -681,6 +703,7 @@ OpenClient.prototype._stopKeepAlive = function() {
  * @private
  */
 OpenClient.prototype._connectionTimeout = function() {
+	this.log('OpenClient.prototype._connectionTimeout');
 	this.emit('connectionTimeout');
 	this.reconnect();
 };

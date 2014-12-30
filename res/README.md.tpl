@@ -49,7 +49,7 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 * Add option to start Pullover on system start [DONE]
 * Resize icon size for OS X
 * Allow to pause notifications
-* Create better looking notifications for Windows [INPROGRESS]
+* Create better looking notifications for Windows [DONE]
 * Create a history for Windows and Linux [INPROGRESS]
 * Improve codebase [INPROGRESS]
 * Create an installer for Windows

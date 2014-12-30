@@ -75,6 +75,19 @@ img.logo {
 	right: 43px;
 }
 
+.new-notifier-settings th {
+	font-weight: normal;
+}
+
+.new-notifier-settings.disabled th {
+	color: #999;
+}
+
+.input-sm {
+	width: 40px;
+	height: 21px;
+}
+
 .info-button {
 	position: absolute;
 	right: 83px;

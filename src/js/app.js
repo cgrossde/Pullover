@@ -5,6 +5,7 @@
 var os = require('os');
 var obs = require('obs');
 var gui = require('nw.gui');
+var path = require('path');
 var http = require('https');
 var semver = require('semver');
 var moment = require('moment');
@@ -13,6 +14,13 @@ var autorun = new Autorun('Pullover');
 var OpenClient = require('./lib/pushover-client');
 var openClient = null;
 var packageInfo = require('./package');
+
+var nwNotify = require('nw-notify');
+nwNotify.setConfig({
+	appIcon: nwNotify.getAppPath() + 'images/icon.png'
+});
+
+console.log('APP ICON PATH2', nwNotify.getAppPath() + 'images/icon.png');
 
 // Setup window, menubar and tray
 var win = gui.Window.get();
@@ -89,12 +97,24 @@ tray.menu = menu;
 
 // Really quit app (only calable from tray)
 function quitApp() {
+	nwNotify.closeAll();
 	win.close(true);
 }
 
 // Notification function
 // Usage: notify('NFL-Release', 'Pats vs Broncos 720p usw', 'http://google.com', 'images/nfl3.png');
-function notify(title, text, url, iconPath, retryOnError) {
+function notify(title, text, url, iconPath) {
+	if(localStorage.newNotifier === 'true') {
+		nwNotify.notify(title, text, url, iconPath);
+	} else {
+		nativeNotify(title, text, url, iconPath);
+	}
+}
+
+/**
+ * Use node webkits native notification function
+ */
+function nativeNotify(title, text, url, iconPath, retryOnError) {
 	retryOnError = (retryOnError !== undefined) ? retryOnError : true;
 	var options = {};
 	options.body = text;
@@ -107,7 +127,7 @@ function notify(title, text, url, iconPath, retryOnError) {
 			// Try one more time in 1 sec
 			setTimeout(function() {
 				console.log('Notification retry');
-				notify(title, text, url, iconPath, false);
+				nativeNotify(title, text, url, iconPath, false);
 			}, 1000);
 		}
 	};
@@ -272,12 +292,13 @@ function updateSyncStatus() {
 								.text('Connected');
 	}
 	else if (connectionStatus() === CONN_TIMEOUT) {
+		console.log('TIMEOUT');
 		setStatusOffline();
 		// Allow reconnect if logged in and device registered
 		if (isLoggedIn() && isDeviceRegistered()) {
 			$('td.status-connection').removeClass(classes)
 									.addClass('text-warning')
-									.empty().append('<span class="reconnect-link>Timeout, click to reconnect</span>')
+									.empty().append('<span class="reconnect-link">Timeout, click to reconnect</span>')
 									.find('span.reconnect-link')
 									.on('click', forceReconnect);
 		}
@@ -367,9 +388,13 @@ function getMessages() {
 			console.log(error);
 		})
 	}, function(failed) {
-		showReloginModal('Get notifications failed',
-		'Login was rejected by Pushover API. This device might have been removed from your account.</br>' +
-		'Please try to relogin.', 'danger');
+		// Check if API rejected or no internet connection
+		if(failed.cause.code !== 'ENOTFOUND') {
+			showReloginModal('Get notifications failed',
+				'Login was rejected by Pushover API. This device might have been removed from your account.</br>' +
+				'Please try to relogin.', 'danger');
+		}
+
 		connectionStatus(CONN_DISCONNECTED);
 	});
 }
@@ -590,6 +615,41 @@ function toggleUpdateCheck() {
 	}
 }
 
+function toggleNewNotifier() {
+	if($('.settings-newnotifications').prop('checked')) {
+		localStorage.newNotifier = true;
+		$('.new-notifier-settings').removeClass('disabled');
+		$('.new-notifier-settings input').attr('disabled', false);
+	} else {
+		localStorage.newNotifier = false;
+		$('.new-notifier-settings').addClass('disabled');
+		$('.new-notifier-settings input').attr('disabled', true);
+	}
+}
+
+function updateDisplayTime() {
+	var value = parseInt($('.settings-displaytime').val(), 10);
+	if(isNaN(value)) {
+		$('.settings-displaytime').val(localStorage.displayTime);
+	} else {
+		localStorage.displayTime = value;
+	}
+	// Update config
+	nwNotify.setConfig({ displayTime: localStorage.displayTime * 1000});
+}
+
+function updateMaxConcNotifications() {
+	var value = parseInt($('.settings-maxconcurrent').val(), 10);
+	console.log(value, typeof value, NaN, null);
+	if(isNaN(value)) {
+		$('.settings-maxconcurrent').val(localStorage.maxConcurrentNotifications);
+	} else {
+		localStorage.maxConcurrentNotifications = value;
+	}
+	// Update config
+	nwNotify.setConfig({ maxVisibleNotifications: localStorage.maxConcurrentNotifications });
+}
+
 // Login to Pushover
 $(document).ready(function() {
 	//win.showDevTools();
@@ -625,11 +685,49 @@ $(document).ready(function() {
 	// App version
 	$('.info-version').text(packageInfo.version);
 
+	//
+	// Settings
+	//
+
 	// Run on startup
 	$('.settings-startup').on('change', runOnStartupToggle);
 
 	// Update check
+	if(localStorage.updateCheck !== undefined && localStorage.updateCheck === 'true') {
+		$('.settings-updatecheck').prop('checked', true);
+		versionCheck();
+	}
 	$('.settings-updatecheck').on('change', toggleUpdateCheck);
+
+	// New notifier (autoenable for windows if not yet set)
+	if(localStorage.newNotifier === undefined) {
+		if (os.platform().indexOf('win') === 0) {
+			localStorage.newNotifier = true;
+		}
+	}
+
+	if(localStorage.displayTime === undefined) {
+		localStorage.displayTime = 7;
+	}
+	$('.settings-displaytime').val(localStorage.displayTime)
+		.on('change', updateDisplayTime);
+	nwNotify.setConfig({ displayTime: localStorage.displayTime * 1000 });
+
+	if(localStorage.maxConcurrentNotifications === undefined) {
+		localStorage.maxConcurrentNotifications = 7;
+	}
+	$('.settings-maxconcurrent').val(localStorage.maxConcurrentNotifications)
+		.on('change', updateMaxConcNotifications);
+	nwNotify.setConfig({ maxVisibleNotifications: localStorage.maxConcurrentNotifications });
+
+	if(localStorage.newNotifier === 'true') {
+		$('.settings-newnotifications').prop('checked', true);
+	} else {
+		$('.new-notifier-settings').addClass('disabled');
+		$('.new-notifier-settings input').attr('disabled', true);
+	}
+	$('.settings-newnotifications').on('change', toggleNewNotifier);
+
 
 	// If not logged in or device not registered, show app window
 	// else just leave it in tray
@@ -643,11 +741,6 @@ $(document).ready(function() {
 	// Set message counter
 	updateMessagesReceived();
 
-	// Update checker
-	if(localStorage.updateCheck !== undefined && localStorage.updateCheck === 'true') {
-		$('.settings-updatecheck').prop('checked', true);
-		versionCheck();
-	}
 	hideModal();
 
 	// Init openClient
