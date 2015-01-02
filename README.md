@@ -17,11 +17,11 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 
 Then download the precompiled binarys:
 
-* **Windows (v0.3.0):** [Pullover_0.3.0_Installer.exe](https://sourceforge.net/projects/pullover/files/0.3.0/Pullover_0.3.0_Installer.exe/download)
-* **Mac OS 10.8+ (v0.3.0):** [Pullover.dmg](https://sourceforge.net/projects/pullover/files/0.3.0/Pullover.dmg/download)
-* **Linux x32 (v0.3.0):** [Pullover_0.3.0_linux32.zip](https://sourceforge.net/projects/pullover/files/0.3.0/Pullover_0.3.0_linux32.zip/download)
+* **Windows (v0.3.1):** [Pullover_0.3.1_Installer.exe](https://sourceforge.net/projects/pullover/files/0.3.1/Pullover_0.3.1_Installer.exe/download)
+* **Mac OS 10.8+ (v0.3.1):** [Pullover_0.3.1.dmg](https://sourceforge.net/projects/pullover/files/0.3.1/Pullover_0.3.1.dmg/download)
+* **Linux x32 (v0.3.1):** [Pullover_0.3.1_linux32.zip](https://sourceforge.net/projects/pullover/files/0.3.1/Pullover_0.3.1_linux32.zip/download)
 
-**Please note:** This App is in an **early alpha** state. For now only the Mac and Windows versions are tested. However it should also run under Linux. If you find bugs or the app crashes please create an issue and I will look into it.
+**Please note:** This App is in an **early alpha** state. For now only the Mac version is tested since that's my main operating system. However it should also run under Windows / Linux. If you find bugs or the app crashes under Win/Linux please create an issue and I will look into it.
 
 ## Build your own
 You can create all builds with Mac OS if you have `wine` installed.
@@ -41,6 +41,15 @@ There is no need to always build packaged binaries if you want to dive into the 
 
     npm install -g node-webkit-builder
     node build run
+
+### Bugs
+
+If you encounter a bug or Pullover crashes, please go to the following directory and send me the `pullover.1.log` file by opening an issue:
+
+* OS X - '/Users/user/Library/Application Support/pullover'
+* Windows 8 - 'C:\Users\User\AppData\Roaming\Pullover'
+* Windows XP - 'C:\Documents and Settings\User\Application Data\Pullover'
+* Linux - '/var/local/Pullover'
 
 ## Contributing
 

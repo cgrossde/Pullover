@@ -7,8 +7,10 @@ var obs = require('obs');
 var gui = require('nw.gui');
 var path = require('path');
 var http = require('https');
+var debug = require('./lib/debug')('App');
 var semver = require('semver');
 var moment = require('moment');
+var inspect = require('eyes').inspector({ stream: null });
 var Autorun = require('autorun');
 var autorun = new Autorun('Pullover');
 var OpenClient = require('./lib/pushover-client');
@@ -20,7 +22,7 @@ nwNotify.setConfig({
 	appIcon: nwNotify.getAppPath() + 'images/icon.png'
 });
 
-console.log('APP ICON PATH2', nwNotify.getAppPath() + 'images/icon.png');
+debug.log('APP ICON PATH', nwNotify.getAppPath() + 'images/icon.png');
 
 // Setup window, menubar and tray
 var win = gui.Window.get();
@@ -55,7 +57,7 @@ try {
 }
 catch (ex) {
 	// Will fail on windows
-	// console.log(ex.message);
+	// debug.log(ex.message);
 }
 
 function hideWindow() {
@@ -101,6 +103,31 @@ function quitApp() {
 	win.close(true);
 }
 
+// Catch all uncaught errors to log them to a file
+// and report an issue
+process.on('uncaughtException', function(error) {
+	debug.log(' - - - - - - - - UNCAUGHT EXCEPTION - - - - - - - - ');
+	debug.log('=============== STACK ===============');
+	debug.log(error.stack);
+	debug.log('=============== Error Object ===============');
+	debug.log(inspect(error).replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, ''));
+	debug.log(' - - - - - - - - UNCAUGHT EXCEPTION - - - - - - - - ');
+	// Show modal to report error and restart pullover
+	showWindow();
+	showModal('Fatal error',
+		'Pullover encountered a fatal error. Please goto <a onclick="gui.Shell.openExternal(\'https://github.com/cgrossde/Pullover/issues\');" href="#">Github (Pullover/Issues)</a> ' +
+		'create a new issue and post the contents of your logfile: <a onclick="gui.Shell.showItemInFolder(\'' + debug.getLogFilePath().replace(/\\/gi,'\\\\').replace(' ', '\\ ') + '\');" href="#">' + debug.getLogFilePath().replace(' ', '\\ ') + '</a>', 'danger select-text', [
+			{
+				text: 'Exit Pullover',
+				func: function() {
+					win.close();
+					process.exit(1);
+				}
+			}
+		], true);
+});
+
+
 // Notification function
 // Usage: notify('NFL-Release', 'Pats vs Broncos 720p usw', 'http://google.com', 'images/nfl3.png');
 function notify(title, text, url, iconPath) {
@@ -122,11 +149,11 @@ function nativeNotify(title, text, url, iconPath, retryOnError) {
 
 	var notice = new Notification(title, options);
 	notice.onerror = function(error) {
-		console.log('ERROR displaying notification (retry=' + retryOnError + ')', error);
+		debug.log('ERROR displaying notification (retry=' + retryOnError + ')', error);
 		if (retryOnError) {
 			// Try one more time in 1 sec
 			setTimeout(function() {
-				console.log('Notification retry');
+				debug.log('Notification retry');
 				nativeNotify(title, text, url, iconPath, false);
 			}, 1000);
 		}
@@ -157,7 +184,7 @@ function showLogin() {
 			// Hand over to app again
 			app();
 		}, function(failed) {
-			console.log('Login failed: ' + failed);
+			debug.log('Login failed: ' + failed);
 			showModal('Login failed', failed, 'danger');
 			// Enable Loginbutton again
 			$('.login-button').off().on('click', onClickFunction);
@@ -203,7 +230,7 @@ function showDeviceRegistration() {
 			// Hand over to app again
 			app();
 		}, function(error) {
-			console.log(error);
+			debug.log(error);
 			showModal('Device registration failed', error.message, 'danger');
 			// Enable deviceRegistration-button again
 			$('.deviceRegistration-button').off().on('click', onClickFunction);
@@ -276,7 +303,7 @@ function showStatus() {
 }
 
 function updateSyncStatus() {
-	console.log('Conn-status:', connectionStatus());
+	debug.log('Conn-status:', connectionStatus());
 	var timeSinceLastSync = 'never';
 	if (openClient !== null && openClient.lastInteractionDate() !== null) {
 		timeSinceLastSync = moment(openClient.lastInteractionDate()).fromNow();
@@ -292,7 +319,7 @@ function updateSyncStatus() {
 								.text('Connected');
 	}
 	else if (connectionStatus() === CONN_TIMEOUT) {
-		console.log('TIMEOUT');
+		debug.log('TIMEOUT');
 		setStatusOffline();
 		// Allow reconnect if logged in and device registered
 		if (isLoggedIn() && isDeviceRegistered()) {
@@ -349,16 +376,16 @@ function setStatusOnline() {
 }
 
 function getMessages() {
-	console.log('getMessages - try request');
+	debug.log('getMessages - try request');
 	openClient.fetchNotifications()
 	.then(function(messages) {
-		console.log('getMessages - successful');
+		debug.log('getMessages - successful');
 		if (messages.length === 0) {
-			console.log('No new messages');
+			debug.log('No new messages');
 			return;
 		}
 		else {
-			console.log('New messages: ' + messages.length);
+			debug.log('New messages: ' + messages.length);
 		}
 		if (localStorage.messagesReceived === undefined) {
 			localStorage.messagesReceived = messages.length;
@@ -385,7 +412,7 @@ function getMessages() {
 		};
 		openClient.acknowledgeNotification(options)
 		.catch(function(error) {
-			console.log(error);
+			debug.log(error);
 		})
 	}, function(failed) {
 		// Check if API rejected or no internet connection
@@ -419,7 +446,7 @@ function showReloginModal(title, text, type) {
 	// Hide again if reconnect happens in the meantime
 	if(openClient) {
 		openClient.once('connected', function() {
-			console.log('Relogin modal hidden');
+			debug.log('Relogin modal hidden');
 			hideModal();
 			hideWindow();
 		});
@@ -508,8 +535,8 @@ function showSpinner() {
 	$('.modal-spinner').fadeIn();
 }
 
-function showModal(title, text, type, addButtonArray) {
-	console.log('Show Modal', title, text, type, addButtonArray);
+function showModal(title, text, type, addButtonArray, hideCloseButton) {
+	debug.log('Show Modal', title, text, type, addButtonArray);
 	$('.modal-additional-button').remove();
 	var textClass = (type) ? 'modal-text text-' + type : 'modal-text';
 	$('#modal').hide().fadeIn();
@@ -530,6 +557,9 @@ function showModal(title, text, type, addButtonArray) {
 			});
 		});
 	}
+	if(hideCloseButton === true) {
+		$('.modal-button').hide();
+	}
 }
 
 function hideModal() {
@@ -540,7 +570,7 @@ function hideModal() {
 }
 
 function versionCheck() {
-	console.log('versionCheck');
+	debug.log('versionCheck');
 	var repoUrl = 'https://raw.githubusercontent.com/cgrossde/Pullover/master/package.json';
 	http.get(repoUrl, function(res) {
 		var body = '';
@@ -572,7 +602,7 @@ function versionCheck() {
 		});
 
 	}).on('error', function(e) {
-		console.log('Version check failed: ', e);
+		debug.log('Version check failed: ', e);
 	});
 }
 
@@ -593,7 +623,7 @@ function runOnStartupToggle() {
 			}
 		})
 		.catch(function(error) {
-			console.log(error);
+			debug.log(error);
 		});
 	}
 }
@@ -640,7 +670,7 @@ function updateDisplayTime() {
 
 function updateMaxConcNotifications() {
 	var value = parseInt($('.settings-maxconcurrent').val(), 10);
-	console.log(value, typeof value, NaN, null);
+	debug.log(value, typeof value, NaN, null);
 	if(isNaN(value)) {
 		$('.settings-maxconcurrent').val(localStorage.maxConcurrentNotifications);
 	} else {
@@ -652,7 +682,7 @@ function updateMaxConcNotifications() {
 
 // Login to Pushover
 $(document).ready(function() {
-	//win.showDevTools();
+	// win.showDevTools();
 	// Show app-container
 	$('.app-container').removeClass('hide');
 	// Setup tobpar buttons
@@ -693,7 +723,7 @@ $(document).ready(function() {
 	$('.settings-startup').on('change', runOnStartupToggle);
 
 	// Update check
-	if(localStorage.updateCheck !== undefined && localStorage.updateCheck === 'true') {
+	if(localStorage.updateCheck === undefined || localStorage.updateCheck === 'true') {
 		$('.settings-updatecheck').prop('checked', true);
 		versionCheck();
 	}
@@ -744,7 +774,9 @@ $(document).ready(function() {
 	hideModal();
 
 	// Init openClient
-	var options = {};
+	var options = {
+		debug: true
+	};
 	if (isLoggedIn()) {
 		options.secret = localStorage.secret;
 		options.id = localStorage.id;
@@ -781,10 +813,9 @@ $(document).ready(function() {
 	if (isLoggedIn() && isDeviceRegistered()) {
 		getMessages();
 		openClient.connect().catch(function(failure) {
-			console.log(failure);
+			debug.log(failure);
 		});
 	}
-
 	// Start App
 	app();
 });

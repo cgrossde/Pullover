@@ -244,14 +244,14 @@ function updateReadme(files) {
  */
 function createDMG() {
     return new Promise(function(resolve, reject) {
-        var targetPath = buildConf.deployDir + '/Pullover.dmg';
+        var targetPath = buildConf.deployDir + '/Pullover_' + packageInfo.version + '.dmg';
         if(fs.existsSync(targetPath)){
             console.log(targetPath + ' already existed. Deleting it.');
             fs.unlinkSync(targetPath);
         }
         var ee = appdmg('config/dmgConf.json', targetPath);
         ee.on('finish', function () {
-            console.log('Pullover.dmg done. ' + Math.floor(fs.statSync(targetPath).size / 1024 / 1024) + ' MB');
+            console.log('Pullover_' + packageInfo.version + '.dmg done. ' + Math.floor(fs.statSync(targetPath).size / 1024 / 1024) + ' MB');
             resolve();
         });
 

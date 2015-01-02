@@ -40,6 +40,15 @@ There is no need to always build packaged binaries if you want to dive into the 
     npm install -g node-webkit-builder
     node build run
 
+### Bugs
+
+If you encounter a bug or Pullover crashes, please go to the following directory and send me the `pullover.1.log` file by opening an issue:
+
+* OS X - '/Users/user/Library/Application Support/pullover'
+* Windows 8 - 'C:\Users\User\AppData\Roaming\Pullover'
+* Windows XP - 'C:\Documents and Settings\User\Application Data\Pullover'
+* Linux - '/var/local/Pullover'
+
 ## Contributing
 
 If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I open-sourced this App with the hope that others contribute to it. Especially for Windows and Linux since I rarely use those systems.

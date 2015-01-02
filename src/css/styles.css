@@ -4,6 +4,10 @@ body {
 	-webkit-user-select: none;
 }
 
+.select-text {
+	-webkit-user-select: text;
+}
+
 #modal {
 	z-index: 1000;
 	position: absolute;

@@ -21,6 +21,7 @@
 'use strict';
 var _ = require('lodash');
 var util = require('util');
+var debug = require('./debug')('OpenClient');
 var Promise = require('promise');
 var request = require('request');
 var WebSocket = require('ws');
@@ -88,7 +89,8 @@ module.exports = OpenClient;
 
 OpenClient.prototype.log = function() {
 	if(this.options.debug) {
-		console.log.apply(console, arguments);
+		// console.log.apply(console, arguments);
+		debug.log.apply(null, arguments);
 	}
 }
 
