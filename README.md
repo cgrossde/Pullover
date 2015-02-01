@@ -23,6 +23,11 @@ Then download the precompiled binarys:
 
 **Please note:** This App is in an **early alpha** state. For now only the Mac version is tested since that's my main operating system. However it should also run under Windows / Linux. If you find bugs or the app crashes under Win/Linux please create an issue and I will look into it.
 
+## Notifications
+
+**Mac OS X:** Pullover will use the native OS X notification center. Don't activate the *Use new notifications* option.
+**Windwos:** Since windows has no notification center I created the [nw-notify](https://github.com/cgrossde/nw-notify) package which displays nice notifications in the lower right corner. If you install Pullover on windows it will automatically enable *Use new notifications*.
+
 ## Build your own
 You can create all builds with Mac OS if you have `wine` installed.
 
