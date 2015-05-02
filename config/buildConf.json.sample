@@ -1,6 +1,6 @@
 {
 	"nwbuild": {
-		"platforms": ["osx", "win", "linux32"],
+		"platforms": ["osx64", "win32", "linux32"],
 	    "files": "./src/**/**",
 	    "buildDir": "./bin",
 	    "macIcns": "./res/icon.icns",
@@ -20,6 +20,8 @@
 		},
 		"project": ""
 	},
+
+	"certPassword": "xyz",
 
 	"deployDir": "./bin/deploy"
 }

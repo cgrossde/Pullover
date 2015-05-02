@@ -7,3 +7,4 @@ config/buildConf.json
 res/cert.spc
 res/cert.pvk
 *.sublime-*
+.DS_Store
