@@ -1,6 +1,6 @@
 To build this project for Windows on a Mac/Linux, some prequesites are required:
 
-Wine is needed winIco and the Pullover installer (makensis).
+Wine and xquartz is needed for the Windows Icon and Pullover installer (makensis).
 Mono MDK is needed for code signing (codesign).
 
 ```

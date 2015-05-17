@@ -11,41 +11,38 @@ I discovered Pushover in mid November 2014 and was really excited. The only thin
 * Make the notification clickable to open URLs attached to notifications
 * Support for Windows or Linux
 
-## Installation - prebuilt binaries
+## Installation / Download
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
-Then download the precompiled binarys:
 
-* **Windows (v0.3.1):** [Pullover_0.3.1_Installer.exe](https://sourceforge.net/projects/pullover/files/0.3.1/Pullover_0.3.1_Installer.exe/download)
-* **Mac OS 10.8+ (v0.3.1):** [Pullover_0.3.1.dmg](https://sourceforge.net/projects/pullover/files/0.3.1/Pullover_0.3.1.dmg/download)
-* **Linux x32 (v0.3.1):** [Pullover_0.3.1_linux32.zip](https://sourceforge.net/projects/pullover/files/0.3.1/Pullover_0.3.1_linux32.zip/download)
+* **Linux x32 (v0.3.2):** [Pullover_0.3.2_linux32.zip](https://sourceforge.net/projects/pullover/files/0.3.2/Pullover_0.3.2_linux32.zip/download)
+* **Windows x32 (v0.3.2):** [Pullover_0.3.2_Installer.exe](https://sourceforge.net/projects/pullover/files/0.3.2/Pullover_0.3.2_Installer.exe/download)
+* **Mac OS 10.8+ x64 (v0.3.2):** [Pullover_0.3.2.dmg](https://sourceforge.net/projects/pullover/files/0.3.2/Pullover_0.3.2.dmg/download)
 
-**Please note:** This App is in an **early alpha** state. For now only the Mac version is tested since that's my main operating system. However it should also run under Windows / Linux. If you find bugs or the app crashes under Win/Linux please create an issue and I will look into it.
-
-## Notifications
-
-**Mac OS X:** Pullover will use the native OS X notification center. Don't activate the *Use new notifications* option.
-**Windwos:** Since windows has no notification center I created the [nw-notify](https://github.com/cgrossde/nw-notify) package which displays nice notifications in the lower right corner. If you install Pullover on windows it will automatically enable *Use new notifications*.
+**Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
 ## Build your own
-You can create all builds with Mac OS if you have `wine` installed.
+You can create builds for all platforms with Mac OS, take a look at [CROSSPLATFORM.md](CROSSPLATFORM.md) to find out about necessary dependencies.
 
-1. Install dependencies of the build process: `npm install`
+1. Install build dependencies: `npm install`
 2. Install dependencies of Pullover: `cd src && npm install`
-3. Open `config/buildConf.json.sample` and adapt `platforms:` to your preference
-4. Rename `config/buildConf.json.sample` to `config/buildConf.json`
-5. Return to root dir and build binaries with: `node build build`
+3. Rename `config/buildConf.json.sample` to `config/buildConf.json`
+4. Open `config/buildConf.json` and adapt `platforms:` to your preference
+5. Return to root dir and build binaries with: `./builder build`
 6. If the build process was successful, you can find the binaries in `bin/pullover/[platform]`
-7. If you want to package them (`.zip`/`.dmg`), execute `node build createDist`
+7. If you want to package them (`.zip`/`.dmg`/`.exe`), execute `./builder createDist`
 8. The distributables will be placed in `bin/deploy`
 
 ### Development
 
-There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install `node-webkit-builder` and run the `build` script:
+There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install the node dependencies in the root folder and in source with `npm install` and run the `builder` script. Make sure to copy `config/buildConf.json.sample` to `config/buildConf.json` first
 
-    npm install -g node-webkit-builder
-    node build run
+    cp `config/buildConf.json.sample` `config/buildConf.json`
+    npm install
+    cd src && npm install
+    cd ..
+    ./builder run
 
 ### Bugs
 
@@ -60,17 +57,9 @@ If you encounter a bug or Pullover crashes, please go to the following directory
 
 If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I open-sourced this App with the hope that others contribute to it. Especially for Windows and Linux since I rarely use those systems.
 
-## Todo
+## Planned features
 
-* Add option to start Pullover on system start [DONE]
-* Resize icon size for OS X
-* Allow to pause notifications
-* Create better looking notifications for Windows [DONE]
-* Create a history for Windows and Linux [INPROGRESS]
-* Improve codebase [INPROGRESS]
-* Create an installer for Windows
-* Create a launcher for Ubuntu
-* Test App under Ubuntu and Windows
+I am currently rewriting Pullover and a list of planned features is in the [wiki](https://github.com/cgrossde/Pullover/wiki). If you have any feature wishes not listed there then open an issue and I will take a look at it.
 
 ## License
 
