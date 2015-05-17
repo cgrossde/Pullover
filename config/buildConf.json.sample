@@ -7,7 +7,7 @@
 	    "macIcns": "./res/icon.icns",
 	    "winIco": "./res/icon.ico",
 	    "macPlist": {
-	        "CFBundleIdentifier": "de.chris-labs.pullover",
+	        "CFBundleIdentifier": "de.chris-labs.pullover.sample",
 	        "CFBundleDisplayName": "Pullover",
 	        "CFBundleName": "Pullover"
 	    }

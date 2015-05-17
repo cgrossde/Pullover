@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-
+'use strict';
 var fs = require('fs.extra');
 var del = require('del');
-var swig  = require('swig');
+var swig = require('swig');
 var async = require('async');
 var appdmg = require('appdmg');
 var program = require('commander');
@@ -16,11 +16,10 @@ var commanderTabTab = require('commander-tabtab');
 var builderPackageInfo = require('./package');
 
 var buildConf = require('./config/buildConf');
-var dmgConf = require('./config/dmgConf');
 
 // Console app
 program._name = './builder';
-program.version(builderPackageInfo.version)
+program.version(builderPackageInfo.version);
 // build
 program
     .version(packageInfo.version)
@@ -44,13 +43,27 @@ program
             updateReadme(files);
         });
     });
+
+// Update README
+program
+    .command('updateReadme')
+    .description('Update README from template.')
+    .action(function updateReadmeAnon() {
+        var files = [
+            'Pullover_' + packageInfo.version + '.dmg',
+            'Pullover_' + packageInfo.version + '_Installer.exe',
+            'Pullover_' + packageInfo.version + '_linux32.zip'
+        ];
+        updateReadme(files);
+    });
+
 program
     .command('run')
     .description('Run app')
     .action(runApp);
 
 // Display info on how to enable tabcompletion
-program.on('--help', function showTabCompletionWithHelp(){
+program.on('--help', function showTabCompletionWithHelp() {
   console.log('  Tab-Completion:');
   console.log('');
   console.log('    To enable tab completion execute: source <(./builder completion)');
@@ -69,12 +82,12 @@ commanderTabTab.init(program, './builder');
 
 program.parse(process.argv);
 
-
 function runApp() {
     var nw = new NwBuilder(buildConf.nwbuild);
     // Enable output to console
     nw.on('stdout', function(data) {process.stdout.write(data.toString()); });
     nw.on('stderr', function(data) {process.stdout.write(data.toString()); });
+    nw.on('error', console.log);
     return nw.run();
 }
 
@@ -87,7 +100,7 @@ function build() {
         var nw = new NwBuilder(buildConf.nwbuild);
         console.log('BUILD...');
         // Log stuff you want
-        nw.on('error',  console.log);
+        nw.on('error', console.log);
 
         // Delete src/node_modules/ws/build to make it cross platform (there are fallbacks)
         del(['src/node_modules/ws/build'], function() {
@@ -123,12 +136,12 @@ function createDistributables() {
             async.map(buildConf.nwbuild.platforms, function nwbuild(platform, done) {
                 var path = './bin/pullover/' + platform;
                 // DMG?
-                if(platform === 'osx64') {
+                if (platform === 'osx64') {
                     createDMG().then(done);
                     return;
                 }
                 // Windows installer?
-                else if(platform === 'win32') {
+                else if (platform === 'win32') {
                     createWindowsInstaller().then(done);
                     return;
                 }
@@ -136,7 +149,7 @@ function createDistributables() {
                 var zipName = 'Pullover_' + version + '_' + platform + '.zip';
 
                 var zipPath = deploymentPath + '/' + zipName;
-                if(fs.existsSync(zipPath)){
+                if (fs.existsSync(zipPath)){
                     console.log(zipPath + ' already existed. Deleting it.');
                     fs.unlinkSync(zipPath);
                 }
@@ -146,20 +159,20 @@ function createDistributables() {
                     console.log(zipName + ' done. ' + Math.floor(archive.pointer() / 1024 / 1024) + ' MB');
                     done();
                 });
-                archive.on('error', function zipError(err){
+                archive.on('error', function zipError(err) {
                     throw err;
                 });
                 archive.pipe(output);
                 archive.bulk([
-                    { expand: true, cwd: path, src: ['**'], dest: '.'}
+                    { expand: true, cwd: path, src: ['**'], dest: '.' }
                 ]);
                 archive.finalize();
             }, function(err) {
                 // All zipped
-                console.log('ALL DONE');
+                console.log('ALL DONE', err);
                 resolve();
             });
-        })
+        });
     }).catch(function (error) {
         console.log('DIST CREATION PROCESS FAILED');
         console.error(error);
@@ -180,10 +193,11 @@ function createDistributables() {
  * @return {promise}
  */
 function deployToSourceforge(localDir, remoteDir) {
+    console.log('Upload', localDir, remoteDir);
     var conn = new Connection();
     var files;
     return new Promise(function(resolve, reject) {
-        remoteDir = '/home/pfs/p/'+buildConf.sourceforge.project+'/' + remoteDir;
+        remoteDir = '/home/pfs/p/' + buildConf.sourceforge.project + '/' + remoteDir;
         conn.on('ready', function connected() {
             console.log('Connection :: ready');
             // Init SFTP
@@ -193,6 +207,7 @@ function deployToSourceforge(localDir, remoteDir) {
                 sftp.mkdir(remoteDir, function sftpCreateDir(err) {
                     if (err) console.log('Dir already exists', err);
                     else console.log('Dir created');
+
                     // Upload files
                     files = fs.readdirSync(localDir);
                     async.eachSeries(files, function sftpUploadFiles(file, callback) {
@@ -230,15 +245,15 @@ function updateReadme(files) {
                         packageInfo.version + '/';
 
         function getPlatformName(file) {
-            if(/\.exe/.test(file)) return "Windows x32";
-            else if (/\.dmg/.test(file)) return "Mac OS 10.8+ x64";
-            else if (/_linux32/.test(file)) return "Linux x32";
-            else if (/_linux64/.test(file)) return "Linux x64";
-            else return "Unkown";
+            if (/\.exe/.test(file)) return 'Windows x32';
+            else if (/\.dmg/.test(file)) return 'Mac OS 10.8+ x64';
+            else if (/_linux32/.test(file)) return 'Linux x32';
+            else if (/_linux64/.test(file)) return 'Linux x64';
+            else return 'Unkown';
         }
 
         // Build downloads array
-        for(i = 0; i < files.length; i++) {
+        for (var i = 0; i < files.length; i++) {
             var file = files[i];
             var download = {
                 fileName: file,
@@ -256,7 +271,7 @@ function updateReadme(files) {
         };
         // Write new readme
         fs.writeFile('./README.md', template(templateVars), function(err) {
-            if(err) reject(err);
+            if (err) reject(err);
             resolve();
         });
     });
@@ -269,7 +284,7 @@ function updateReadme(files) {
 function createDMG() {
     return new Promise(function(resolve, reject) {
         var targetPath = buildConf.deployDir + '/Pullover_' + packageInfo.version + '.dmg';
-        if(fs.existsSync(targetPath)){
+        if (fs.existsSync(targetPath)){
             console.log(targetPath + ' already existed. Deleting it.');
             fs.unlinkSync(targetPath);
         }
@@ -295,7 +310,7 @@ function createWindowsInstaller() {
     return new Promise(function(resolve, reject) {
         var buildDir = './bin/tmp';
         var filename = 'Pullover_' + packageInfo.version + '_Installer.exe';
-        if(fs.existsSync(buildDir)){
+        if (fs.existsSync(buildDir)){
             // Clear tmp dir
             del([buildDir], createWindowsInstaller);
             return;
@@ -309,14 +324,14 @@ function createWindowsInstaller() {
             name: packageInfo.name,
             prettyName: 'Pullover',
             version: packageInfo.version,
-            src: "../pullover/win32",
-            dest: "../deploy/" + filename,
-            icon: "../../res/icon.ico",
-            setupIcon: "../../res/icon.ico",
-            banner: "../../res/windowsInstaller/winInst_header.bmp"
+            src: '../pullover/win32',
+            dest: '../deploy/' + filename,
+            icon: '../../res/icon.ico',
+            setupIcon: '../../res/icon.ico',
+            banner: '../../res/windowsInstaller/winInst_header.bmp'
         };
         // Copy icon to win source
-        if(! fs.existsSync('./bin/pullover/win32/icon.ico')){
+        if (! fs.existsSync('./bin/pullover/win32/icon.ico')){
             fs.writeFileSync('./bin/pullover/win32/icon.ico', fs.readFileSync('./res/icon.ico'));
         }
 
@@ -345,18 +360,18 @@ function createWindowsInstaller() {
                     signInstall.stdout.on('data', function(data) {
                         process.stdout.write(data);
                         // It's a hack -.-
-                        if(data.toString().indexOf('.pvk:') !== -1) {
+                        if (data.toString().indexOf('.pvk:') !== -1) {
                             console.log('Entering password');
                             signInstall.stdin.write(buildConf.certPassword + '\n');
                         }
 
                     });
-                    signInstall.stderr.pipe(process.stdout)
+                    signInstall.stderr.pipe(process.stdout);
                     signInstall.on('close', function() {
                         console.log('Installer signed');
                         // Clear tmp and return
                         del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
-                    })
+                    });
                 });
             });
         });
