@@ -20,12 +20,16 @@
  */
 'use strict';
 var _ = require('lodash');
+var os = require('os');
 var util = require('util');
 var debug = require('./debug')('OpenClient');
 var Promise = require('promise');
-var request = require('request');
 var WebSocket = require('ws');
 var EventEmitter = require('events').EventEmitter;
+
+var packageInfo = require('../package.json');
+var userAgent = 'Pullover/' + packageInfo.version + ' (' + os.platform() + ' ' + os.arch() + ' ' + os.release() + ')';
+var request = require('request').defaults({ headers: { 'User-Agent': userAgent } });
 
 /**
  * The OpenClient classe
