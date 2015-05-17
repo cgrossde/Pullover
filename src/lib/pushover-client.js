@@ -28,7 +28,8 @@ var WebSocket = require('ws');
 var EventEmitter = require('events').EventEmitter;
 
 var packageInfo = require('../package.json');
-var userAgent = 'Pullover/' + packageInfo.version + ' (' + os.platform() + ' ' + os.arch() + ' ' + os.release() + ')';
+var userAgent = 'Pullover/' + packageInfo.version + ' (' + os.platform() + ' '
+	+ os.arch() + ' ' + os.release() + ')';
 var request = require('request').defaults({ headers: { 'User-Agent': userAgent } });
 
 /**
@@ -90,13 +91,12 @@ util.inherits(OpenClient, EventEmitter);
 // Export
 module.exports = OpenClient;
 
-
 OpenClient.prototype.log = function() {
-	if(this.options.debug) {
+	if (this.options.debug) {
 		// console.log.apply(console, arguments);
 		debug.log.apply(null, arguments);
 	}
-}
+};
 
 /**
  * Login with email and password to get secret for further calls
@@ -432,12 +432,12 @@ OpenClient.prototype.connect = function(optionsOverride, callback) {
 		// Register callbacks
 		self.webSocket.on('open', function() {
 			self.emit('connected');
-			resolve(true);		// Resolve here, we can not know if login will be successful
 			var loginToken = 'login:' + options.deviceId + ':' + options.secret;
 			if (self.webSocket !== null && self.webSocket !== undefined && self.webSocket.readyState === 1) {
 				self.webSocket.send(loginToken);
 				self._resetKeepAlive();
 			}
+			resolve(true);		// Resolve here, we can not know if login will be successful
 		});
 
 		self.webSocket.on('message', function(data) {
@@ -473,8 +473,11 @@ OpenClient.prototype.connect = function(optionsOverride, callback) {
 				else {
 					// Still closed by endpoint, possibly wrong credentials
 					// => emit event
+					self.log('Connection seems to have been closed by API Endpoint, this is unusual');
+					self.log('Trying to reconnect ...');
 					self.log('closedByEndpoint');
 					self.emit('closedByEndpoint');
+					self.reconnect();
 				}
 			}
 			else { // Closed by OpenClient
@@ -513,6 +516,11 @@ OpenClient.prototype._parseCommand = function(command) {
 		this._resetKeepAlive();
 		this.emit('message');
 
+	}
+	else if (command === 'E') {
+		this.log('Login failed');
+		this.emit('loginFailed');
+		this.disconnect();
 	}
 	// Reconnect
 	else if (command === 'R') {

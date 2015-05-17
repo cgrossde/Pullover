@@ -417,6 +417,7 @@ function getMessages() {
 	}, function(failed) {
 		// Check if API rejected or no internet connection
 		if(failed.cause.code !== 'ENOTFOUND') {
+			debug.log('showReloginModal because of getting messages failed');
 			showReloginModal('Get notifications failed',
 				'Login was rejected by Pushover API. This device might have been removed from your account.</br>' +
 				'Please try to relogin.', 'danger');
@@ -583,7 +584,7 @@ function versionCheck() {
 			var latestInfo = JSON.parse(body);
 			if (semver.lt(packageInfo.version, latestInfo.version)) {
 				notify('Pullver Update',
-					'New Update available: v' + latestInfo.version + '.\nYou are using v' + packageInfo.version,
+					'New Update available: v' + latestInfo.version + '.\nYou are using v' + packageInfo.version + '. Click to update',
 					'https://github.com/cgrossde/Pullover/releases/latest'
 				);
 				// Show update in about/info
@@ -694,6 +695,10 @@ $(document).ready(function() {
 	$('.show-devtools-button').on('click', function() {
 		win.showDevTools();
 	});
+	// Setup show log file folder
+	$('.open-log-folder').on('click', function() {
+		gui.Shell.showItemInFolder(debug.getLogFilePath());
+	});
 	// Setup registration link
 	$('.create-account-link').on('click', function() {
 		gui.Shell.openExternal('https://pushover.net/login');
@@ -722,12 +727,8 @@ $(document).ready(function() {
 	// Run on startup
 	$('.settings-startup').on('change', runOnStartupToggle);
 
-	// Update check
-	if(localStorage.updateCheck === undefined || localStorage.updateCheck === 'true') {
-		$('.settings-updatecheck').prop('checked', true);
-		versionCheck();
-	}
-	$('.settings-updatecheck').on('change', toggleUpdateCheck);
+	// Update check - always check for updates!!
+	versionCheck();
 
 	// New notifier (autoenable for windows if not yet set)
 	if(localStorage.newNotifier === undefined) {
@@ -795,6 +796,8 @@ $(document).ready(function() {
 	});
 	openClient.on('connectionTimeout', function() {
 		connectionStatus(CONN_TIMEOUT);
+		// Fetch messages after a timeout (usually due to sleep of mac)
+		getMessages();
 	});
 	openClient.on('keepAlive', function() {
 		connectionStatus(CONN_CONNECTED);
@@ -804,7 +807,8 @@ $(document).ready(function() {
 		enableCountdown(secondsTillReconnect);
 	});
 	openClient.on('message', getMessages);
-	openClient.on('closedByEndpoint', function() {
+	openClient.on('loginFailed', function() {
+		debug.log('showReloginModal because of failed login');
 		showReloginModal('Login failed',
 		'Login was rejected by Pushover API. This device might have been removed from your account.</br>' +
 		'Please try to relogin.', 'danger');
