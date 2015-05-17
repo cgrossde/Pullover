@@ -572,7 +572,7 @@ function hideModal() {
 
 function versionCheck() {
 	debug.log('versionCheck');
-	var repoUrl = 'https://raw.githubusercontent.com/cgrossde/Pullover/master/package.json';
+	var repoUrl = 'https://raw.githubusercontent.com/cgrossde/Pullover/master/src/package.json';
 	http.get(repoUrl, function(res) {
 		var body = '';
 
@@ -635,14 +635,6 @@ function updateMessagesReceived() {
 	}
 	else {
 		$('.messages-received').text('none');
-	}
-}
-
-function toggleUpdateCheck() {
-	if($('.settings-updatecheck').prop('checked')) {
-		localStorage.updateCheck = true;
-	} else {
-		localStorage.updateCheck = false;
 	}
 }
 
