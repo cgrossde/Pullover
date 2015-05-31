@@ -18,6 +18,8 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 {% for download in downloads %}
 * **{{download.platformName}} (v{{version}}):** [{{download.fileName}}]({{download.url}}){% endfor %}
 
+**Installation on Linux:** Please refer to this wiki article [wiki/Installing-on-Linux](https://github.com/cgrossde/Pullover/wiki/Installing-on-Linux)
+
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
 ## Build your own
