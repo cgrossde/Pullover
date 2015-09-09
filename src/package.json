@@ -1,22 +1,36 @@
 {
-  "name": "pullover",
-  "version": "0.3.2",
+  "name": "pullover-app",
+  "version": "0.4.0",
   "description": "A pushover desktop client",
   "main": "index.html",
   "author": "Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)",
   "license": "GPL",
+  "devDependencies": {
+    "babel-core": "^5.4.7",
+    "babel-eslint": "^3.1.9",
+    "babel-loader": "^5.1.2",
+    "bower": "^1.5.2",
+    "css-loader": "^0.15.6",
+    "eslint-plugin-react": "^2.3.0",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "file-loader": "^0.8.4",
+    "html-webpack-plugin": "^1.6.0",
+    "node-sass": "^3.2.0",
+    "sass-loader": "^1.0.3",
+    "style-loader": "^0.12.3",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.10.5"
+  },
   "dependencies": {
-    "autorun": "^1.0.0",
-    "debug": "^2.1.1",
-    "lodash": "^2.4.1",
-    "mkdirp": "^0.5.0",
-    "moment": "^2.8.4",
-    "nw-notify": "^0.2.0",
-    "obs": "^0.11.2",
-    "promise": "^6.0.1",
-    "request": "^2.48.0",
-    "semver": "^4.1.0",
-    "ws": "^0.6.2"
+    "autorun": "^1.0.3",
+    "bootstrap": "^3.3.5",
+    "bootstrap-sass": "^3.3.5",
+    "eslint": "^1.0.0",
+    "lodash": "^3.10.0",
+    "mkdirp": "^0.5.1",
+    "promise": "^7.0.3",
+    "react": "^0.13.0",
+    "request": "^2.60.0"
   },
   "window": {
     "title": "Pullover",
@@ -24,9 +38,8 @@
     "toolbar": false,
     "frame": false,
     "width": 450,
-    "height": 330
-  },
-  "devDependencies": {
-    "eyes": "^0.1.8"
+    "height": 330,
+    "show": false,
+    "transparent": true
   }
 }

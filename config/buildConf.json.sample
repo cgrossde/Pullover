@@ -2,7 +2,7 @@
 	"nwbuild": {
 		"version": "0.12.1",
 		"platforms": ["osx64", "win32", "linux32"],
-	    "files": "./src/**/**",
+	    "files": "./dist/**/**",
 	    "buildDir": "./bin",
 	    "macIcns": "./res/icon.icns",
 	    "winIco": "./res/icon.ico",

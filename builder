@@ -22,7 +22,6 @@ program._name = './builder';
 program.version(builderPackageInfo.version);
 // build
 program
-    .version(packageInfo.version)
     .command('build')
     .description('Build binaries')
     .action(build);
@@ -102,6 +101,9 @@ function build() {
         // Log stuff you want
         nw.on('error', console.log);
 
+        /**
+         * @todo  Still needed?
+         */
         // Delete src/node_modules/ws/build to make it cross platform (there are fallbacks)
         del(['src/node_modules/ws/build'], function() {
             // Build returns a promise

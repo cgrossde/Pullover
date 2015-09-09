@@ -1,10 +1,21 @@
 node_modules
+# Don't commit the distributables or nw.js binaries
 cache
 bin
 *.nw
 npm-debug.log
+
+# Keep the config and code certificates private
 config/buildConf.json
 res/cert.spc
 res/cert.pvk
+
+# Don't commit the compiled app, except images, sounds and the license
+dist/*
+!dist/images
+!dist/sounds
+!dist/LICENSE
+
+# System and editor files
 *.sublime-*
 .DS_Store
