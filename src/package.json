@@ -23,13 +23,13 @@
   },
   "dependencies": {
     "autorun": "^1.0.3",
-    "bootstrap": "^3.3.5",
     "bootstrap-sass": "^3.3.5",
     "eslint": "^1.0.0",
     "lodash": "^3.10.0",
     "mkdirp": "^0.5.1",
     "promise": "^7.0.3",
     "react": "^0.13.0",
+    "react-router": "^1.0.0-beta3",
     "request": "^2.60.0"
   },
   "window": {
@@ -39,7 +39,6 @@
     "frame": false,
     "width": 450,
     "height": 330,
-    "show": false,
-    "transparent": true
+    "show": false
   }
 }

@@ -15,6 +15,7 @@
     "commander": "^2.5.0",
     "commander-tabtab": "^0.1.0",
     "del": "^1.0.0",
+    "eyes": "^0.1.8",
     "fs.extra": "^1.2.1",
     "install": "^0.1.8",
     "node-webkit-builder": "^1.0.4",

@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
+import Navbar from './Navbar'
 
 export default class App extends Component {
   displayName: 'App'
   render() {
     return (
       <div>
-        <h1 className="test">Prototype</h1>
-        <p>Some text goes here</p>
+        <Navbar />
+        {this.props.children}
       </div>
     )
   }

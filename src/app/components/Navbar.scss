@@ -1,0 +1,40 @@
+div.navbar {
+	background-color: #02A3EF;
+	-webkit-app-region: drag;
+	position: relative;
+	cursor: pointer;
+
+	img.logo {
+		margin: 7px;
+		height: 30px;
+	}
+
+	.close-button, .status-button, .info-button, .settings-button {
+		position: absolute;
+		top: 7px;
+		font-size: 25px;
+		cursor: pointer;
+		-webkit-app-region: no-drag;
+	}
+
+	.close-button {
+		right: 7px;
+		border: 0;
+		padding: 0;
+		background: transparent;
+	}
+
+	.settings-button {
+		right: 43px;
+	}
+
+	.info-button {
+		position: absolute;
+		right: 83px;
+	}
+
+	.status-button {
+		position: absolute;
+		right: 123px;
+	}
+}
