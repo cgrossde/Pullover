@@ -3,3 +3,7 @@ $icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
 @import '~bootstrap-sass/assets/stylesheets/bootstrap';
 
 // Global styles go here
+h1,h2,h3 {
+	color: #02A3EF;
+	margin-top: 15px;
+}
