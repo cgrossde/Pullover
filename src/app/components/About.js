@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Row, Col, Table } from 'react-bootstrap'
+import { openExternalLink } from '../nw/Window'
+import packageInfo from 'json!../../package.json'
 
 export default class About extends Component {
   displayName: 'About'
@@ -15,15 +17,20 @@ export default class About extends Component {
                 <tbody>
                   <tr>
                     <th>Version</th>
-                    <td className="info-version"></td>
+                    <td className="info-version">{packageInfo.version}</td>
                   </tr>
                   <tr>
                     <th>Homepage</th>
-                    <td><a className="github-link" href="#">Github cgrossde/pullover</a></td>
+                    <td>
+                      <a className="github-link" href="https://github.com/cgrossde/Pullover"
+                        onClick={openExternalLink}>Github cgrossde/pullover</a>
+                    </td>
                   </tr>
                   <tr>
                     <th>Found a bug?</th>
-                    <td><a className="github-issue-link" href="#">Report it here</a></td>
+                    <td><a className="github-issue-link"
+                      href="https://github.com/cgrossde/Pullover/issues"
+                      onClick={openExternalLink}>Report it here</a></td>
                   </tr>
                   <tr>
                     <th>Messages received</th>
