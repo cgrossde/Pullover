@@ -5,7 +5,9 @@ import history from '../services/History'
 
 // Create permanent tray icon
 // Tray icon
-var icon = (os.platform() === 'darwin') ? 'images/tray_mac@2x.png' : 'images/tray.png'
+// tiffutil -cathidpicheck tray_mac.png tray_mac@2x.png -out tray_mac.tiff
+var icon = (os.platform() === 'darwin') ? 'images/tray_mac.tiff' : 'images/tray.png'
+console.log(icon)
 var tray = new Gui.Tray({
 	icon: icon
 })
