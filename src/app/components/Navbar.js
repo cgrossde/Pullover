@@ -9,7 +9,7 @@ export default class Navbar extends Component {
 
   render() {
     return (
-      <div className="navbar">
+      <div className="titlebar">
         <img className="logo" src="images/logo.png"/>
         <div className="close-button" data-toggle="tooltip" data-placement="bottom" title="Send to tray">
           <span className="glyphicon glyphicon-remove" onClick={hideWindow}></span>
