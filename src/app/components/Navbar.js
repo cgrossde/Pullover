@@ -18,7 +18,7 @@ export default class Navbar extends Component {
           <span className="glyphicon glyphicon-cog"></span>
         </div>
         <div className="about-button">
-          <Link to="/about"><span className="glyphicon glyphicon-about-sign"></span></Link>
+          <Link to="/about"><span className="glyphicon glyphicon-info-sign"></span></Link>
         </div>
         <div className="status-button">
           <Link to="/status"><span className="glyphicon glyphicon-flash"></span></Link>
