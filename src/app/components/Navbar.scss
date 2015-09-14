@@ -9,12 +9,16 @@ div.navbar {
 		height: 30px;
 	}
 
-	.close-button, .status-button, .info-button, .settings-button {
+	.close-button, .status-button, .about-button, .settings-button {
 		position: absolute;
 		top: 7px;
 		font-size: 25px;
-		cursor: pointer;
 		-webkit-app-region: no-drag;
+
+		a span {
+			color: #333;
+			cursor: pointer;
+		}
 	}
 
 	.close-button {
@@ -28,7 +32,7 @@ div.navbar {
 		right: 43px;
 	}
 
-	.info-button {
+	.about-button {
 		position: absolute;
 		right: 83px;
 	}

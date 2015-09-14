@@ -1,23 +1,20 @@
 'use strict'
 
 // Setup logging for fatal exits
-import './Logging'
+import './services/Logging'
 
 // Get window and setup tray
-import Window from './Window'
-import './Tray'
+import Window from './nw/Window'
+import './nw/Tray'
 
 // Include package.json for NW.js, add global styles
 import 'file?name=package.json!../package.json'
 import './styles/styles.scss'
 
-// Vendor: React & Router
+// React and Router(as well as App)
 import React from 'react/addons'
-import { Router, Route } from 'react-router'
-// Import App and main components
-import App from './components/App'
-import About from './components/About'
-import Status from './components/Status'
+import router from './services/Router'
+
 
 // Debugging?
 if (process.env.DEBUG === '1') {
@@ -27,17 +24,11 @@ if (process.env.DEBUG === '1') {
   var devWindow = Window.showDevTools()
   devWindow.moveTo(0,23)
   devWindow.resizeTo(900, 700)
+  devWindow.show()
 }
 
-// Routing config and render App
-React.render((
-  <Router>
-    <Route path='/' component={App}>
-      <Route path='about' component={About}/>
-      <Route path='status' component={Status}/>
-    </Route>
-  </Router>
-), document.body)
+// Render App
+React.render(router, document.body)
 
 // Show App once it was rendered
 Window.show()

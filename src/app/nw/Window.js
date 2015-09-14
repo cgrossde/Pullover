@@ -7,26 +7,26 @@ export default win
 
 // Export function to show, hide and quit the app
 export function hideWindow() {
-	win.hide();
-	win.setShowInTaskbar(false);
+	win.hide()
+	win.setShowInTaskbar(false)
 }
 
 export function showWindow() {
-	win.show();
-	win.setShowInTaskbar(true);
+	win.show()
+	win.setShowInTaskbar(true)
 }
 
 // Really quit app (only callable from tray)
 export function quitApp() {
-	win.close(true);
+	win.close(true)
 }
 
 // Get the minimize event
-win.on('minimize', hideWindow);
+win.on('minimize', hideWindow)
 
 // Handle CMD+W vs CMD+Q
-win.on('close', hideWindow);
+win.on('close', hideWindow)
 
 // No taskbar item
-win.setShowInTaskbar(false);
-win.setResizable(false);
+win.setShowInTaskbar(false)
+win.setResizable(false)

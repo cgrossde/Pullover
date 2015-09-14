@@ -29,7 +29,7 @@
     "mkdirp": "^0.5.1",
     "promise": "^7.0.3",
     "react": "^0.13.0",
-    "react-router": "^1.0.0-beta3",
+    "react-router": "^1.0.0-rc1",
     "request": "^2.60.0"
   },
   "window": {

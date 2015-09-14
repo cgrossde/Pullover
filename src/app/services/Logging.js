@@ -1,6 +1,6 @@
 import Eyes from 'eyes'
-import Debug from './lib/debug'
-import { showWindow } from './Window'
+import Debug from '../lib/debug'
+import { showWindow } from '../nw/Window'
 
 var debug = Debug('Fatal')
 var inspect = Eyes.inspector({ stream: null })
