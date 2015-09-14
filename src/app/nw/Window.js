@@ -21,6 +21,11 @@ export function quitApp() {
 	win.close(true)
 }
 
+export function openExternalLink(event) {
+  event.preventDefault()
+  Gui.Shell.openExternal(event.target.href)
+}
+
 // Get the minimize event
 win.on('minimize', hideWindow)
 
