@@ -2,7 +2,7 @@ import { createStore, compose } from 'redux'
 import { reduxReactRouter } from 'redux-react-router'
 import createHashHistory from 'react-router/node_modules/history/lib/createHashHistory'
 
-import reducer from '../reducers/index'
+import reducer from '../reducers/Index'
 
 const store = compose(
   reduxReactRouter({ createHistory: createHashHistory })

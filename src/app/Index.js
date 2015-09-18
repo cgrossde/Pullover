@@ -18,6 +18,8 @@ import { ReduxRouter } from 'redux-react-router'
 import routes from './services/Routes'
 import store from './services/Store'
 
+window.store = store
+
 // Debugging?
 if (process.env.DEBUG === '1') {
   // Move App
