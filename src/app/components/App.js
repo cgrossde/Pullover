@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Navbar from './Navbar'
 
 import './App.scss'
 
-export default class App extends Component {
-  displayName: 'App'
+const App = React.createClass({
+  displayName: 'App',
+
   render() {
     return (
       <div>
@@ -15,4 +16,6 @@ export default class App extends Component {
       </div>
     )
   }
-}
+})
+
+export default App

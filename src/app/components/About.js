@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Row, Col, Table } from 'react-bootstrap'
 import { openExternalLink } from '../nw/Window'
 import packageInfo from 'json!../../package.json'
 
-export default class About extends Component {
-  displayName: 'About'
+const About = React.createClass({
+  displayName: 'About',
+
   render() {
     return (
       <Row>
@@ -44,4 +45,6 @@ export default class About extends Component {
       </Row>
     )
   }
-}
+})
+
+export default About

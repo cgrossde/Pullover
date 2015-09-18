@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class Status extends Component {
-  displayName: 'Status'
+const Status = React.createClass({
+  displayName: 'Status',
+
   render() {
     return (
       <div>
@@ -10,4 +11,6 @@ export default class Status extends Component {
       </div>
     )
   }
-}
+})
+
+export default Status

@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router'
 import { hideWindow } from '../nw/Window'
 
 import './Navbar.scss'
 
-export default class Navbar extends Component {
-  displayName: 'Navbar'
+const Navbar = React.createClass({
+  displayName: 'Navbar',
 
   render() {
     return (
@@ -26,5 +26,6 @@ export default class Navbar extends Component {
       </div>
     )
   }
+})
 
-}
+export default Navbar
