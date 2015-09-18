@@ -11,10 +11,12 @@ import './nw/Tray'
 import 'file?name=package.json!../package.json'
 import './styles/styles.scss'
 
-// React and Router(as well as App)
+// React, Redux, ReduxRouter and routes
 import React from 'react/addons'
-import router from './services/Router'
-
+import { Provider } from 'react-redux'
+import { ReduxRouter } from 'redux-react-router'
+import routes from './services/Routes'
+import store from './services/Store'
 
 // Debugging?
 if (process.env.DEBUG === '1') {
@@ -28,7 +30,23 @@ if (process.env.DEBUG === '1') {
 }
 
 // Render App
-React.render(router, document.body)
+const Root = React.createClass({
+  displayName: 'Root',
+  render() {
+    return (
+      <div>
+        <Provider store={store}>
+          {() =>
+            <ReduxRouter>
+              { routes }
+            </ReduxRouter>
+          }
+        </Provider>
+      </div>
+    )
+  }
+})
+React.render(<Root />, document.body)
 
 // Show App once it was rendered
 Window.show()
