@@ -10,8 +10,10 @@
 'use strict'
 var _ = require('lodash')
 var os = require('os')
+var util = require('util')
 var debug = require('./debug')('OpenClient')
 var Promise = require('promise')
+var EventEmitter = require('events').EventEmitter
 
 var packageInfo = require('../../package.json')
 var userAgent = 'Pullover/' + packageInfo.version + ' (' + os.platform() + ' '
@@ -25,6 +27,8 @@ var request = require('request').defaults({ headers: { 'User-Agent': userAgent }
  * @param {object} options Configuration object
  */
 var OpenClient = function(options) {
+	// Setup events
+	EventEmitter.call(this)
 	// Setup options with defaults
 	this.options = _.defaults(options, {
 		// Options regarding Open Client API
@@ -45,8 +49,13 @@ var OpenClient = function(options) {
 
 		debug: false					// If true, log every method call to console
 	})
+
+	// Prevent default action (exit) if no listener for error events
+	this.on('error', function() {})
 }
 
+// Inherit from events
+util.inherits(OpenClient, EventEmitter)
 // Export
 module.exports = OpenClient
 
