@@ -1,0 +1,14 @@
+.spinner {
+	z-index: 1000;
+	position: absolute;
+	top: 0;
+	width: 450px;
+	height: 100%;
+	background-color: rgba(0,0,0,0.8);
+
+	.spinner-image {
+		z-index: 1000;
+		display: block;
+		margin: 25% auto;
+	}
+}
