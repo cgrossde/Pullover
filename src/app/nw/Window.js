@@ -32,6 +32,16 @@ win.on('minimize', hideWindow)
 // Handle CMD+W vs CMD+Q
 win.on('close', hideWindow)
 
+// Mac allow CMD+C, CMD+V, CMD+W, ...
+var nativeMenuBar = new Gui.Menu({ type: 'menubar' })
+try {
+  nativeMenuBar.createMacBuiltin('Pullover')
+  win.menu = nativeMenuBar
+}
+catch (ex) {
+  // Will fail on windows
+}
+
 // No taskbar item
 win.setShowInTaskbar(false)
 win.setResizable(false)
