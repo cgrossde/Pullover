@@ -46,7 +46,7 @@ module.exports = {
 
       {
         test: /\.jsx?$/,
-        loaders: ['babel'],
+        loaders: ['babel-loader?optional=runtime'],
         include: path.join(__dirname, 'app')
       },
       {
