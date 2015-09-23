@@ -52,6 +52,7 @@ program
             'Pullover_' + packageInfo.version + '.dmg',
             'Pullover_' + packageInfo.version + '_Installer.exe',
             'Pullover_' + packageInfo.version + '_linux32.zip'
+            'Pullover_' + packageInfo.version + '_linux64.zip'
         ];
         updateReadme(files);
     });
