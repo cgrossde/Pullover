@@ -1,5 +1,5 @@
 import React from 'react/addons'
-import { Router, Route } from 'react-router'
+import { Router, Route, IndexRoute } from 'react-router'
 
 // Import App and main components
 import App from '../components/App'
@@ -10,6 +10,7 @@ import Status from '../components/Status'
 const Routes = (
   <Router>
     <Route path='/' component={App}>
+      <IndexRoute component={Status} />
       <Route path='about' component={About}/>
       <Route path='status' component={Status}/>
     </Route>

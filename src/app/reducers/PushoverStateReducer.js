@@ -1,40 +1,48 @@
 import {
-  SET_USER_KEY,
-  SET_USER_SECRET,
-  SET_DEVICE_NAME,
-  SET_DEVICE_ID
+  SET_USER_DATA,
+  SET_DEVICE_DATA,
+  LOGOUT
 } from '../actions/Pushover'
 
 // Load values from localStorage
 const initialState = {
-  userKey: localStorage.userKey,
-  userSecret: localStorage.userSecret,
-  deviceName: localStorage.deviceName,
-  deviceId: localStorage.deviceId,
+  userKey: localStorage.getItem('userKey'),
+  userEmail: localStorage.getItem('userEmail'),
+  userSecret: localStorage.getItem('userSecret'),
+  deviceName: localStorage.getItem('deviceName'),
+  deviceId: localStorage.getItem('deviceId'),
 }
 
 export function pushoverStateReducer(state = initialState, action) {
   switch (action.type) {
-    case SET_USER_KEY:
-      localStorage.userKey = action.key
+    case SET_USER_DATA:
+      const { userKey, userEmail, userSecret } = action.userData
+      localStorage.setItem('userKey', userKey)
+      localStorage.setItem('userEmail', userEmail)
+      localStorage.setItem('userSecret', userSecret)
       return Object.assign({}, state, {
-        userKey: action.key
+        userKey,
+        userEmail,
+        userSecret
       })
-    case SET_USER_SECRET:
-      localStorage.userSecret = action.secret
+
+    case SET_DEVICE_DATA:
+      const { deviceName, deviceId } = action.deviceData
+      localStorage.setItem('deviceName', deviceName)
+      localStorage.setItem('deviceId', deviceId)
       return Object.assign({}, state, {
-        userSecret: action.secret
+        deviceName,
+        deviceId
       })
-    case SET_DEVICE_NAME:
-      localStorage.deviceName = action.name
-      return Object.assign({}, state, {
-        deviceName: action.name
-      })
-    case SET_DEVICE_ID:
-      localStorage.deviceId = action.id
-      return Object.assign({}, state, {
-        deviceId: action.id
-      })
+
+    case LOGOUT:
+      localStorage.removeItem('userKey')
+      localStorage.removeItem('userEmail')
+      localStorage.removeItem('userSecret')
+      localStorage.removeItem('deviceName')
+      localStorage.removeItem('deviceId')
+      return Object.assign({}, initialState)
+
     default:
       return state
   }

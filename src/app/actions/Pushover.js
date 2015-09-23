@@ -1,20 +1,15 @@
-export const SET_USER_KEY = 'SET_USER_KEY'
-export const SET_USER_SECRET = 'SET_USER_SECRET'
-export const SET_DEVICE_NAME = 'SET_DEVICE_NAME'
-export const SET_DEVICE_ID = 'SET_DEVICE_ID'
+export const SET_USER_DATA = 'SET_USER_DATA'
+export const SET_DEVICE_DATA = 'SET_DEVICE_DATA'
+export const LOGOUT = 'LOGOUT'
 
-export function setUserKey(key) {
-  return { type: SET_USER_KEY, key }
+export function setUserData(userData) {
+  return { type: SET_USER_DATA, userData }
 }
 
-export function setUserSecret(secret) {
-  return { type: SET_USER_SECRET, secret }
+export function setDeviceData(deviceData) {
+  return { type: SET_DEVICE_DATA, deviceData }
 }
 
-export function setDeviceName(name) {
-  return { type: SET_DEVICE_NAME, name }
-}
-
-export function setDeviceId(id) {
-  return { type: SET_DEVICE_ID, id }
+export function logout() {
+  return { type: LOGOUT }
 }

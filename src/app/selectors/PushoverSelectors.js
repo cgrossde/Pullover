@@ -7,7 +7,7 @@ export const isLoggedInSelector = createSelector(
   pushoverSelector,
   (pushover) => {
     return {
-      isLoggedIn: (! pushover.userKey === undefined || ! pushover.userSecret === undefined )
+      isLoggedIn: (pushover.userKey !== null && pushover.userSecret !== null )
     }
   }
 )
@@ -16,19 +16,22 @@ export const isDeviceRegisteredSelector = createSelector(
   pushoverSelector,
   (pushover) => {
     return {
-      isDeviceRegistered: (! pushover.deviceName === undefined
-        || ! pushover.deviceId === undefined )
+      isDeviceRegistered: (pushover.deviceName !== null
+        && pushover.deviceId !== null )
     }
   }
 )
 
 export const pushoverStatusSelector = createSelector(
+  pushoverSelector,
   isLoggedInSelector,
   isDeviceRegisteredSelector,
-  (isLoggedIn, isDeviceRegistered) => {
+  (pushover, isLoggedIn, isDeviceRegistered) => {
     return {
       isLoggedIn: isLoggedIn.isLoggedIn,
-      isDeviceRegistered: isDeviceRegistered.isDeviceRegistered
+      isDeviceRegistered: isDeviceRegistered.isDeviceRegistered,
+      userEmail: pushover.userEmail,
+      deviceName: pushover.deviceName
     }
   }
 )

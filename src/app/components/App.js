@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 import './App.scss'
 import Navbar from './Navbar'
 import Login from './Login'
+import DeviceRegistration from './DeviceRegistration'
 import { pushoverStatusSelector } from '../selectors/PushoverSelectors'
-
+import pushover from '../services/Pushover'
 
 const App = React.createClass({
   displayName: 'App',
@@ -25,7 +26,7 @@ const App = React.createClass({
     }
     // Device registered?
     else if (! isDeviceRegistered) {
-      currentComponent = ( <Login /> )
+      currentComponent = ( <DeviceRegistration /> )
     }
 
     return (
@@ -36,6 +37,17 @@ const App = React.createClass({
         </div>
       </div>
     )
+  },
+
+  componentDidMount() {
+    const {isLoggedIn, isDeviceRegistered} = this.props
+    // Fetch new notifications on startup
+    if (isLoggedIn && isDeviceRegistered) {
+      pushover.fetchNotifications()
+        .then(function(notifications) {
+          console.log(notifications)
+        })
+    }
   }
 })
 
