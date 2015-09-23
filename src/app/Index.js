@@ -8,7 +8,7 @@ import Window from './nw/Window'
 import './nw/Tray'
 
 // Include package.json for NW.js, add global styles
-import 'file?name=package.json!../package.json'
+import '!!file?name=package.json!../package.json'
 import './styles/styles.scss'
 
 // React, Redux, ReduxRouter and routes
