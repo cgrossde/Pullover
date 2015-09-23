@@ -38,6 +38,12 @@ module.exports = {
       { test: /\.eot$/,    loader: 'file-loader?name=./fonts/[name].[ext]' },
       { test: /\.svg$/,    loader: 'file-loader?name=./fonts/[name].[ext]' },
 
+      // JSON
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
+      },
+
       {
         test: /\.jsx?$/,
         loaders: ['babel'],

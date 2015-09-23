@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col, Table } from 'react-bootstrap'
 import { openExternalLink } from '../nw/Window'
-import packageInfo from 'json!../../package.json'
+import packageInfo from '../../package.json'
 
 const About = React.createClass({
   displayName: 'About',
