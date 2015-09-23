@@ -14,7 +14,7 @@ import './styles/styles.scss'
 // React, Redux, ReduxRouter and routes
 import React from 'react/addons'
 import { Provider } from 'react-redux'
-import { ReduxRouter } from 'redux-react-router'
+import { ReduxRouter } from 'redux-router'
 import routes from './services/Routes'
 import store from './services/Store'
 
