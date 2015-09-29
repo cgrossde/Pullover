@@ -21,8 +21,7 @@ const Status = React.createClass({
                   <tr>
                     <th>Logged in</th>
                     <td>
-                      {this.props.userEmail}&nbsp;
-                      (<a href="#" onClick={this.logout} alt="Logout">Logout</a>)
+                      {this.props.userEmail} (<a href="#" onClick={this.logout} alt="Logout">Logout</a>)
                     </td>
                   </tr>
                   <tr>

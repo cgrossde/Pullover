@@ -1,10 +1,10 @@
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 
-import { openExternalLink } from '../nw/Window'
 import Spinner from './Spinner'
-import pushover from '../services/Pushover'
 import store from '../services/Store'
+import pushover from '../services/Pushover'
+import { openExternalLink } from '../nw/Window'
 import { setUserData } from '../actions/Pushover'
 
 const Login = React.createClass({

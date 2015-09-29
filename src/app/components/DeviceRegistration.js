@@ -45,8 +45,8 @@ const DeviceRegistration = React.createClass({
               </div>
             </form>
             <br />
-            <span><b>Current user:</b> {this.props.userEmail}&nsbp;
-              (<a href="#" onClick={this.logout} alt="Logout">Logout</a>)
+            <br />
+            <span><b>Current user:</b> {this.props.userEmail} (<a href="#" onClick={this.logout} alt="Logout">Logout</a>)
             </span>
           </Col>
         </Row>
