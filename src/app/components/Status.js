@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { connect } from 'react-redux'
 import { Row, Col, Table } from 'react-bootstrap'
 
@@ -10,6 +11,15 @@ const Status = React.createClass({
   displayName: 'Status',
 
   render() {
+    let lastSync = 'never'
+    let lastSyncClass = 'text-danger'
+    if (this.props.latestSyncDate !== null) {
+      lastSync = moment(parseInt(this.props.latestSyncDate))
+      const date15minAgo = moment().subtract(15, 'minutes')
+      lastSyncClass = (lastSync.isBefore(date15minAgo)) ? 'text-danger' : 'text-info'
+    }
+
+    let connectionClass = (this.props.connectionStatus === 'ONLINE') ? 'text-success' : 'text-danger'
     return (
       <Row>
         <Col md={8} mdOffset={2}>
@@ -19,22 +29,24 @@ const Status = React.createClass({
               <Table>
                 <tbody>
                   <tr>
-                    <th>Logged in</th>
+                    <th>User</th>
                     <td>
-                      {this.props.userEmail} (<a href="#" onClick={this.logout} alt="Logout">Logout</a>)
+                      <span className="text-info">{this.props.userEmail}</span> (<a href="#" onClick={this.logout} alt="Logout">Logout</a>)
                     </td>
                   </tr>
                   <tr>
                     <th>Device registered</th>
-                    <td>{this.props.deviceName}</td>
+                    <td>
+                      <span className="text-info">{this.props.deviceName}</span>
+                    </td>
                   </tr>
                   <tr>
                     <th>Last sync</th>
-                    <td></td>
+                    <td><span className={lastSyncClass}>{lastSync.fromNow()}</span></td>
                   </tr>
                   <tr>
                     <th>Status</th>
-                    <td></td>
+                    <td><span className={connectionClass}>{this.props.connectionStatus}</span></td>
                   </tr>
                 </tbody>
               </Table>
