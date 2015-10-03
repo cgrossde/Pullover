@@ -376,6 +376,13 @@ OpenClient.prototype.acknowledgeNotification = function(optionsOverride, callbac
 	}).nodeify(callback)
 }
 
+OpenClient.prototype.ready = function() {
+	if (this.options.secret !== null && this.options.deviceId !== null) {
+		return true
+	}
+	return false
+}
+
 /**
  * Try to parse payload of response,
  * if response was valid resolve else reject
