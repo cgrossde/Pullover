@@ -6,6 +6,7 @@ import Spinner from './Spinner'
 import pushover from '../services/Pushover'
 import store from '../services/Store'
 import { setDeviceData, logout } from '../actions/Pushover'
+import { connectToPushover } from '../services/ConnectionManager'
 
 const DeviceRegistration = React.createClass({
   displayName: 'DeviceRegistration',
@@ -46,7 +47,7 @@ const DeviceRegistration = React.createClass({
             </form>
             <br />
             <br />
-            <span><b>Current user:</b> {this.props.userEmail} (<a href="#" onClick={this.logout} alt="Logout">Logout</a>)
+            <span className="text-muted"><b>Current user:</b> {this.props.userEmail} (<a href="#" onClick={this.logout} alt="Logout">Logout</a>)
             </span>
           </Col>
         </Row>
@@ -82,6 +83,9 @@ const DeviceRegistration = React.createClass({
     }))
     // No need to transition because isDeviceRegistered is a state monitored by redux
     // Once true the active route will be shown automatically by App.js
+
+    // Now we are ready to connect to pushover
+    connectToPushover()
   },
 
   logout() {
