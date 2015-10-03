@@ -6,7 +6,7 @@ import Navbar from './Navbar'
 import Login from './Login'
 import DeviceRegistration from './DeviceRegistration'
 import { pushoverStatusSelector } from '../selectors/PushoverSelectors'
-import pushover from '../services/Pushover'
+import { connectToPushover } from '../services/ConnectionManager'
 
 const App = React.createClass({
   displayName: 'App',
@@ -43,10 +43,7 @@ const App = React.createClass({
     const {isLoggedIn, isDeviceRegistered} = this.props
     // Fetch new notifications on startup
     if (isLoggedIn && isDeviceRegistered) {
-      pushover.fetchNotifications()
-        .then(function(notifications) {
-          console.log(notifications)
-        })
+      connectToPushover()
     }
   }
 })
