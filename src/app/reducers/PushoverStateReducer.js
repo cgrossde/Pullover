@@ -1,6 +1,11 @@
+import Debug from '../lib/debug'
+var debug = Debug('ConnectionManager')
+
 import {
   SET_USER_DATA,
   SET_DEVICE_DATA,
+  UPDATE_CONNECTION_STATE,
+  UPDATE_SYNC_DATE,
   LOGOUT
 } from '../actions/Pushover'
 
@@ -11,6 +16,8 @@ const initialState = {
   userSecret: localStorage.getItem('userSecret'),
   deviceName: localStorage.getItem('deviceName'),
   deviceId: localStorage.getItem('deviceId'),
+  connectionStatus: 'STOPPED',
+  latestSyncDate: localStorage.getItem('latestSyncDate')
 }
 
 export function pushoverStateReducer(state = initialState, action) {
@@ -33,6 +40,25 @@ export function pushoverStateReducer(state = initialState, action) {
       return Object.assign({}, state, {
         deviceName,
         deviceId
+      })
+
+    case UPDATE_SYNC_DATE:
+      const latestSyncDate = new Date().getTime()
+      localStorage.setItem('latestSyncDate', latestSyncDate)
+      return Object.assign({}, state, {
+        latestSyncDate
+      })
+
+    case UPDATE_CONNECTION_STATE:
+      const connectionStatus = action.connectionState
+      const allowedStates = ['STOPPED', 'OFFLINE', 'ONLINE']
+      // Is it an allowed connection state?
+      if (allowedStates.indexOf(connectionStatus) === -1) {
+        debug.log('Invalid connection status: ' + connectionStatus)
+        return state
+      }
+      return Object.assign({}, state, {
+        connectionStatus
       })
 
     case LOGOUT:

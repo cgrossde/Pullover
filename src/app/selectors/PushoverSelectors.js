@@ -31,7 +31,9 @@ export const pushoverStatusSelector = createSelector(
       isLoggedIn: isLoggedIn.isLoggedIn,
       isDeviceRegistered: isDeviceRegistered.isDeviceRegistered,
       userEmail: pushover.userEmail,
-      deviceName: pushover.deviceName
+      deviceName: pushover.deviceName,
+      connectionStatus: pushover.connectionStatus,
+      latestSyncDate: pushover.latestSyncDate
     }
   }
 )
