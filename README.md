@@ -51,9 +51,9 @@ There is no need to always build packaged binaries if you want to dive into the 
 If you encounter a bug or Pullover crashes, please go to the following directory and send me the `pullover.1.log` file by opening an issue:
 
 * OS X - '/Users/user/Library/Application Support/pullover'
-* Windows 8 - 'C:\Users\User\AppData\Roaming\Pullover'
+* Windows - 'C:\Users\User\AppData\Roaming\Pullover'
 * Windows XP - 'C:\Documents and Settings\User\Application Data\Pullover'
-* Linux - '/var/local/Pullover'
+* Linux - '~/.local/share/Pullover'
 
 ## Contributing
 
