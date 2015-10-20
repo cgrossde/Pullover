@@ -57,5 +57,8 @@ module.exports = {
         include: path.join(__dirname, 'app')
       }
     ]
+  },
+  externals: {
+    'bindings': 'commonjs bindings'
   }
 }
