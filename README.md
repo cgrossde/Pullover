@@ -16,9 +16,9 @@ I discovered Pushover in mid November 2014 and was really excited. The only thin
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
 
-* **Linux x32 (v0.3.2):** [Pullover_0.3.2_linux32.zip](https://sourceforge.net/projects/pullover/files/0.3.2/Pullover_0.3.2_linux32.zip/download)
 * **Windows x32 (v0.3.2):** [Pullover_0.3.2_Installer.exe](https://sourceforge.net/projects/pullover/files/0.3.2/Pullover_0.3.2_Installer.exe/download)
 * **Mac OS 10.8+ x64 (v0.3.2):** [Pullover_0.3.2.dmg](https://sourceforge.net/projects/pullover/files/0.3.2/Pullover_0.3.2.dmg/download)
+* **Linux:** Can be found under [releases](https://github.com/cgrossde/Pullover/releases/tag/v0.3.2)
 
 **Installation on Linux:** Please refer to this wiki article [wiki/Installing-on-Linux](https://github.com/cgrossde/Pullover/wiki/Installing-on-Linux)
 
@@ -62,6 +62,11 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 ## Planned features
 
 I am currently rewriting Pullover and a list of planned features is in the [wiki](https://github.com/cgrossde/Pullover/wiki). If you have any feature wishes not listed there then open an issue and I will take a look at it.
+
+## Contributors
+
+* [chrishar](https://github.com/chrishar): Figured out how to install Pullover on linux
+* [lonaowna](https://github.com/lonaowna): Fixed path for linux and updated wiki
 
 ## License
 
