@@ -10,6 +10,24 @@ import { pushoverStatusSelector } from '../selectors/PushoverSelectors'
 const Status = React.createClass({
   displayName: 'Status',
 
+  getInitialState() {
+    return {
+      refreshInterval: null
+    }
+  },
+
+  componentDidMount() {
+    // Rerender every 30 sec to update time since last sync
+    const refreshInterval = setInterval(this.render.bind(this), 1000*30)
+    this.setState({
+      refreshInterval: refreshInterval
+    })
+  },
+
+  componentWillUnmount() {
+    clearInterval(this.state.refreshInterval)
+  },
+
   render() {
     let lastSync = 'never'
     let lastSyncClass = 'text-danger'
