@@ -11,10 +11,14 @@ var fileLoggerReady = false;
 
 // Also log to file
 // * OS X - '/Users/user/Library/Application Support/pullover'
-// * Windows 8 - 'C:\Users\User\AppData\Roaming\Pullover'
+// * Windows - 'C:\Users\User\AppData\Roaming\Pullover'
 // * Windows XP - 'C:\Documents and Settings\User\Application Data\Pullover'
-// * Linux - '/var/local/Pullover'
-var appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Application\ Support' : '/var/local');
+// * Linux - '~/.local/share/Pullover'
+var appDataPath = process.env.APPDATA;
+if (process.platform == 'darwin')
+	appDataPath = process.env.HOME + '/Library/Application\ Support';
+else if (process.platform == 'linux')
+	appDataPath = process.env.HOME + '/.local/share';
 var logPath = path.join(appDataPath, 'Pullover');
 console.log('LOG PATH: ' + logPath)
 if(! fs.existsSync(logPath)) {
