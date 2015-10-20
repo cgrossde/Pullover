@@ -14,20 +14,46 @@ import isReachable from 'is-reachable'
 
 import Debug from '../lib/debug'
 import store from '../services/Store'
-import pushover from '../services/Pushover'
+import pushover, { connectWS, disconnectWS } from '../services/Pushover'
 import wakeDetect from '../lib/wake-detect'
-import { updateConnectionState, updateSyncDate } from '../actions/Pushover'
+import {
+  updateConnectionState,
+  updateSyncDate,
+  logout as logoutPushover
+} from '../actions/Pushover'
 
 var debug = Debug('ConnectionManager')
 
 // Reconnect every x min
 let reconnectInterval = null
-let reconnectSpan = 1000 * 60 * 30 // 30 min
+const reconnectSpan = 1000 * 60 * 30 // 30 min
 
 // If OFFLINE => check internet connection every x min
 let checkInternetInterval = null
-let checkInternetSpan = 1000 * 60 // 1 min
+const checkInternetSpan = 1000 * 60 * 2 // 2 min
 let checkingInternet = false
+
+// Handle login failures: Before we logout the user
+// we wait for at least 3 consecutive login failures
+let loginFails = 0
+const maxLoginFails = 3
+const waitAfterLoginFail = 1000 * 60 * 1 // 1 min
+
+// Ref to pushover ws client
+let wsClient = null
+
+// Attach on wake listener only once
+// Reconnect on wake
+wakeDetect.on('wake', (sleepSecs) => {
+  debug.log('Device woke up after ' + sleepSecs + 's of sleep')
+  if (! isStopped()) {
+    reconnect()
+  }
+})
+
+function isStopped() {
+  return (store.getState().pushover.connectionStatus === 'STOPPED')
+}
 
 function start() {
   store.dispatch(updateConnectionState('ONLINE'))
@@ -38,7 +64,7 @@ function start() {
   }, reconnectSpan)
 
   // Fetch notifications and open web socket
-  fetchAndConnect();
+  fetchAndConnect()
 
   // Start listening for wake events
   wakeDetect.start()
@@ -47,14 +73,14 @@ let online = start // alias for start function
 
 function stop() {
   store.dispatch(updateConnectionState('STOPPED'))
+  // Stop WS
+  disconnectFromWS()
   // Stop listening for wake events
   wakeDetect.stop()
   // Stop reconnect interval
   clearInterval(reconnectInterval)
   // Stop check internet interval
   clearInterval(checkInternetInterval)
-  // Stop WS
-  disconnectWS()
 }
 
 function reconnect() {
@@ -63,57 +89,89 @@ function reconnect() {
   start()
 }
 
-// Attach on wake listener only once
-// Reconnect on wake
-wakeDetect.on('wake', (sleepSecs) => {
-  debug.log('Device woke up after ' + sleepSecs + 's of sleep')
-  reconnect()
-})
+function fetchAndConnect() {
+  debug.log('fetchAndConnect')
+  // Fetch new notifications
+  fetchNotifications()
+  // Start WS
+  connectToWS()
+}
 
 function offline() {
-  store.dispatch(updateConnectionState('OFFLINE'))
+  if (isStopped()) {
+    return
+  }
   stop()
+  store.dispatch(updateConnectionState('OFFLINE'))
   debug.log('Offline')
   // Setup interval to check internet connection
   // and pushover availability
   checkInternetInterval = setInterval(checkInternetConnection, checkInternetSpan)
 }
 
+function connectToWS() {
+  // Connect and get instance
+  wsClient = connectWS()
+  wsClient.on('notification', fetchNotifications)
+  wsClient.on('error', offline)
+  wsClient.on('loginFailed', () => {
+    loginFailed('WebSocket')
+  })
+  wsClient.on('requestedReconnect', reconnect)
+  wsClient.on('keepAlive', () => {
+    store.dispatch(updateSyncDate())
+  })
+  wsClient.on('timeout', offline)
+}
+
+function disconnectFromWS() {
+  wsClient.removeAllListeners()
+  disconnectWS()
+}
+
 function checkInternetConnection() {
   // Don't run more than one check concurrently
   if (checkingInternet) {
     return
-  } else {
+  }
+  else {
     checkingInternet = true
   }
   // Are we online?
   isOnline(function(err, internetOnline) {
-    if(internetOnline) {
+    if (internetOnline) {
       // Is pushover reachable
-      isReachable('api.pushover.net:443', function(err, reachable) {
-        if(reachable) {
+      isReachable('api.pushover.net:443', function(error, reachable) {
+        if (reachable) {
           debug.log('We are online again')
           clearInterval(checkInternetInterval)
           online()
         }
-        checkingInternet = false;
-      });
-    } else {
-      checkingInternet = false;
+        checkingInternet = false
+      })
     }
-  });
+    else {
+      checkingInternet = false
+    }
+  })
 }
 
-function fetchAndConnect() {
-  debug.log('fetchAndConnect')
-  // Fetch new notifications
-  fetchNotifications()
-  // Start WS
-  connectWS();
+function loginFailed(type) {
+  loginFails++
+  if (loginFails >= maxLoginFails) {
+    debug.log('Max login fails reached. Logout and relogin. - ' + type)
+    store.dispatch(logoutPushover())
+  }
+  else {
+    debug.log('Login failed (' + loginFails + ' of ' + maxLoginFails + ') - ' + type)
+    stop()
+    store.dispatch(updateConnectionState('OFFLINE'))
+    setTimeout(start, waitAfterLoginFail)
+  }
 }
 
 function fetchNotifications() {
-  if(! pushover.ready()) {
+  if (! pushover.ready()) {
     debug.log('Pushover not ready, secret or device id missing')
     return
   }
@@ -121,21 +179,19 @@ function fetchNotifications() {
   pushover.fetchNotifications()
   .then(function(notifications) {
     store.dispatch(updateSyncDate())
-    debug.log('Received ' + notifications.length + ' notifications')
+    loginFails = 0
+    debug.log('Received ' + notifications.length + ' notifications', notifications)
   })
   .catch(function(error) {
-    debug.log('Error')
-    offline()
     // Check if connection or auth error
+    if (error.name === 'InvalidCredentials') {
+      loginFailed('fetch')
+    }
+    else {
+      debug.log('Fetch failed - offline', error)
+      offline()
+    }
   })
-}
-
-function connectWS() {
-
-}
-
-function disconnectWS() {
-
 }
 
 export { start as connectToPushover }

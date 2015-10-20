@@ -1,5 +1,5 @@
 import Debug from '../lib/debug'
-var debug = Debug('ConnectionManager')
+var debug = Debug('pushoverStateReducer')
 
 import {
   SET_USER_DATA,
@@ -67,7 +67,14 @@ export function pushoverStateReducer(state = initialState, action) {
       localStorage.removeItem('userSecret')
       localStorage.removeItem('deviceName')
       localStorage.removeItem('deviceId')
-      return Object.assign({}, initialState)
+      return Object.assign({}, state, {
+        userKey: null,
+        userEmail: null,
+        userSecret: null,
+        deviceName: null,
+        deviceId: null,
+        connectionStatus: 'STOPPED'
+      })
 
     default:
       return state

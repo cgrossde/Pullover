@@ -11,7 +11,7 @@
 var _ = require('lodash')
 var os = require('os')
 var util = require('util')
-var debug = require('./debug')('OpenClient')
+var debug = require('./debug')('PushoverRESTClient')
 var Promise = require('promise')
 var EventEmitter = require('events').EventEmitter
 
@@ -36,9 +36,6 @@ var OpenClient = function(options) {
 		deviceId: null,
 		apiBaseURL: 'https://api.pushover.net/',
 		apiNamespace: '1/',
-
-		// Options regarding webSocket and reconnect
-		webSocketEndpoint: 'wss://client.pushover.net/push:443',
 
 		// Optional, set only if you don't want to supply
 		// login(), or registerDevice() with options
