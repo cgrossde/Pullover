@@ -40,7 +40,8 @@
     "redux": "^3.0.0",
     "redux-router": "^1.0.0-beta3",
     "request": "^2.60.0",
-    "reselect": "^1.1.0"
+    "reselect": "^1.1.0",
+    "ws": "^0.8.0"
   },
   "window": {
     "title": "Pullover",
@@ -50,5 +51,8 @@
     "width": 450,
     "height": 330,
     "show": false
+  },
+  "browser": {
+    "bindings": false
   }
 }
