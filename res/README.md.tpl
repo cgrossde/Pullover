@@ -61,6 +61,11 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 
 I am currently rewriting Pullover and a list of planned features is in the [wiki](https://github.com/cgrossde/Pullover/wiki). If you have any feature wishes not listed there then open an issue and I will take a look at it.
 
+## Contributors
+
+* [chrishar](https://github.com/chrishar): Figured out how to install Pullover on linux
+* [lonaowna](https://github.com/lonaowna): Fixed path for linux and updated wiki
+
 ## License
 
     Pullover - The unofficial Pushover desktop client

@@ -8,3 +8,4 @@ res/cert.spc
 res/cert.pvk
 *.sublime-*
 .DS_Store
+dist
