@@ -4,7 +4,7 @@
 import './services/Logging'
 
 // Get window and setup tray
-import Window from './nw/Window'
+import Window, { showWindow } from './nw/Window'
 import './nw/Tray'
 
 // Include package.json for NW.js, add global styles
@@ -17,7 +17,7 @@ import { Provider } from 'react-redux'
 import { ReduxRouter } from 'redux-router'
 import routes from './services/Routes'
 import store from './services/Store'
-
+// Make it accessible for debugging
 window.store = store
 
 // Debugging?
@@ -51,4 +51,4 @@ const Root = React.createClass({
 React.render(<Root />, document.body)
 
 // Show App once it was rendered
-Window.show()
+showWindow()
