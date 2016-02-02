@@ -38,6 +38,7 @@ const DeviceRegistration = React.createClass({
                     placeholder="Device name" ref="devicename" />
                 </Col>
               </div>
+              <br />
               <div className="form-group">
                 <Col xs={8} xsOffset={2}>
                   <button type="submit" className="btn btn-primary"
@@ -60,7 +61,7 @@ const DeviceRegistration = React.createClass({
     // Display loading overlay
     this.setState({ spinner: true })
     // Get deviceName parameters
-    const deviceName = React.findDOMNode(this.refs.devicename).value.trim()
+    const deviceName = this.refs.devicename.value.trim()
     // Try to register device
     pushover.registerDevice({ deviceName })
       .then(this.registrationSuccessful)
@@ -76,7 +77,8 @@ const DeviceRegistration = React.createClass({
   },
 
   registrationSuccessful(response) {
-    const deviceName = React.findDOMNode(this.refs.devicename).value.trim()
+    const deviceName = this.refs.devicename.value.trim()
+    console.log(this.refs.runOnStartup)
     store.dispatch(setDeviceData({
       deviceName,
       deviceId: response.id
@@ -85,7 +87,11 @@ const DeviceRegistration = React.createClass({
     // Once true the active route will be shown automatically by App.js
 
     // Now we are ready to connect to pushover
-    connectToPushover()
+    try {
+      connectToPushover()
+    } catch(e) {
+      console.log(e, e.stack)
+    }
   },
 
   logout() {

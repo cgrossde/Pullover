@@ -13,9 +13,10 @@ import isOnline from 'is-online'
 import isReachable from 'is-reachable'
 
 import Debug from '../lib/debug'
-import store from '../services/Store'
+import store from './Store'
 import pushover, { connectWS, disconnectWS } from '../services/Pushover'
 import wakeDetect from '../lib/wake-detect'
+import { processNotifications } from './NotificationManager'
 import {
   updateConnectionState,
   updateSyncDate,
@@ -180,7 +181,8 @@ function fetchNotifications() {
   .then(function(notifications) {
     store.dispatch(updateSyncDate())
     loginFails = 0
-    debug.log('Received ' + notifications.length + ' notifications', notifications)
+    debug.log('Received ' + notifications.length + ' notifications')
+    processNotifications(notifications)
   })
   .catch(function(error) {
     // Check if connection or auth error

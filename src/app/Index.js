@@ -12,7 +12,8 @@ import '!!file?name=package.json!../package.json'
 import './styles/styles.scss'
 
 // React, Redux, ReduxRouter and routes
-import React from 'react/addons'
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { ReduxRouter } from 'redux-router'
 import routes from './services/Routes'
@@ -38,17 +39,15 @@ const Root = React.createClass({
     return (
       <div>
         <Provider store={store}>
-          {() =>
             <ReduxRouter>
               { routes }
             </ReduxRouter>
-          }
         </Provider>
       </div>
     )
   }
 })
-React.render(<Root />, document.body)
+ReactDOM.render(<Root />, document.body)
 
 // Show App once it was rendered
 showWindow()

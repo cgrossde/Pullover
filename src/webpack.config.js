@@ -2,6 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var WebpackNotifierPlugin = require('webpack-notifier')
 
 module.exports = {
   devtool: 'source-map',
@@ -22,7 +23,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Pullover'
     }),
-    new ExtractTextPlugin('styles.css')
+    new ExtractTextPlugin('styles.css'),
+    new WebpackNotifierPlugin()
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', '.scss']

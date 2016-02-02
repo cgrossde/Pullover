@@ -35,6 +35,7 @@ const Status = React.createClass({
       lastSync = moment(parseInt(this.props.latestSyncDate))
       const date15minAgo = moment().subtract(15, 'minutes')
       lastSyncClass = (lastSync.isBefore(date15minAgo)) ? 'text-danger' : 'text-info'
+      lastSync = lastSync.fromNow()
     }
 
     let connectionClass = (this.props.connectionStatus === 'ONLINE') ? 'text-success' : 'text-danger'
@@ -60,7 +61,7 @@ const Status = React.createClass({
                   </tr>
                   <tr>
                     <th>Last sync</th>
-                    <td><span className={lastSyncClass}>{lastSync.fromNow()}</span></td>
+                    <td><span className={lastSyncClass}>{lastSync}</span></td>
                   </tr>
                   <tr>
                     <th>Status</th>

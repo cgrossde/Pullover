@@ -66,8 +66,8 @@ const Login = React.createClass({
     // Display loading overlay
     this.setState({ spinner: true })
     // Get login parameters
-    const email = React.findDOMNode(this.refs.email).value.trim()
-    const password = React.findDOMNode(this.refs.password).value.trim()
+    const email = this.refs.email.value.trim()
+    const password = this.refs.password.value.trim()
     // Delete password, we don't want/need to keep it
     React.findDOMNode(this.refs.password).value = ''
     // Try login
@@ -85,7 +85,7 @@ const Login = React.createClass({
   },
 
   loginSuccessful(response) {
-    const email = React.findDOMNode(this.refs.email).value.trim()
+    const email = this.refs.email.value.trim()
     store.dispatch(setUserData({
       userKey: response.id,
       userEmail: email,
