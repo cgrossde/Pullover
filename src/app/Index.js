@@ -16,10 +16,27 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { ReduxRouter } from 'redux-router'
+import packageInfo from '../../package.json'
 import routes from './services/Routes'
 import store from './services/Store'
+
 // Make it accessible for debugging
 window.store = store
+
+// First run?
+window.firstRun = false
+window.updateRun = false
+if (localStorage.getItem('version') === null) {
+  console.log('FIRST RUN')
+  window.firstRun = true
+  localStorage.setItem('version', packageInfo.version)
+}
+// Update run?
+else if (localStorage.getItem('version') !== packageInfo.version) {
+  console.log('UPDATE RUN')
+  window.updateRun = true
+  localStorage.setItem('version', packageInfo.version)
+}
 
 // Debugging?
 if (process.env.DEBUG === '1') {
