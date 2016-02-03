@@ -3,25 +3,13 @@ import path from 'path'
 import https from 'https'
 import mkdirp from 'mkdirp'
 
+import Paths from '../services/Paths'
 import Debug from '../lib/debug'
 const debug = Debug('SoundCache')
 
-// Cache sound files
-// * OS X - '/Users/user/Library/Application Support/pullover/sounds'
-// * Windows 8 - 'C:\Users\User\AppData\Roaming\Pullover\sounds'
-// * Windows XP - 'C:\Documents and Settings\User\Application Data\Pullover\sounds'
-// * Linux - '$XDG_DATA_HOME/Pullover or $HOME/.local/share/Pullover/sounds'
-var appDataPath = process.env.APPDATA ||
-  (process.platform === 'darwin' ? process.env.HOME + '/Library/Application\ Support' : process.env.XDG_DATA_HOME || process.env.HOME + './local/share')
-var soundCachePath = path.join(appDataPath, 'Pullover', 'sounds')
-console.log('SOUND CACHE: ' + soundCachePath)
-if (! fs.existsSync(soundCachePath)) {
-  mkdirp.sync(soundCachePath)
-}
-
 class SoundCache {
   constructor(soundCachePath) {
-    this.path = soundCachePath
+    this.path = Paths.getSoundCachePath()
     this.soundUrl = 'https://api.pushover.net/sounds/'
     // Make sure default sound is downloaded
     this.get('po')
@@ -68,4 +56,4 @@ class SoundCache {
   }
 }
 
-export default new SoundCache(soundCachePath)
+export default new SoundCache()
