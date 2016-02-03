@@ -28,17 +28,16 @@ import notificationDB from './NotificationDB'
 import Debug from '../lib/debug'
 const debug = Debug('NotificationManager')
 
-import store from './Store'
+import Settings from '../services/Settings'
 import { notify } from './Notifier'
 import Pushover from './Pushover'
 
-console.log(store.getState())
 
 export function processNotifications(notificationArray) {
   if (notificationArray.length < 1)
     return
   // Respect max notification amount, but don't allow more than 30
-  const maxNotificationAmount = store.getState().settings.maxNotificationAmount || 30
+  const maxNotificationAmount = Settings.get('maxNotificationAmount') || 30
   // Process notifications
   notificationArray
     .forEach((notification, index) => {

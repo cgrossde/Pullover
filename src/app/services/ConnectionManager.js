@@ -29,9 +29,9 @@ var debug = Debug('ConnectionManager')
 let reconnectInterval = null
 const reconnectSpan = 1000 * 60 * 30 // 30 min
 
-// If OFFLINE => check internet connection every x min
+// If OFFLINE => check internet connection every x sec
 let checkInternetInterval = null
-const checkInternetSpan = 1000 * 60 * 2 // 2 min
+const checkInternetSpan = 1000 * 30 // 30 sec
 let checkingInternet = false
 
 // Handle login failures: Before we logout the user

@@ -17,7 +17,7 @@
 import path from 'path'
 import nwNotify from 'nw-notify'
 
-import store from './Store'
+import Settings from '../services/Settings'
 import SoundCache from './SoundCache'
 import Debug from '../lib/debug'
 var debug = Debug('Notifier')
@@ -26,7 +26,16 @@ nwNotify.getAppPath()
 
 nwNotify.setConfig({
   appIcon: path.join(path.resolve(path.dirname()), 'images', 'icon.png'),
-  displayTime: 50000
+  displayTime: Settings.get('displayTime') * 1000
+})
+
+// Autoupdate displayTime
+Settings.on('change', (event) => {
+  if (event.key === 'displayTime') {
+    nwNotify.setConfig({
+      displayTime: event.value * 1000
+    })
+  }
 })
 
 // Notification function
@@ -35,7 +44,7 @@ export function notify(notification) {
   // Set icon path
   notification.icon = 'https://api.pushover.net/icons/' + notification.icon + '.png'
 
-  if (store.getState().settings.nativeNotifications === true) {
+  if (Settings.get('nativeNotifications') === true) {
     nativeNotify(notification.title, notification.message, notification.url, notification.sound, notification.icon)
   }
   else {
