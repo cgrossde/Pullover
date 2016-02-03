@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux'
-import { routerStateReducer } from 'redux-router'
+import { hashHistory } from 'react-router'
+import { routeReducer } from 'react-router-redux'
 
 import { pushoverStateReducer } from './PushoverStateReducer'
 
 const reducer = combineReducers({
-	router: routerStateReducer,
+	rounting: routeReducer,
   pushover: pushoverStateReducer,
 })
 

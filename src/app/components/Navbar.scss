@@ -20,6 +20,11 @@ div.titlebar {
 			color: #333;
 			cursor: pointer;
 		}
+
+		a.active {
+			border-bottom: 3px solid #FFF;
+  			padding-bottom: 2px;
+		}
 	}
 
 	.close-button {

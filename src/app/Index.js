@@ -15,7 +15,6 @@ import './styles/styles.scss'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { ReduxRouter } from 'redux-router'
 import packageInfo from '../../package.json'
 import routes from './services/Routes'
 import store from './services/Store'
@@ -56,9 +55,7 @@ const Root = React.createClass({
     return (
       <div>
         <Provider store={store}>
-            <ReduxRouter>
-              { routes }
-            </ReduxRouter>
+          { routes }
         </Provider>
       </div>
     )

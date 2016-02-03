@@ -1,6 +1,6 @@
 import store from '../services/Store'
-import { pushState } from 'redux-router'
+import { routeActions } from 'react-router-redux'
 
 export function transitionTo(path) {
-	store.dispatch(pushState(null, path))
+	store.dispatch(routeActions.push(path))
 }

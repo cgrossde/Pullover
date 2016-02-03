@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router, Route, IndexRoute } from 'react-router'
+import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 
 // Import App and main components
 import App from '../components/App'
@@ -9,7 +9,7 @@ import Settings from '../components/Settings'
 
 // Routing config
 const Routes = (
-  <Router>
+  <Router history={hashHistory}>
     <Route path='/' component={App}>
       <IndexRoute component={Status} />
       <Route path='about' component={About}/>
