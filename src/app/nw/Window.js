@@ -26,6 +26,10 @@ export function openExternalLink(event) {
   Gui.Shell.openExternal(event.target.href)
 }
 
+export function showItemInFolder(path) {
+  Gui.Shell.showItemInFolder(path)
+}
+
 // Get the minimize event
 win.on('minimize', hideWindow)
 
