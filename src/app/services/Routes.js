@@ -5,6 +5,7 @@ import { Router, Route, IndexRoute } from 'react-router'
 import App from '../components/App'
 import About from '../components/About'
 import Status from '../components/Status'
+import Settings from '../components/Settings'
 
 // Routing config
 const Routes = (
@@ -13,6 +14,7 @@ const Routes = (
       <IndexRoute component={Status} />
       <Route path='about' component={About}/>
       <Route path='status' component={Status}/>
+      <Route path='settings' component={Settings}/>
     </Route>
   </Router>
 )
