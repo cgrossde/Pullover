@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
+import { connect } from 'react-redux'
 import { hideWindow } from '../nw/Window'
 
 import './Navbar.scss'
@@ -8,6 +9,8 @@ const Navbar = React.createClass({
   displayName: 'Navbar',
 
   render() {
+    const icon = (this.props.status === 'ONLINE') ? 'signal' : 'flash'
+    const iconClass = 'glyphicon glyphicon-' + icon
     return (
       <div className="titlebar">
         <img className="logo" src="images/logo.png"/>
@@ -15,17 +18,23 @@ const Navbar = React.createClass({
           <span className="glyphicon glyphicon-remove" onClick={hideWindow}></span>
         </div>
         <div className="settings-button">
-          <span className="glyphicon glyphicon-cog"></span>
+          <Link activeClassName="active" to="/settings"><span className="glyphicon glyphicon-cog"></span></Link>
         </div>
         <div className="about-button">
-          <Link to="/about"><span className="glyphicon glyphicon-info-sign"></span></Link>
+          <Link activeClassName="active" to="/about"><span className="glyphicon glyphicon-info-sign"></span></Link>
         </div>
         <div className="status-button">
-          <Link to="/status"><span className="glyphicon glyphicon-flash"></span></Link>
+          <Link activeClassName="active" to="/status"><span className={iconClass}></span></Link>
         </div>
       </div>
     )
   }
 })
 
-export default Navbar
+function select(state) {
+  return {
+    status: state.pushover.connectionStatus
+  }
+}
+
+export default connect(select)(Navbar)
