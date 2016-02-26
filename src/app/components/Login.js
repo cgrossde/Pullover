@@ -7,6 +7,8 @@ import pushover from '../services/Pushover'
 import { openExternalLink } from '../nw/Window'
 import { setUserData } from '../actions/Pushover'
 
+import './Login.scss'
+
 const Login = React.createClass({
   displayName: 'Login',
 
@@ -23,7 +25,7 @@ const Login = React.createClass({
     const infoText = (this.state.error) ? this.state.error : 'You will need to do this only once.'
 
     return (
-      <div>
+      <div className="login">
         <Spinner active={this.state.spinner} />
         <Row>
           <Col md={8} mdOffset={2}>
