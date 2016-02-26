@@ -6,6 +6,7 @@ import App from '../components/App'
 import About from '../components/About'
 import Status from '../components/Status'
 import Settings from '../components/Settings'
+import ShowUpdate from '../components/ShowUpdate'
 import FatalError from '../components/FatalError'
 
 // Routing config
@@ -17,6 +18,7 @@ const Routes = (
       <Route path='status' component={Status}/>
       <Route path='settings' component={Settings}/>
       <Route path='error' component={FatalError}/>
+      <Route path='updateAvailable' component={ShowUpdate}/>
     </Route>
   </Router>
 )

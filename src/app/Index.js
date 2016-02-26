@@ -63,5 +63,10 @@ const Root = React.createClass({
 })
 ReactDOM.render(<Root />, document.body)
 
-// Show App once it was rendered
-showWindow()
+// Show App once it was rendered (only if it's the first start)
+if(window.firstRun)
+  showWindow()
+
+// Update check
+import { check } from './services/UpdateCheck'
+check();

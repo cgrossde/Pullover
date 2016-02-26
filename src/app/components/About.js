@@ -2,6 +2,7 @@ import React from 'react'
 import { Row, Col, Table } from 'react-bootstrap'
 import { openExternalLink } from '../nw/Window'
 import packageInfo from '../../package.json'
+import { check } from '../services/UpdateCheck'
 
 const About = React.createClass({
   displayName: 'About',
@@ -33,12 +34,14 @@ const About = React.createClass({
                       href="https://github.com/cgrossde/Pullover/issues"
                       onClick={openExternalLink}>Report it here</a></td>
                   </tr>
-                  <tr>
+                  {/*<tr>
                     <th>Messages received</th>
                     <td className="messages-received">none</td>
-                  </tr>
+                  </tr>*/}
                 </tbody>
               </Table>
+
+              <a className="link" onClick={check}>Check for updates</a>
             </Col>
           </Row>
         </Col>
