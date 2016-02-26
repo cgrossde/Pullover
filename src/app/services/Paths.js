@@ -38,7 +38,7 @@ class Paths {
     this.soundPath = path.join(this.appPath, 'sounds')
     if (! fs.existsSync(this.soundPath)) {
       mkdirp.sync(this.soundPath)
-      console.log('Created log directory', this.soundPath)
+      console.log('Created sounds directory', this.soundPath)
     }
 	}
 
