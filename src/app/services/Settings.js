@@ -1,12 +1,27 @@
 
+import os from 'os'
 import Autorun from 'autorun'
 import { EventEmitter } from 'events'
 import Debug from '../lib/debug'
-import os from 'os'
+import packageInfo from '../../package.json'
 
 var autorun = new Autorun('Pullover')
 var debug = Debug('Settings')
 
+// First run?
+window.firstRun = false
+window.updateRun = false
+if (localStorage.getItem('version') === null) {
+  console.log('FIRST RUN')
+  window.firstRun = true
+  localStorage.setItem('version', packageInfo.version)
+}
+// Update run?
+else if (localStorage.getItem('version') !== packageInfo.version) {
+  console.log('UPDATE RUN')
+  window.updateRun = true
+  localStorage.setItem('version', packageInfo.version)
+}
 
 class Settings extends EventEmitter {
 
@@ -24,7 +39,7 @@ class Settings extends EventEmitter {
     // Otherwise get runOnStartup status from autorun module
     if (window.firstRun) {
       this.enableRunOnStartup()
-      if (os.platform().indexOf('win') === 0) {
+      if (os.platform() === 'darwin') {
         this.settings.nativeNotifications = true
       }
     } else {
