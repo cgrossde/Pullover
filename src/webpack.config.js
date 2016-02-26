@@ -58,9 +58,11 @@ module.exports = {
           'sass-loader?outputStyle=expanded&sourceMap=true&sourceMapContents=true'),
         include: path.join(__dirname, 'app')
       }
-    ]
+    ],
+    noParse: /node_modules\/json-schema\/lib\/validate\.js/
   },
   externals: {
     'bindings': 'commonjs bindings'
-  }
+  },
+
 }

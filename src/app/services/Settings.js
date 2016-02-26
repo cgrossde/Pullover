@@ -17,8 +17,9 @@ class Settings extends EventEmitter {
     this.settings = {}
     this.settings.displayTime = this.cast(localStorage.getItem('displayTime')) || 7,
     this.settings.nativeNotifications = this.cast(localStorage.getItem('nativeNotifications')) || false,
-    this.settings.maxNotificationAmount = this.cast(localStorage.getItem('maxNotificationAmount')),
+    this.settings.maxNotificationAmount = this.cast(localStorage.getItem('maxNotificationAmount')) || 20,
     this.settings.runOnStartup = this.cast(localStorage.getItem('runOnStartup')) || false
+    debug.log('Settings loaded', this.settings)
     // Enable runOnStartup if it's the firstRun
     // Otherwise get runOnStartup status from autorun module
     if (window.firstRun)
@@ -43,7 +44,6 @@ class Settings extends EventEmitter {
   }
 
   set(key, value) {
-    debug.log('Set ' + key + ' to: ' + value)
     // Allow for execution of hooks when changing certain settings
     switch (key) {
       case 'runOnStartup':
@@ -69,7 +69,7 @@ class Settings extends EventEmitter {
       key: key,
       value: value
     })
-    debug.log('Changed "' + key + '"',value)
+    debug.log('Changed \'' + key + '\'',value)
   }
 
   cast(value) {

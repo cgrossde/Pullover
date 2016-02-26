@@ -19,7 +19,7 @@
 global.indexedDB = window.indexedDB
 
 import treo from 'treo'
-import treoPromise from 'treo/plugins/treo-promise'
+import treoPromise from '../lib/treo-promise-plugin-fix'
 
 import Debug from '../lib/debug'
 var debug = Debug('NotificationDB')
@@ -66,7 +66,7 @@ class NotificationDB {
 
   isNew(notification) {
     return this.notificationDB.get(notification.id)
-      .then((result) => {
+      .then(function(result) {
         if (result !== undefined) {
           throw new Error('notificationExists')
         }

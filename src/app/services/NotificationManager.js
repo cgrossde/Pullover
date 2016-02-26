@@ -34,10 +34,11 @@ import Pushover from './Pushover'
 
 
 export function processNotifications(notificationArray) {
-  if (notificationArray.length < 1)
+  if (notificationArray.length === 0)
     return
-  // Respect max notification amount, but don't allow more than 30
-  const maxNotificationAmount = Settings.get('maxNotificationAmount') || 30
+  // Respect max notification amount (default: 20)
+  const maxNotificationAmount = Settings.get('maxNotificationAmount')
+  debug.log('maxNotificationAmount', maxNotificationAmount)
   // Process notifications
   notificationArray
     .forEach((notification, index) => {
@@ -46,6 +47,18 @@ export function processNotifications(notificationArray) {
         || remainingNotifications <= maxNotificationAmount)
       processNotification(notification, showNotification)
     })
+  // If we ommited showing some notifications(maxNotificationAmount) tell the user how many
+  if(maxNotificationAmount < notificationArray.length) {
+    const ommitedNotifications = notificationArray.length - maxNotificationAmount
+    setTimeout(() => {
+      notify({
+        title: 'Skipped ' + ommitedNotifications + ' older notifications',
+        message: 'Change with setting "max notification queue"'
+      })
+    }, 500);
+  }
+
+
   const lastNotification = notificationArray.pop()
   // Acknowledge reception of messages
   Pushover.acknowledgeNotification({ lastNotificationId: lastNotification.id })

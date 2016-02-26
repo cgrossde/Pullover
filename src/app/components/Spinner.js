@@ -8,8 +8,8 @@ const Spinner = React.createClass({
   render() {
     var spinner = (
       <div className="spinner">
-          <img className="spinner-image" src="images/spinner.gif" alt="Loading..."/>
-        </div>
+        <img className="spinner-image" src="images/spinner.gif" alt="Loading..."/>
+      </div>
     )
     return (this.props.active) ? spinner : null
   }

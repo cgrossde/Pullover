@@ -1,0 +1,32 @@
+.infobox {
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  width: 450px;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+
+  .infobox-content {
+    z-index: 1000;
+    display: block;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 350px;
+    padding: 10px;
+    text-align: left;
+
+    .infobox-close {
+      float: right;
+      cursor: pointer;
+    }
+
+    h2 {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+  }
+}

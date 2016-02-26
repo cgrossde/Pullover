@@ -7,7 +7,7 @@ import './services/Logging'
 import Window, { showWindow } from './nw/Window'
 import './nw/Tray'
 
-// Include package.json for NW.js, add global styles
+// Include package.json for NW.js, also add global styles
 import '!!file?name=package.json!../package.json'
 import './styles/styles.scss'
 

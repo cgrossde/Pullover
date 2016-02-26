@@ -1,6 +1,7 @@
 import Eyes from 'eyes'
 import Debug from '../lib/debug'
 import { showWindow } from '../nw/Window'
+import packageInfo from '../../package.json'
 
 var debug = Debug('Fatal')
 var inspect = Eyes.inspector({ stream: null })
@@ -9,11 +10,11 @@ var inspect = Eyes.inspector({ stream: null })
 // and report an issue
 process.on('uncaughtException', function(error) {
 	debug.log(' - - - - - - - - UNCAUGHT EXCEPTION - - - - - - - - ')
+	debug.log('Pullover v' + packageInfo.version)
 	debug.log('=============== STACK ===============')
 	debug.log(error.stack)
 	debug.log('=============== Error Object ===============')
 	debug.log(inspect(error).replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '').replace('\\\\n', '\n'))
-	console.log('###',inspect(error).replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, ''))
 	debug.log(' - - - - - - - - UNCAUGHT EXCEPTION - - - - - - - - ')
 	// Show modal to report error and restart pullover
 	showWindow()

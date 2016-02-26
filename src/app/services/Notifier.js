@@ -22,8 +22,6 @@ import SoundCache from './SoundCache'
 import Debug from '../lib/debug'
 var debug = Debug('Notifier')
 
-nwNotify.getAppPath()
-
 nwNotify.setConfig({
   appIcon: path.join(path.resolve(path.dirname()), 'images', 'icon.png'),
   displayTime: Settings.get('displayTime') * 1000
@@ -42,7 +40,7 @@ Settings.on('change', (event) => {
 // Usage: notify('NFL-Release', 'Pats vs Broncos 720p usw', 'http://google.com', 'images/nfl3.png');
 export function notify(notification) {
   // Set icon path
-  notification.icon = 'https://api.pushover.net/icons/' + notification.icon + '.png'
+  notification.icon = (notification.icon) ? 'https://api.pushover.net/icons/' + notification.icon + '.png' : undefined
 
   if (Settings.get('nativeNotifications') === true) {
     nativeNotify(notification.title, notification.message, notification.url, notification.sound, notification.icon)
@@ -67,6 +65,8 @@ export function notify(notification) {
  */
 function nativeNotify(title, text, url, iconPath, sound, retryOnError) {
   retryOnError = (retryOnError !== undefined) ? retryOnError : true
+  title = title || '';
+  text = text || '';
   var options = {}
   options.body = text
   if (iconPath) options.icon = iconPath

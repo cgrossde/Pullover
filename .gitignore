@@ -19,3 +19,4 @@ dist/*
 # System and editor files
 *.sublime-*
 .DS_Store
+.idea

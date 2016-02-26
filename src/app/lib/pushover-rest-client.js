@@ -18,7 +18,9 @@ var EventEmitter = require('events').EventEmitter
 var packageInfo = require('../../package.json')
 var userAgent = 'Pullover/' + packageInfo.version + ' (' + os.platform() + ' '
 	+ os.arch() + ' ' + os.release() + ')'
-var request = require('request').defaults({ headers: { 'User-Agent': userAgent } })
+var request = require('request').defaults({
+	headers: { 'User-Agent': userAgent }
+})
 
 /**
  * The OpenClient classe
