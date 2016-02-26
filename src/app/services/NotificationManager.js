@@ -58,10 +58,9 @@ export function processNotifications(notificationArray) {
     }, 500);
   }
 
-
   const lastNotification = notificationArray.pop()
   // Acknowledge reception of messages
-  Pushover.acknowledgeNotification({ lastNotificationId: lastNotification.id })
+  return Pushover.acknowledgeNotification({ lastNotificationId: lastNotification.id })
     .catch(function(err) {
       debug.log('Failed to acknowledge reception of notifications. lastNotificationId: '
        + lastNotificationId.id)

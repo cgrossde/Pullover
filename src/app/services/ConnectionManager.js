@@ -94,8 +94,11 @@ function fetchAndConnect() {
   debug.log('fetchAndConnect')
   // Fetch new notifications
   fetchNotifications()
-  // Start WS
-  connectToWS()
+  .then(() => {
+    // Start WS
+    connectToWS()
+  })
+
 }
 
 function offline() {
@@ -177,12 +180,12 @@ function fetchNotifications() {
     return
   }
 
-  pushover.fetchNotifications()
+  return pushover.fetchNotifications()
   .then(function(notifications) {
     store.dispatch(updateSyncDate())
     loginFails = 0
     debug.log('Received ' + notifications.length + ' notifications')
-    processNotifications(notifications)
+    return processNotifications(notifications)
   })
   .catch(function(error) {
     // Check if connection or auth error
