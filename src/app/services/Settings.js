@@ -2,7 +2,7 @@
 import Autorun from 'autorun'
 import { EventEmitter } from 'events'
 import Debug from '../lib/debug'
-
+import os from 'os'
 
 var autorun = new Autorun('Pullover')
 var debug = Debug('Settings')
@@ -22,10 +22,14 @@ class Settings extends EventEmitter {
     debug.log('Settings loaded', this.settings)
     // Enable runOnStartup if it's the firstRun
     // Otherwise get runOnStartup status from autorun module
-    if (window.firstRun)
+    if (window.firstRun) {
       this.enableRunOnStartup()
-    else
+      if (os.platform().indexOf('win') === 0) {
+        this.settings.nativeNotifications = true
+      }
+    } else {
       this.updateRunOnStartupStatus()
+    }
   }
 
   get(key) {
