@@ -44,7 +44,7 @@ const SettingsComponent = React.createClass({
               <b className="link" onClick={this.toggleRunOnStartup}>Run on startup</b>
             </Col>
             <Col xs={4}>
-              <input type="checkbox" read-only checked={this.state.runOnStartup} onClick={this.toggleRunOnStartup}/>
+              <input type="checkbox" readOnly checked={this.state.runOnStartup} onClick={this.toggleRunOnStartup}/>
             </Col>
           </Row>
           <hr />
@@ -91,7 +91,7 @@ const SettingsComponent = React.createClass({
                     <b className="link" onClick={this.toggleNativeNotifications}>Use native Notifications</b>
                   </Col>
                   <Col xs={4}>
-                    <input type="checkbox" read-only checked={this.state.nativeNotifications}
+                    <input type="checkbox" readOnly checked={this.state.nativeNotifications}
                            onClick={this.toggleNativeNotifications}/>
                   </Col>
                 </Row>
