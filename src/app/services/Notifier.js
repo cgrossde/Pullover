@@ -41,21 +41,22 @@ Settings.on('change', (event) => {
 export function notify(notification) {
   // Set icon path
   notification.icon = (notification.icon) ? 'https://api.pushover.net/icons/' + notification.icon + '.png' : undefined
+  // Sounds
+  if (notification.sound)
+    notification.sound = SoundCache.get(notification.sound)
+  else
+    notification.sound = SoundCache.get('po')
 
   if (Settings.get('nativeNotifications') === true) {
     nativeNotify(notification.title, notification.message, notification.url, notification.sound, notification.icon)
   }
   else {
-    let sound = false
-    if (notification.sound) {
-      sound = SoundCache.get(notification.sound)
-    }
     nwNotify.notify({
       title: notification.title,
       text: notification.message,
       url: notification.url,
       image: notification.icon,
-      sound: sound
+      sound: notification.sound
     })
   }
 }
