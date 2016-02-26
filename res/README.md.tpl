@@ -1,24 +1,30 @@
-# Pullover
+# Pullover - DEV
 *The unofficial multi-platform Pushover desktop client.*
 
 ![Pullover Demo](https://raw.githubusercontent.com/cgrossde/Pullover/master/res/Demo.gif)
 
-## Why was this App created?
+## Features
 
-I discovered Pushover in mid November 2014 and was really excited. The only thing missing was a decent desktop client. At the time there was only a rudimentary Notification Center integration for Mac. But I was missing the following features:
-
-* Show the icon of the notifying app (it always showed the pushover icon)
-* Make the notification clickable to open URLs attached to notifications
-* Support for Windows or Linux
+* Native Pushover Client for Windows, Mac and Linux
+* Show icon of the notifying app
+* Make notification with URLs clickable
+* Limit the max amount of notifications shown at once
+* Run on startup
 
 ## Installation / Download
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
+**ALPHA RELEASE (complete rewrite)** - Please report all bugs you encounter
+
 {% for download in downloads %}
 * **{{download.platformName}} (v{{version}}):** [{{download.fileName}}]({{download.url}}){% endfor %}
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
+
+**Donate for code signing:**
+I did sign the Windows installer in the past but my certificate expired. I would also like to sign the Mac version but that requires a (paid) Apple Developer Account.
+Both costs money, if you would like to support this project, consider making a donation: [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U3RY7599D8G2J)
 
 ## Build your own
 You can create builds for all platforms with Mac OS, take a look at [CROSSPLATFORM.md](CROSSPLATFORM.md) to find out about necessary dependencies.
@@ -46,18 +52,36 @@ There is no need to always build packaged binaries if you want to dive into the 
 
 If you encounter a bug or Pullover crashes, please go to the following directory and send me the `pullover.1.log` file by opening an issue:
 
-* OS X - '/Users/user/Library/Application Support/pullover'
-* Windows 8 - 'C:\Users\User\AppData\Roaming\Pullover'
-* Windows XP - 'C:\Documents and Settings\User\Application Data\Pullover'
-* Linux - '/var/local/Pullover'
+* OS X - '$HOME/Library/Application Support/Pullover'
+* Windows 8 - 'C:\Users\YOURUSERNAME\AppData\Roaming\Pullover'
+* Windows XP - 'C:\Documents and Settings\YOURUSERNAME\Application Data\Pullover'
+* Linux - '$XDG_DATA_HOME/Pullover or $HOME/.local/share/Pullover'
 
 ## Contributing
 
 If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I open-sourced this App with the hope that others contribute to it. Especially for Windows and Linux since I rarely use those systems.
 
-## Planned features
+## Changelog
 
-I am currently rewriting Pullover and a list of planned features is in the [wiki](https://github.com/cgrossde/Pullover/wiki). If you have any feature wishes not listed there then open an issue and I will take a look at it.
+**1.0.0-alpha.1:**
+
+* Complete rewrite, UI is now based on React
+* Connection handling was improved and should be very stable now
+* Max notification queue: Limit the amount of notifications shown at once (helpful for rarely used computers)
+* Notification sounds
+* All received notifications are stored in an internal database. This will be used in the future to show a history of received notifications
+
+**0.0.1** - **0.3.2** Initial app, based on jQuery but kind of messy
+
+## Why was this App created?
+
+I discovered Pushover in mid November 2014 and was really excited. The only thing missing was a decent desktop client. At the time there was only a rudimentary Notification Center integration for Mac. But I was missing the following features:
+
+* Show the icon of the notifying app (it always showed the pushover icon)
+* Make the notification clickable to open URLs attached to notifications
+* Support for Windows or Linux
+
+Since then a lot has changed. The initial app was written because I wanted to try `nwjs` and fix the problems mentioned before. I used jQuery at the time and it got kind of messy and unpredictable. In 2015 I wanted to do something with React and did a complete rewrite (with a lot of breaks in between). The first beta after the rewrite was released in Feb. 2016. The code is a lot better to maintain now and new features should be easy to implement.
 
 ## License
 

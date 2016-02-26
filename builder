@@ -207,6 +207,7 @@ function deployToSourceforge(localDir, remoteDir) {
             conn.sftp(function sftp(err, sftp) {
                 if (err) console.log(err);
                 // Create dir and ignore error (dir already exists)
+                sftp.
                 sftp.mkdir(remoteDir, function sftpCreateDir(err) {
                     if (err) console.log('Dir already exists', err);
                     else console.log('Dir created');
@@ -350,31 +351,34 @@ function createWindowsInstaller() {
                 nsis.stderr.pipe(process.stderr);
                 nsis.on('close', function () {
                     console.log("\nWindows installer created");
-                    // Sign installer
-                    var signInstall = childProcess.spawn('signcode',
-                        [   '-spc', 'res/cert.spc',
-                            '-v', 'res/cert.pvk',
-                            '-a', 'sha1', '-$', 'individual',
-                            '-i', 'https://github.com/cgrossde/Pullover',
-                            '-t', 'http://timestamp.verisign.com/scripts/timstamp.dll',
-                            '-tr', '10',
-                            'bin/deploy/' + filename
-                        ]);
-                    signInstall.stdout.on('data', function(data) {
-                        process.stdout.write(data);
-                        // It's a hack -.-
-                        if (data.toString().indexOf('.pvk:') !== -1) {
-                            console.log('Entering password');
-                            signInstall.stdin.write(buildConf.certPassword + '\n');
-                        }
-
-                    });
-                    signInstall.stderr.pipe(process.stdout);
-                    signInstall.on('close', function() {
-                        console.log('Installer signed');
-                        // Clear tmp and return
-                        del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
-                    });
+                    // Clear tmp and return
+                    del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
+                    // NO CODESIGNING, because certificate expired
+                    //// Sign installer
+                    //var signInstall = childProcess.spawn('signcode',
+                    //    [   '-spc', 'res/cert.spc',
+                    //        '-v', 'res/cert.pvk',
+                    //        '-a', 'sha1', '-$', 'individual',
+                    //        '-i', 'https://github.com/cgrossde/Pullover',
+                    //        '-t', 'http://timestamp.verisign.com/scripts/timstamp.dll',
+                    //        '-tr', '10',
+                    //        'bin/deploy/' + filename
+                    //    ]);
+                    //signInstall.stdout.on('data', function(data) {
+                    //    process.stdout.write(data);
+                    //    // It's a hack -.-
+                    //    if (data.toString().indexOf('.pvk:') !== -1) {
+                    //        console.log('Entering password');
+                    //        signInstall.stdin.write(buildConf.certPassword + '\n');
+                    //    }
+                    //
+                    //});
+                    //signInstall.stderr.pipe(process.stdout);
+                    //signInstall.on('close', function() {
+                    //    console.log('Installer signed');
+                    //    // Clear tmp and return
+                    //    del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
+                    //});
                 });
             });
         });

@@ -1,5 +1,5 @@
 {
-  "name": "pullover-dev",
+  "name": "pullover",
   "version": "1.0.0-alpha.1",
   "description": "A pushover desktop client",
   "main": "index.html",
@@ -44,6 +44,7 @@
     "redux": "^3.2.1",
     "request": "^2.65.0",
     "reselect": "^1.1.0",
+    "semver": "^5.1.0",
     "treo": "^0.5.1",
     "ws": "^0.8.0"
   },
