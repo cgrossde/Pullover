@@ -45,11 +45,15 @@ You can create builds for all platforms with Mac OS, take a look at [CROSSPLATFO
 
 There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install the node dependencies in the root folder and in source with `npm install` and run the `builder` script. Make sure to copy `config/buildConf.json.sample` to `config/buildConf.json` first
 
+```Shell
     cp `config/buildConf.json.sample` `config/buildConf.json`
     npm install
     cd src && npm install
+    ./node_modules/webpack/bin/webpack.js --watch
+    # In another shell go back to Pullovers root folder and run the app
     cd ..
     ./builder run
+```
 
 ### Bugs
 
