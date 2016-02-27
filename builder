@@ -207,7 +207,6 @@ function deployToSourceforge(localDir, remoteDir) {
             conn.sftp(function sftp(err, sftp) {
                 if (err) console.log(err);
                 // Create dir and ignore error (dir already exists)
-                sftp.
                 sftp.mkdir(remoteDir, function sftpCreateDir(err) {
                     if (err) console.log('Dir already exists', err);
                     else console.log('Dir created');
