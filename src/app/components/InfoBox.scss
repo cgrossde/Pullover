@@ -1,5 +1,5 @@
 .infobox {
-  z-index: 1000;
+  z-index: 500;
   position: absolute;
   top: 0;
   width: 450px;
@@ -7,7 +7,7 @@
   background-color: rgba(0,0,0,0.8);
 
   .infobox-content {
-    z-index: 1000;
+    z-index: 500;
     display: block;
     margin: 20px auto;
     background-color: #ffffff;

@@ -84,4 +84,5 @@ function processNotification(notification, show = true) {
         console.log('Failed adding message', err)
       }
     })
+    .done()
 }

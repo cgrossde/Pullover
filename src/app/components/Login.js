@@ -2,10 +2,12 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 
 import Spinner from './Spinner'
+import InfoBox from './InfoBox'
 import store from '../services/Store'
 import pushover from '../services/Pushover'
-import { openExternalLink } from '../nw/Window'
+import { openExternalLink,showWindow } from '../nw/Window'
 import { setUserData } from '../actions/Pushover'
+import { maxLoginFailsReached, resetMaxLoginFails } from '../services/ConnectionManager'
 
 import './Login.scss'
 
@@ -23,6 +25,7 @@ const Login = React.createClass({
     const formGroupClass = (this.state.error) ? 'form-group has-error' : 'form-group'
     const infoClass = (this.state.error) ? 'text-danger' : 'text-muted'
     const infoText = (this.state.error) ? this.state.error : 'You will need to do this only once.'
+    let showMaxLoginFailInfo = maxLoginFailsReached()
 
     return (
       <div className="login">
@@ -59,8 +62,18 @@ const Login = React.createClass({
             </span>
           </Col>
         </Row>
+        <InfoBox active={showMaxLoginFailInfo} close={this.closeMaxLoginFailInfo}
+          title="Invalid Credentials">
+          Three login attempts failed. Maybe you removed this device from your pushover account?
+          <br/>Please login again.
+        </InfoBox>
       </div>
     )
+  },
+
+  closeMaxLoginFailInfo() {
+    resetMaxLoginFails()
+    this.forceUpdate()
   },
 
   handleSubmit(e) {
@@ -95,6 +108,10 @@ const Login = React.createClass({
     }))
     // No need to transition because isLoggedIn is a state monitored by redux
     // Once true the deviceRegistration will be shown automatically by App.js
+  },
+
+  componentDidMount() {
+    showWindow()
   }
 })
 

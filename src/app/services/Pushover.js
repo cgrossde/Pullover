@@ -52,7 +52,6 @@ export function connectWS() {
 export function disconnectWS() {
   if (wsClient !== null) {
     wsClient.disconnect()
+    wsClient = null
   }
-
-  return wsClient
 }

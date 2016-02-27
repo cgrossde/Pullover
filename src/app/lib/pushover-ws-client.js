@@ -38,10 +38,10 @@ class OpenClientWS extends EventEmitter {
     })
 
     this.socket = null
-    // If we receive no interaction within 90 sek
+    // If we receive no interaction within 70 sek
     // => TIMEOUT
     this.timeoutInterval = null
-    this.timeoutSpan = 1000 * 90
+    this.timeoutSpan = 1000 * 70
     this.lastInteraction = null
   }
 
@@ -86,15 +86,17 @@ class OpenClientWS extends EventEmitter {
   checkTimeout() {
     const now = new Date()
     const diff = now.getTime() - this.lastInteraction.getTime()
-    if (diff > this.timeoutSpan) {
+    if (diff + 100 > this.timeoutSpan) {
       debug.log('Socket timed out')
       this.emit('timeout')
     }
   }
 
   disconnect() {
-    this.socket.close()
-    this.socket = null
+    if(this.socket !== null) {
+      this.socket.close()
+      this.socket = null
+    }
     clearInterval(this.timeoutInterval)
   }
 

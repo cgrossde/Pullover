@@ -15,6 +15,7 @@ import isReachable from 'is-reachable'
 import Debug from '../lib/debug'
 import store from './Store'
 import pushover, { connectWS, disconnectWS } from '../services/Pushover'
+import { showWindow } from '../nw/Window'
 import wakeDetect from '../lib/wake-detect'
 import { processNotifications } from './NotificationManager'
 import {
@@ -38,10 +39,13 @@ let checkingInternet = false
 // we wait for at least 3 consecutive login failures
 let loginFails = 0
 const maxLoginFails = 3
-const waitAfterLoginFail = 1000 * 60 * 1 // 1 min
+const waitAfterLoginFail = 1000 * 20 // 20 sec
 
 // Ref to pushover ws client
 let wsClient = null
+
+// Status var (used to show info on login screen which explains logout)
+let maxLoginFailsExceeded = false
 
 // Attach on wake listener only once
 // Reconnect on wake
@@ -94,9 +98,13 @@ function fetchAndConnect() {
   debug.log('fetchAndConnect')
   // Fetch new notifications
   fetchNotifications()
-  .then(() => {
-    // Start WS
-    connectToWS()
+  .done((success) => {
+    if(success !== false) {
+      debug.log('Connect to WebSocket')
+      maxLoginFailsExceeded = false
+      // Start WS
+      connectToWS()
+    }
   })
 
 }
@@ -129,11 +137,14 @@ function connectToWS() {
 }
 
 function disconnectFromWS() {
-  wsClient.removeAllListeners()
-  disconnectWS()
+  if (wsClient !== null) {
+    wsClient.removeAllListeners()
+    disconnectWS()
+  }
 }
 
 function checkInternetConnection() {
+  debug.log('Checking internet connection')
   // Don't run more than one check concurrently
   if (checkingInternet) {
     return
@@ -164,13 +175,20 @@ function loginFailed(type) {
   loginFails++
   if (loginFails >= maxLoginFails) {
     debug.log('Max login fails reached. Logout and relogin. - ' + type)
+    maxLoginFailsExceeded = true
+    stop()
     store.dispatch(logoutPushover())
+    showWindow()
   }
   else {
     debug.log('Login failed (' + loginFails + ' of ' + maxLoginFails + ') - ' + type)
     stop()
+    debug.log('Stopped')
     store.dispatch(updateConnectionState('OFFLINE'))
-    setTimeout(start, waitAfterLoginFail)
+    setTimeout(() => {
+      debug.log('Retry login')
+      start()
+    }, waitAfterLoginFail)
   }
 }
 
@@ -186,8 +204,7 @@ function fetchNotifications() {
     loginFails = 0
     debug.log('Received ' + notifications.length + ' notifications')
     return processNotifications(notifications)
-  })
-  .catch(function(error) {
+  }, (error) => {
     // Check if connection or auth error
     if (error.name === 'InvalidCredentials') {
       loginFailed('fetch')
@@ -196,9 +213,20 @@ function fetchNotifications() {
       debug.log('Fetch failed - offline', error)
       offline()
     }
+    return false;
   })
+}
+
+function maxLoginFailsReached() {
+  return maxLoginFailsExceeded
+}
+
+function resetMaxLoginFails() {
+  maxLoginFailsExceeded = false
 }
 
 export { start as connectToPushover }
 export { stop as disconnectFromPushover }
 export { reconnect as reconnectToPushover }
+export { maxLoginFailsReached }
+export { resetMaxLoginFails }
