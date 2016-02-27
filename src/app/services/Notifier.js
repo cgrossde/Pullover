@@ -48,7 +48,7 @@ export function notify(notification) {
     notification.sound = SoundCache.get('po')
 
   if (Settings.get('nativeNotifications') === true) {
-    nativeNotify(notification.title, notification.message, notification.url, notification.sound, notification.icon)
+    nativeNotify(notification.title, notification.message, notification.url, notification.icon, notification.sound)
   }
   else {
     nwNotify.notify({
@@ -92,7 +92,7 @@ function nativeNotify(title, text, url, iconPath, sound, retryOnError) {
 
   if (sound) {
     notice.onshow = function() {
-      const audio = new window.Audio(SoundCache.get(sound))
+      const audio = new window.Audio(sound)
       audio.play()
     }
   }
