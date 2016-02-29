@@ -4,7 +4,7 @@ import { Row, Col, Button } from 'react-bootstrap'
 import Debug from '../lib/debug'
 import Paths from '../services/Paths'
 import packageInfo from '../../package.json'
-import { openExternalLink, quitApp, showItemInFolder } from '../nw/Window'
+import { externalLinkHandler, quitApp, showItemInFolder } from '../nw/Window'
 
 import './FatalError.scss'
 
@@ -22,7 +22,7 @@ const FatalError = React.createClass({
             <p><b>Sorry, something unexpected happened.</b></p>
             <p className="text-center">
               Please report this bug <a href="https://github.com/cgrossde/Pullover/issues/new"
-                                        onClick={openExternalLink}>here</a> together with the Pullover log file:<br/>
+                                        onClick={externalLinkHandler}>here</a> together with the Pullover log file:<br/>
               <a className="link" onClick={this.showLogsFolder}><code>{debug.getLogFilePath()}</code><br/>
               Click to open the log file folder.<br/></a>
               Please also add the Pullover version({packageInfo.version}) and the operating system you were using.
