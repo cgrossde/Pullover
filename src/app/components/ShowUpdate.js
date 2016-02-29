@@ -4,7 +4,7 @@ import { Row, Col, Button } from 'react-bootstrap'
 import Debug from '../lib/debug'
 import Paths from '../services/Paths'
 import packageInfo from '../../package.json'
-import { openExternalLink } from '../nw/Window'
+import { externalLinkHandler } from '../nw/Window'
 import { getCachedRemotePackageInfo } from '../services/UpdateCheck'
 
 const debug = Debug('ShowUpdate')
@@ -31,7 +31,7 @@ const ShowUpdate = React.createClass({
             New version is <b>{this.state.remotePackageInfo.version}</b>
             <br/>
             <br/>
-            <a href={releaseLink} className="btn btn-success" onClick={openExternalLink}>Download now!</a>
+            <a href={releaseLink} className="btn btn-success" onClick={externalLinkHandler}>Download now!</a>
           </p>
         </Col>
       </Row>

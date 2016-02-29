@@ -21,9 +21,13 @@ export function quitApp() {
 	win.close(true)
 }
 
-export function openExternalLink(event) {
+export function openExternalLink(link) {
+  Gui.Shell.openExternal(link)
+}
+
+export function externalLinkHandler(event) {
   event.preventDefault()
-  Gui.Shell.openExternal(event.target.href)
+  openExternalLink(event.target.href)
 }
 
 export function showItemInFolder(path) {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Col, Table } from 'react-bootstrap'
-import { openExternalLink } from '../nw/Window'
+import { externalLinkHandler } from '../nw/Window'
 import packageInfo from '../../package.json'
 import { check } from '../services/UpdateCheck'
 
@@ -25,14 +25,14 @@ const About = React.createClass({
                     <th>Homepage</th>
                     <td>
                       <a className="github-link" href="https://github.com/cgrossde/Pullover"
-                        onClick={openExternalLink}>Github cgrossde/pullover</a>
+                        onClick={externalLinkHandler}>Github cgrossde/pullover</a>
                     </td>
                   </tr>
                   <tr>
                     <th>Found a bug?</th>
                     <td><a className="github-issue-link"
                       href="https://github.com/cgrossde/Pullover/issues"
-                      onClick={openExternalLink}>Report it here</a></td>
+                      onClick={externalLinkHandler}>Report it here</a></td>
                   </tr>
                   {/*<tr>
                     <th>Messages received</th>

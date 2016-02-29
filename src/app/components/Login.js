@@ -5,7 +5,7 @@ import Spinner from './Spinner'
 import InfoBox from './InfoBox'
 import store from '../services/Store'
 import pushover from '../services/Pushover'
-import { openExternalLink,showWindow } from '../nw/Window'
+import { externalLinkHandler, showWindow } from '../nw/Window'
 import { setUserData } from '../actions/Pushover'
 import { maxLoginFailsReached, resetMaxLoginFails } from '../services/ConnectionManager'
 
@@ -58,7 +58,7 @@ const Login = React.createClass({
             </form>
             <span className="text-primary">
               <a href="https://pushover.net/login" alt="Create Account"
-                onClick={openExternalLink}>No account yet? Click here to create one.</a>
+                onClick={externalLinkHandler}>No account yet? Click here to create one.</a>
             </span>
           </Col>
         </Row>
