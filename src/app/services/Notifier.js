@@ -17,6 +17,7 @@
 import path from 'path'
 import nwNotify from 'nw-notify'
 
+import { openExternalLink } from '../nw/Window'
 import Settings from '../services/Settings'
 import SoundCache from './SoundCache'
 import Debug from '../lib/debug'
@@ -86,7 +87,7 @@ function nativeNotify(title, text, url, iconPath, sound, retryOnError) {
 
   if (url !== null) {
     notice.onclick = function() {
-      gui.Shell.openExternal(url)
+      openExternalLink(url)
     }
   }
 
