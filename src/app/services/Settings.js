@@ -4,24 +4,17 @@ import Autorun from 'autorun'
 import { EventEmitter } from 'events'
 import Debug from '../lib/debug'
 import packageInfo from '../../package.json'
+import store from './Store'
+import {
+  setUserData,
+  setDeviceData
+} from '../actions/Pushover'
 
 var autorun = new Autorun('Pullover')
 var debug = Debug('Settings')
 
-// First run?
 window.firstRun = false
 window.updateRun = false
-if (localStorage.getItem('version') === null) {
-  console.log('FIRST RUN')
-  window.firstRun = true
-  localStorage.setItem('version', packageInfo.version)
-}
-// Update run?
-else if (localStorage.getItem('version') !== packageInfo.version) {
-  console.log('UPDATE RUN')
-  window.updateRun = true
-  localStorage.setItem('version', packageInfo.version)
-}
 
 class Settings extends EventEmitter {
 
@@ -35,14 +28,18 @@ class Settings extends EventEmitter {
     this.settings.maxNotificationAmount = this.cast(localStorage.getItem('maxNotificationAmount')) || 20,
     this.settings.runOnStartup = this.cast(localStorage.getItem('runOnStartup')) || false
     debug.log('Settings loaded', this.settings)
-    // Enable runOnStartup if it's the firstRun
-    // Otherwise get runOnStartup status from autorun module
-    if (window.firstRun) {
-      this.enableRunOnStartup()
-      if (os.platform() === 'darwin') {
-        this.settings.nativeNotifications = true
-      }
-    } else {
+    // First or update run?
+    if (localStorage.getItem('version') === null) {
+      window.firstRun = true
+      this.firstRun()
+    }
+    // Update run?
+    else if (localStorage.getItem('version') !== packageInfo.version) {
+      window.updateRun = true
+      this.updateRun(localStorage.getItem('version'))
+    }
+    // Nothing special => just update autorun status
+    else {
       this.updateRunOnStartupStatus()
     }
   }
@@ -141,6 +138,55 @@ class Settings extends EventEmitter {
 
   runOnStartupSupported() {
     return autorun.isPlatformSupported()
+  }
+
+  /**
+   * Upgrade handling
+   */
+  firstRun() {
+    debug.log('First run')
+    // Check if version 0.x.x was installed?
+    if(localStorage.secret || localStorage.id) {
+      this.updateFrom_0_x_x()
+    } else {
+      this.set('runOnStartup', true)
+      // Use mac notification center by default
+      if (os.platform() === 'darwin') {
+        this.settings.nativeNotifications = true
+      }
+    }
+  }
+
+  updateRun(fromVersion) {
+    debug.log('UPDATE RUN from ' + localStorage.getItem('version') + ' to ' + packageInfo.version)
+    // For the future
+    debug.log('No migrations necessary')
+    localStorage.setItem('version', packageInfo.version)
+    this.updateRunOnStartupStatus()
+  }
+
+  updateFrom_0_x_x() {
+    debug.log('Upgrade from 0.x.x')
+    // Native notifications?
+    if(localStorage.newNotifier)
+      this.set('nativeNotifications', false)
+    else
+      this.set('nativeNotifications', true)
+    // Reset login data
+    if(localStorage.secret || localStorage.id) {
+      // Let them login again (we store the email now to let
+      // the user check which account is logged in)
+      store.dispatch(setUserData({
+        userKey: null,
+        userEmail: null,
+        userSecret: null
+      }))
+      store.dispatch(setDeviceData({
+        deviceName: null,
+        deviceId: null
+      }))
+    }
+    this.updateRunOnStartupStatus()
   }
 }
 
