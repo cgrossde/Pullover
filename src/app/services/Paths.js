@@ -19,7 +19,7 @@ class Paths {
 	constructor() {
     // Base path
     this.appPath = process.env.APPDATA ||
-      (process.platform === 'darwin' ? process.env.HOME + '/Library/Application\ Support' : process.env.XDG_DATA_HOME || process.env.HOME + './local/share')
+      (process.platform === 'darwin' ? process.env.HOME + '/Library/Application\ Support' : process.env.XDG_DATA_HOME || process.env.HOME + '/.local/share')
     this.appPath = path.join(this.appPath, 'Pullover')
     if (! fs.existsSync(this.appPath)) {
       mkdirp.sync(this.appPath)
