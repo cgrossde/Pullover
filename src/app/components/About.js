@@ -3,9 +3,16 @@ import { Row, Col, Table } from 'react-bootstrap'
 import { externalLinkHandler } from '../nw/Window'
 import packageInfo from '../../package.json'
 import { check } from '../services/UpdateCheck'
+import NotificationDB from '../services/NotificationDB'
 
 const About = React.createClass({
   displayName: 'About',
+
+  getInitialState() {
+    return {
+      count: 0
+    }
+  },
 
   render() {
     return (
@@ -34,10 +41,10 @@ const About = React.createClass({
                       href="https://github.com/cgrossde/Pullover/issues"
                       onClick={externalLinkHandler}>Report it here</a></td>
                   </tr>
-                  {/*<tr>
+                  <tr>
                     <th>Messages received</th>
-                    <td className="messages-received">none</td>
-                  </tr>*/}
+                    <td className="messages-received">{this.state.count}</td>
+                  </tr>
                 </tbody>
               </Table>
 
@@ -47,6 +54,18 @@ const About = React.createClass({
         </Col>
       </Row>
     )
+  },
+
+  componentDidMount() {
+    // Get count and keep it updated
+    NotificationDB
+      .count()
+      .then((count) => {
+        this.setState({ count })
+      })
+    NotificationDB.on('newCount', (count) => {
+      this.setState({ count })
+    })
   }
 })
 

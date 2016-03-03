@@ -33,6 +33,7 @@
     "is-reachable": "^1.1.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.10.6",
+    "nedb": "^1.8.0",
     "nw-notify": "^1.0.2",
     "promise": "^7.0.3",
     "react": "^0.14.7",
@@ -45,7 +46,6 @@
     "request": "^2.65.0",
     "reselect": "^1.1.0",
     "semver": "^5.1.0",
-    "treo": "^0.5.1",
     "ws": "^0.8.0"
   },
   "window": {

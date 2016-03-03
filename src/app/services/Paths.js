@@ -40,6 +40,13 @@ class Paths {
       mkdirp.sync(this.soundPath)
       console.log('Created sounds directory', this.soundPath)
     }
+
+    // DB path
+    this.notificationDBPath = path.join(this.appPath, 'notificationDB')
+    if (! fs.existsSync(this.notificationDBPath)) {
+      mkdirp.sync(this.notificationDBPath)
+      console.log('Created sounds directory', this.notificationDBPath)
+    }
 	}
 
   getLogPath() {
@@ -48,6 +55,10 @@ class Paths {
 
   getSoundCachePath() {
     return this.soundPath
+  }
+
+  getNotificationDBPath() {
+    return this.notificationDBPath
   }
 }
 

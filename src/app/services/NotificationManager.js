@@ -70,8 +70,8 @@ export function processNotifications(notificationArray) {
 function processNotification(notification, show = true) {
   notificationDB.isNew(notification)
     .then((res) => {
-      notificationDB.add(notification)
       if (show) notify(notification)
+      return notificationDB.add(notification)
     })
     .catch((err) => {
       if (err.message === 'notificationExists') {

@@ -14,64 +14,77 @@
     umid: 6298,
     title: 'Welcome to Pushover!' } ]
  */
+import path from 'path'
+import Datastore from 'nedb'
+import Promise from 'promise'
+import { EventEmitter } from 'events'
 
-// Treo only looks in the global space
-global.indexedDB = window.indexedDB
-
-import treo from 'treo'
-import treoPromise from '../lib/treo-promise-plugin-fix'
-
+import Paths from './Paths'
 import Debug from '../lib/debug'
 var debug = Debug('NotificationDB')
 
 
-class NotificationDB {
+class NotificationDB extends EventEmitter {
 
   constructor() {
+    // Init eventemitter
+    super()
     // Init DB
-    const schema = treo.schema()
-      .version(1)
-        .addStore('apps', { key: 'aid' })
-        .addStore('notifications', { key: 'id' })
-        .addIndex('byAppId', 'aid')
-        .addIndex('byDate', 'date')
-
-    const db = treo('pushover', schema)
-      .use(treoPromise())
-
-    this.appDB = db.store('apps')
-    this.notificationDB = db.store('notifications')
+    this.notificationDB = new Datastore(
+      { filename: path.join(Paths.getNotificationDBPath(), 'notifications.db'), autoload: true }
+    )
     // DEBUG
-    global.appDB = this.appDB
     global.notificationDB = this.notificationDB
   }
 
   add(notification) {
-    // Create/update app collection
-    return this.appDB.put(notification)
-      .then(() => {
-        this.appDB.all()
-          .then((appList) => {
-            console.log('AppList:', appList)
-          })
-      })
-      .catch((err) => {
-        console.log('Error in addNotifications', err)
-        throw {
-          name: 'dbfailure',
-          message: (err && err.message) ? err.message : 'Unkown error'
+    return new Promise((resolve, reject) => {
+      // Store the original id, but make clear it's
+      // not the identifier (nedb will generate one for us: _id)
+      notification.originalId = notification.id
+      delete notification.id
+      // Store notification
+      this.notificationDB.insert(notification, (err, newDoc) => {
+        if(err) {
+          debug.log('Error in addNotifications', err)
+          throw {
+            name: 'dbfailure',
+            message: (err && err.message) ? err.message : 'Unkown error'
+          }
         }
+        this.updateCount();
+        resolve(newDoc)
       })
+    })
   }
 
   isNew(notification) {
-    return this.notificationDB.get(notification.id)
-      .then(function(result) {
-        if (result !== undefined) {
-          throw new Error('notificationExists')
+    return new Promise((resolve, reject) => {
+      this.notificationDB.findOne({originalId: notification.id}, (err, res) => {
+        if (err || res !== null) {
+          reject(new Error('notificationExists'))
         }
+        resolve();
       })
+    })
   }
+
+  count() {
+    return new Promise((resolve, reject) => {
+      this.notificationDB.count({}, (err, count) => {
+        if(err)
+          reject(err)
+        resolve(count)
+      })
+    })
+  }
+
+  updateCount() {
+    this.count().then((count) => {
+      this.emit('newCount', count)
+    })
+  }
+
 }
 
 
