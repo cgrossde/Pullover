@@ -7,19 +7,20 @@ var WebpackNotifierPlugin = require('webpack-notifier')
 module.exports = {
   devtool: 'source-map',
   target: 'node-webkit',
-  entry: [
-    './app/Index'
-  ],
-  devServer: {
-      contentBase: '../dist'
+  entry: {
+    app: './app/Index',
+    vendors: [ 'autorun','nedb','nw-notify','promise','react','react-bootstrap','react-dom',
+      'react-redux','react-router','react-router-redux','redux','request',
+      'lodash', 'ws', 'moment', 'semver']
   },
   output: {
     path: path.join(__dirname, '..', 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].js',
     publicPath: ''
   },
   plugins: [
     new webpack.NoErrorsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
     new HtmlWebpackPlugin({
       title: 'Pullover'
     }),
