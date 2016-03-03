@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { Row, Col } from 'react-bootstrap'
 
 import Spinner from './Spinner'
@@ -84,7 +85,7 @@ const Login = React.createClass({
     const email = this.refs.email.value.trim()
     const password = this.refs.password.value.trim()
     // Delete password, we don't want/need to keep it
-    React.findDOMNode(this.refs.password).value = ''
+    ReactDOM.findDOMNode(this.refs.password).value = ''
     // Try login
     pushover.login({ email, password })
       .then(this.loginSuccessful)
