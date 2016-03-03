@@ -45,7 +45,7 @@ class Paths {
     this.notificationDBPath = path.join(this.appPath, 'notificationDB')
     if (! fs.existsSync(this.notificationDBPath)) {
       mkdirp.sync(this.notificationDBPath)
-      console.log('Created sounds directory', this.notificationDBPath)
+      console.log('Created notification DB directory', this.notificationDBPath)
     }
 	}
 
