@@ -15,7 +15,7 @@
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
-**ALPHA RELEASE (complete rewrite)** - Please report all bugs you encounter
+**BETA RELEASE (complete rewrite)** - Please report all bugs you encounter
 
 
 * **Linux x64 (v1.0.0-beta.1):** [Pullover_1.0.0-beta.1_linux64.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.1/Pullover_1.0.0-beta.1_linux64.zip/download)
