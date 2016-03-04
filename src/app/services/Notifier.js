@@ -16,6 +16,7 @@
 
 import path from 'path'
 import nwNotify from 'nw-notify'
+import striptags from 'striptags'
 
 import { openExternalLink } from '../nw/Window'
 import Settings from '../services/Settings'
@@ -67,8 +68,10 @@ export function notify(notification) {
  */
 function nativeNotify(title, text, url, iconPath, sound, retryOnError) {
   retryOnError = (retryOnError !== undefined) ? retryOnError : true
-  title = title || '';
-  text = text || '';
+  title = title || ''
+  text = text || ''
+  // Native notifications don't support HTML
+  text = striptags(text)
   var options = {}
   options.body = text
   if (iconPath) options.icon = iconPath
@@ -85,7 +88,7 @@ function nativeNotify(title, text, url, iconPath, sound, retryOnError) {
     }
   }
 
-  if (url !== null) {
+  if (url !== undefined) {
     notice.onclick = function() {
       openExternalLink(url)
     }
