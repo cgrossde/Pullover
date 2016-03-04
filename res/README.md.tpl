@@ -67,6 +67,15 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 
 ## Changelog
 
+**1.0.0-beta.1:**
+
+* Fixes #45, strip HTML from native notifications (HTML is not supported)
+* Enhancement #44, switch internal DB and show received notification count
+* Fixes #43, click on native notification lead to crash
+* Fixes #42, added upgrade logic to keep settings when upgrading
+* Fixes #32, typo in data path for linux
+* Fixes #21, respect notification priority (no sound for -1 and no show for -2)
+
 **1.0.0-alpha.1:**
 
 * Complete rewrite, UI is now based on React

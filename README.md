@@ -18,10 +18,10 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 **ALPHA RELEASE (complete rewrite)** - Please report all bugs you encounter
 
 
-* **Linux x64 (v1.0.0-alpha.1):** [Pullover_1.0.0-alpha.1_linux64.zip](https://sourceforge.net/projects/pullover/files/1.0.0-alpha.1/Pullover_1.0.0-alpha.1_linux64.zip/download)
-* **Linux x32 (v1.0.0-alpha.1):** [Pullover_1.0.0-alpha.1_linux32.zip](https://sourceforge.net/projects/pullover/files/1.0.0-alpha.1/Pullover_1.0.0-alpha.1_linux32.zip/download)
-* **Windows x32 (v1.0.0-alpha.1):** [Pullover_1.0.0-alpha.1_Installer.exe](https://sourceforge.net/projects/pullover/files/1.0.0-alpha.1/Pullover_1.0.0-alpha.1_Installer.exe/download)
-* **Mac OS 10.8+ x64 (v1.0.0-alpha.1):** [Pullover_1.0.0-alpha.1.dmg](https://sourceforge.net/projects/pullover/files/1.0.0-alpha.1/Pullover_1.0.0-alpha.1.dmg/download)
+* **Linux x64 (v1.0.0-beta.1):** [Pullover_1.0.0-beta.1_linux64.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.1/Pullover_1.0.0-beta.1_linux64.zip/download)
+* **Linux x32 (v1.0.0-beta.1):** [Pullover_1.0.0-beta.1_linux32.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.1/Pullover_1.0.0-beta.1_linux32.zip/download)
+* **Windows x32 (v1.0.0-beta.1):** [Pullover_1.0.0-beta.1_Installer.exe](https://sourceforge.net/projects/pullover/files/1.0.0-beta.1/Pullover_1.0.0-beta.1_Installer.exe/download)
+* **Mac OS 10.8+ x64 (v1.0.0-beta.1):** [Pullover_1.0.0-beta.1.dmg](https://sourceforge.net/projects/pullover/files/1.0.0-beta.1/Pullover_1.0.0-beta.1.dmg/download)
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
@@ -69,6 +69,15 @@ If you encounter a bug or Pullover crashes, please go to the following directory
 If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I open-sourced this App with the hope that others contribute to it. Especially for Windows and Linux since I rarely use those systems.
 
 ## Changelog
+
+**1.0.0-beta.1:**
+
+* Fixes #45, strip HTML from native notifications (HTML is not supported)
+* Enhancement #44, switch internal DB and show received notification count
+* Fixes #43, click on native notification lead to crash
+* Fixes #42, added upgrade logic to keep settings when upgrading
+* Fixes #32, typo in data path for linux
+* Fixes #21, respect notification priority (no sound for -1 and no show for -2)
 
 **1.0.0-alpha.1:**
 
