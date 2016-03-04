@@ -24,7 +24,7 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
-[**Try the new 1.0.0-alpha.1 version. It's a complete rewrite with some new features.**](https://github.com/cgrossde/Pullover/tree/develop#installation--download)
+[**Try the new 1.0.0-beta.1 version. It's a complete rewrite with some new features.**](https://github.com/cgrossde/Pullover/tree/develop#installation--download)
 
 ## Build your own
 You can create builds for all platforms with Mac OS, take a look at [CROSSPLATFORM.md](CROSSPLATFORM.md) to find out about necessary dependencies.
