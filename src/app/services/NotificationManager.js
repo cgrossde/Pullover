@@ -68,6 +68,10 @@ export function processNotifications(notificationArray) {
 }
 
 function processNotification(notification, show = true) {
+  // Make sure notifications with priority -2 are not shown
+  if(notification.priority === -2)
+    show = false
+  // Check if new before adding to db
   notificationDB.isNew(notification)
     .then((res) => {
       if (show) notify(notification)
