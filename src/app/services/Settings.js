@@ -155,6 +155,7 @@ class Settings extends EventEmitter {
         this.settings.nativeNotifications = true
       }
     }
+    localStorage.setItem('version', packageInfo.version)
   }
 
   updateRun(fromVersion) {
