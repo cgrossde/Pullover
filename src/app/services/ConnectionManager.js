@@ -8,7 +8,6 @@
  *   only the last X will be displayed.
  */
 
-import Promise from 'promise'
 import isOnline from 'is-online'
 import isReachable from 'is-reachable'
 

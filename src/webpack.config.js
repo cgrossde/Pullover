@@ -11,7 +11,7 @@ module.exports = {
     app: './app/Index',
     vendors: [ 'autorun','nedb','nw-notify','promise','react','react-bootstrap','react-dom',
       'react-redux','react-router','react-router-redux','redux','request',
-      'lodash', 'ws', 'moment', 'semver', 'striptags']
+      'lodash', 'ws', 'moment', 'semver', 'striptags', 'rx']
   },
   output: {
     path: path.join(__dirname, '..', 'dist'),

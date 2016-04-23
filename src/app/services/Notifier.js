@@ -46,11 +46,6 @@ export function notify(notification) {
   // Sounds
   if (notification.sound)
     notification.sound = SoundCache.get(notification.sound)
-  else
-    notification.sound = SoundCache.get('po')
-  // No sound if priority = -1
-  if (notification.priority === -1)
-    delete notification.sound
 
   if (Settings.get('nativeNotifications') === true) {
     nativeNotify(notification.title, notification.message, notification.url, notification.icon, notification.sound)
@@ -98,10 +93,11 @@ function nativeNotify(title, text, url, iconPath, sound, retryOnError) {
   }
 
   if (sound) {
-    // Does not fire (on OS X 10.11.3)
-    notice.onshow = function() {
-      const audio = new window.Audio(sound)
-      audio.play()
-    }
+    // Native notifications are shown at once (at least on OS X 10.11.3)
+    // Therefore play the sound immediately
+    // notice.onshow = function() {
+    const audio = new window.Audio(sound)
+    audio.play()
+    // }
   }
 }
