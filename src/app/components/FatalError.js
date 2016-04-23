@@ -27,7 +27,7 @@ const FatalError = React.createClass({
               Click to open the log file folder.<br/></a>
               Please also add the Pullover version({packageInfo.version}) and the operating system you were using.
             </p>
-            It is recommended to start Pullover now<br/>
+            It is recommended to restart Pullover now<br/>
             <Button bsStyle="danger" onClick={this.exit}>Exit Pullover</Button>
           </Col>
         </Row>
