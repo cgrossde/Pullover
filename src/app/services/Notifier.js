@@ -47,6 +47,10 @@ export function notify(notification) {
   if (notification.sound)
     notification.sound = SoundCache.get(notification.sound)
 
+  // Show app name if no title was supplied
+  notification.title = notification.title || notification.app
+
+
   if (Settings.get('nativeNotifications') === true) {
     nativeNotify(notification.title, notification.message, notification.url, notification.icon, notification.sound)
   }
@@ -66,7 +70,6 @@ export function notify(notification) {
  */
 function nativeNotify(title, text, url, iconPath, sound, retryOnError) {
   retryOnError = (retryOnError !== undefined) ? retryOnError : true
-  title = title || ''
   text = text || ''
   // Native notifications don't support HTML
   text = striptags(text)
