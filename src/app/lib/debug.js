@@ -14,48 +14,55 @@ console.log('LOG PATH: ', logPath)
 var logfileName = (process.env.DEBUG === '1') ? 'pullover.debug' : 'pullover'
 
 // Keep the last 5 logfiles, shift logfile names
-for (let  i = 4; i >= 1; i--) {
-	if (fs.existsSync(path.join(logPath, logfileName + '.' + i + '.log'))) {
-		// Rename file with increased index, e.g.: pullover.2.log becomes pullover.3.log
-		fs.renameSync(path.join(logPath, logfileName + '.' + i + '.log'),
-			path.join(logPath, logfileName + '.' +(i+1)+'.log'))
-	}
+for (let i = 4; i >= 1; i--) {
+  if (fs.existsSync(path.join(logPath, logfileName + '.' + i + '.log'))) {
+    // Rename file with increased index, e.g.: pullover.2.log becomes pullover.3.log
+    fs.renameSync(path.join(logPath, logfileName + '.' + i + '.log'),
+      path.join(logPath, logfileName + '.' + (i + 1) + '.log'))
+  }
 }
 var logFilePath = path.join(logPath, logfileName + '.1.log')
 // Open log file for writing
 var logFileHandle = fs.openSync(logFilePath, 'w')
 
 function getLogFilePath() {
-	return logFilePath
+  return logFilePath
 }
 
 function getLogPath() {
-	return logPath
+  return logPath
 }
 
 function logToFile(string) {
-	string += '\r\n'
-	fs.writeSync(logFileHandle, string)
+  string += '\r\n'
+  fs.writeSync(logFileHandle, string)
 }
 
 function getLogFn(namespace) {
-	return function() {
-		var date = util.inspect(new Date())
-		var string = '  ' + namespace + '   '
-		for (let i = 0; i < arguments.length; i++) {
-			string += '   ' + util.inspect(arguments[i])
-		}
-		string = string.replace(/\\n/g, '\n').replace(/\\/g, '')
-		logToFile(date + string)
-		console.log.call(console, string)
-	}
+  return function () {
+    var date = util.inspect(new Date())
+    var string = '  ' + namespace
+    var message = ''
+    for (let i = 0; i < arguments.length; i++) {
+      message += '   ' + util.inspect(arguments[i])
+    }
+    message = message.replace(/\\n/g, '\n').replace(/\\/g, '')
+    // Rightpad namespace to have all messages start in the same column
+    var padTo = 20
+    while (string.length < padTo)
+      string += ' '
+    // Now add message
+    string += message
+    logToFile(date + string)
+    console.log.call(console, string)
+  }
 }
 
 
-export default function(namespace) {
-	return {
-		log: getLogFn(namespace),
-		getLogFilePath: getLogFilePath,
-		getLogPath: getLogPath
-	}
+export default function (namespace) {
+  return {
+    log: getLogFn(namespace),
+    getLogFilePath: getLogFilePath,
+    getLogPath: getLogPath
+  }
 }
