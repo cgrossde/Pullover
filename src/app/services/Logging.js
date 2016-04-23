@@ -15,6 +15,12 @@ var inspect = Eyes.inspector({stream: null})
 // Catch all uncaught errors to log them to a file
 // and report an issue
 process.on('uncaughtException', function (error) {
+  // Ignore non fatal error visionmedia/superagent#714
+  // TODO: Remove once fixed
+  if(error.code && error.code === 'ENOTFOUND' && error.syscall && error.syscall === 'getaddrinfo') {
+    debug.log('Surpressed uncaught exception related to visionmedia/superagent#714', error)
+    return
+  }
   debug.log(' - - - - - - - - UNCAUGHT EXCEPTION - - - - - - - - ')
   debug.log('Pullover v' + packageInfo.version)
   debug.log('=============== STACK ===============')
