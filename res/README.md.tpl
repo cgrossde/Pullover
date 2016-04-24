@@ -15,7 +15,7 @@
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
-**ALPHA RELEASE (complete rewrite)** - Please report all bugs you encounter
+**BETA RELEASE (complete rewrite)** - Please report all bugs you encounter
 
 {% for download in downloads %}
 * **{{download.platformName}} (v{{version}}):** [{{download.fileName}}]({{download.url}}){% endfor %}
@@ -56,16 +56,22 @@ There is no need to always build packaged binaries if you want to dive into the 
 
 If you encounter a bug or Pullover crashes, please go to the following directory and send me the `pullover.1.log` file by opening an issue:
 
-* OS X - '$HOME/Library/Application Support/Pullover'
-* Windows 8 - 'C:\Users\YOURUSERNAME\AppData\Roaming\Pullover'
-* Windows XP - 'C:\Documents and Settings\YOURUSERNAME\Application Data\Pullover'
-* Linux - '$XDG_DATA_HOME/Pullover or $HOME/.local/share/Pullover'
+* OS X - `$HOME/Library/Application Support/Pullover`
+* Windows 8 - `C:\Users\YOURUSERNAME\AppData\Roaming\Pullover`
+* Windows XP - `C:\Documents and Settings\YOURUSERNAME\Application Data\Pullover`
+* Linux - `$XDG_DATA_HOME/Pullover or $HOME/.local/share/Pullover`
 
 ## Contributing
 
 If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I open-sourced this App with the hope that others contribute to it. Especially for Windows and Linux since I rarely use those systems.
 
 ## Changelog
+
+**1.0.0-beta.2:**
+
+* Fixes #48, #49, if title is empty use app name instead
+* Migitate #47, surpress non fatal exception related to visionmedia/superagent#714
+* Fixes #46, sound throtteling and add sounds for native notifications (functional processing of notifications with RxJS)
 
 **1.0.0-beta.1:**
 
