@@ -73,7 +73,7 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 **1.0.0-beta.2:**
 
 * Fixes #48, #49, if title is empty use app name instead
-* Migitate #47, surpress non fatal exception related to visionmedia/superagent#714
+* Mitigate #47, surpress non fatal exception related to visionmedia/superagent#714
 * Fixes #46, sound throtteling and add sounds for native notifications (functional processing of notifications with RxJS)
 
 **1.0.0-beta.1:**
