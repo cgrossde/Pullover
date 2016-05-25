@@ -1,6 +1,6 @@
 {
   "name": "pullover",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "A pushover desktop client",
   "main": "index.html",
   "author": "Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)",

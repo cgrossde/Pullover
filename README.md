@@ -18,10 +18,10 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 **BETA RELEASE (complete rewrite)** - Please report all bugs you encounter
 
 
-* **Linux x64 (v1.0.0-beta.2):** [Pullover_1.0.0-beta.2_linux64.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.2/Pullover_1.0.0-beta.2_linux64.zip/download)
-* **Linux x32 (v1.0.0-beta.2):** [Pullover_1.0.0-beta.2_linux32.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.2/Pullover_1.0.0-beta.2_linux32.zip/download)
-* **Windows x32 (v1.0.0-beta.2):** [Pullover_1.0.0-beta.2_Installer.exe](https://sourceforge.net/projects/pullover/files/1.0.0-beta.2/Pullover_1.0.0-beta.2_Installer.exe/download)
-* **Mac OS 10.8+ x64 (v1.0.0-beta.2):** [Pullover_1.0.0-beta.2.dmg](https://sourceforge.net/projects/pullover/files/1.0.0-beta.2/Pullover_1.0.0-beta.2.dmg/download)
+* **Linux x64 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_linux64.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_linux64.zip/download)
+* **Linux x32 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_linux32.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_linux32.zip/download)
+* **Windows x32 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_Installer.exe](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_Installer.exe/download)
+* **Mac OS 10.8+ x64 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3.dmg](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3.dmg/download)
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
@@ -70,10 +70,14 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 
 ## Changelog
 
+**1.0.0-beta.3:**
+
+* Fixes #52, catch JSON parse errors
+
 **1.0.0-beta.2:**
 
 * Fixes #48, #49, if title is empty use app name instead
-* Migitate #47, surpress non fatal exception related to visionmedia/superagent#714
+* Mitigate #47, surpress non fatal exception related to visionmedia/superagent#714
 * Fixes #46, sound throtteling and add sounds for native notifications (functional processing of notifications with RxJS)
 
 **1.0.0-beta.1:**
