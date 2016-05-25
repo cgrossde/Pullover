@@ -390,7 +390,12 @@ OpenClient.prototype.ready = function() {
  */
 function validateResponse(body, resolve, reject) {
 	if (body !== undefined && body !== '') {
-		var response = JSON.parse(body)
+		try {
+			var response = JSON.parse(body)
+		} catch (e) {
+			// Server returned non-JSON response
+			debug.log('Invalid response from server', body)
+		}
 		if (response !== undefined && response.status !== undefined) {
 			// Check response result
 			if (response.status === 1) {
