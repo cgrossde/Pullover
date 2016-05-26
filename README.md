@@ -3,28 +3,31 @@
 
 ![Pullover Demo](https://raw.githubusercontent.com/cgrossde/Pullover/master/res/Demo.gif)
 
-## Why was this App created?
+## Features
 
-I discovered Pushover in mid November 2014 and was really excited. The only thing missing was a decent desktop client. At the time there was only a rudimentary Notification Center integration for Mac. But I was missing the following features:
-
-* Show the icon of the notifying app (it always showed the pushover icon)
-* Make the notification clickable to open URLs attached to notifications
-* Support for Windows or Linux
+* Native Pushover Client for Windows, Mac and Linux
+* Show icon of the notifying app
+* Make notification with URLs clickable
+* Limit the max amount of notifications shown at once
+* Run on startup
 
 ## Installation / Download
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
+**BETA RELEASE (complete rewrite)** - Please report all bugs you encounter
 
-* **Windows x32 (v0.3.2):** [Pullover_0.3.2_Installer.exe](https://sourceforge.net/projects/pullover/files/0.3.2/Pullover_0.3.2_Installer.exe/download)
-* **Mac OS 10.8+ x64 (v0.3.2):** [Pullover_0.3.2.dmg](https://sourceforge.net/projects/pullover/files/0.3.2/Pullover_0.3.2.dmg/download)
-* **Linux:** Can be found under [releases](https://github.com/cgrossde/Pullover/releases/tag/v0.3.2)
 
-**Installation on Linux:** Please refer to this wiki article [wiki/Installing-on-Linux](https://github.com/cgrossde/Pullover/wiki/Installing-on-Linux)
+* **Linux x64 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_linux64.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_linux64.zip/download)
+* **Linux x32 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_linux32.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_linux32.zip/download)
+* **Windows x32 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_Installer.exe](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_Installer.exe/download)
+* **Mac OS 10.8+ x64 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3.dmg](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3.dmg/download)
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
-[**Try the new 1.0.0-beta.3 version. It's a complete rewrite with some new features.**](https://github.com/cgrossde/Pullover/tree/develop#installation--download)
+**Donate for code signing:**
+I did sign the Windows installer in the past but my certificate expired. I would also like to sign the Mac version but that requires a (paid) Apple Developer Account.
+Both costs money, if you would like to support this project, consider making a donation: [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U3RY7599D8G2J)
 
 ## Build your own
 You can create builds for all platforms with Mac OS, take a look at [CROSSPLATFORM.md](CROSSPLATFORM.md) to find out about necessary dependencies.
@@ -42,28 +45,69 @@ You can create builds for all platforms with Mac OS, take a look at [CROSSPLATFO
 
 There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install the node dependencies in the root folder and in source with `npm install` and run the `builder` script. Make sure to copy `config/buildConf.json.sample` to `config/buildConf.json` first
 
+```Shell
     cp `config/buildConf.json.sample` `config/buildConf.json`
     npm install
     cd src && npm install
+    ./node_modules/webpack/bin/webpack.js --watch
+    # In another shell go back to Pullovers root folder and run the app
     cd ..
     ./builder run
+```
 
 ### Bugs
 
 If you encounter a bug or Pullover crashes, please go to the following directory and send me the `pullover.1.log` file by opening an issue:
 
-* OS X - '/Users/user/Library/Application Support/pullover'
-* Windows - 'C:\Users\User\AppData\Roaming\Pullover'
-* Windows XP - 'C:\Documents and Settings\User\Application Data\Pullover'
-* Linux - '~/.local/share/Pullover'
+* OS X - `$HOME/Library/Application Support/Pullover`
+* Windows 8 - `C:\Users\YOURUSERNAME\AppData\Roaming\Pullover`
+* Windows XP - `C:\Documents and Settings\YOURUSERNAME\Application Data\Pullover`
+* Linux - `$XDG_DATA_HOME/Pullover or $HOME/.local/share/Pullover`
 
 ## Contributing
 
 If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I open-sourced this App with the hope that others contribute to it. Especially for Windows and Linux since I rarely use those systems.
 
-## Planned features
+## Changelog
 
-I am currently rewriting Pullover and a list of planned features is in the [wiki](https://github.com/cgrossde/Pullover/wiki). If you have any feature wishes not listed there then open an issue and I will take a look at it.
+**1.0.0-beta.3:**
+
+* Fixes #52, catch JSON parse errors
+
+**1.0.0-beta.2:**
+
+* Fixes #48, #49, if title is empty use app name instead
+* Mitigate #47, surpress non fatal exception related to visionmedia/superagent#714
+* Fixes #46, sound throtteling and add sounds for native notifications (functional processing of notifications with RxJS)
+
+**1.0.0-beta.1:**
+
+* Fixes #45, strip HTML from native notifications (HTML is not supported)
+* Enhancement #44, switch internal DB and show received notification count
+* Fixes #43, click on native notification lead to crash
+* Fixes #42, added upgrade logic to keep settings when upgrading
+* Fixes #32, typo in data path for linux
+* Fixes #21, respect notification priority (no sound for -1 and no show for -2)
+
+**1.0.0-alpha.1:**
+
+* Complete rewrite, UI is now based on React
+* Connection handling was improved and should be very stable now
+* Max notification queue: Limit the amount of notifications shown at once (helpful for rarely used computers)
+* Notification sounds
+* All received notifications are stored in an internal database. This will be used in the future to show a history of received notifications
+
+**0.0.1** - **0.3.2** Initial app, based on jQuery but kind of messy
+
+## Why was this App created?
+
+I discovered Pushover in mid November 2014 and was really excited. The only thing missing was a decent desktop client. At the time there was only a rudimentary Notification Center integration for Mac. But I was missing the following features:
+
+* Show the icon of the notifying app (it always showed the pushover icon)
+* Make the notification clickable to open URLs attached to notifications
+* Support for Windows or Linux
+
+Since then a lot has changed. The initial app was written because I wanted to try `nwjs` and fix the problems mentioned before. I used jQuery at the time and it got kind of messy and unpredictable. In 2015 I wanted to do something with React and did a complete rewrite (with a lot of breaks in between). The first beta after the rewrite was released in Feb. 2016. The code is a lot better to maintain now and new features should be easy to implement.
 
 ## Contributors
 

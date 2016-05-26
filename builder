@@ -22,7 +22,6 @@ program._name = './builder';
 program.version(builderPackageInfo.version);
 // build
 program
-    .version(packageInfo.version)
     .command('build')
     .description('Build binaries')
     .action(build);
@@ -52,7 +51,8 @@ program
         var files = [
             'Pullover_' + packageInfo.version + '.dmg',
             'Pullover_' + packageInfo.version + '_Installer.exe',
-            'Pullover_' + packageInfo.version + '_linux32.zip'
+            'Pullover_' + packageInfo.version + '_linux32.zip',
+            'Pullover_' + packageInfo.version + '_linux64.zip'
         ];
         updateReadme(files);
     });
@@ -102,6 +102,9 @@ function build() {
         // Log stuff you want
         nw.on('error', console.log);
 
+        /**
+         * @todo  Still needed?
+         */
         // Delete src/node_modules/ws/build to make it cross platform (there are fallbacks)
         del(['src/node_modules/ws/build'], function() {
             // Build returns a promise
@@ -347,31 +350,34 @@ function createWindowsInstaller() {
                 nsis.stderr.pipe(process.stderr);
                 nsis.on('close', function () {
                     console.log("\nWindows installer created");
-                    // Sign installer
-                    var signInstall = childProcess.spawn('signcode',
-                        [   '-spc', 'res/cert.spc',
-                            '-v', 'res/cert.pvk',
-                            '-a', 'sha1', '-$', 'individual',
-                            '-i', 'https://github.com/cgrossde/Pullover',
-                            '-t', 'http://timestamp.verisign.com/scripts/timstamp.dll',
-                            '-tr', '10',
-                            'bin/deploy/' + filename
-                        ]);
-                    signInstall.stdout.on('data', function(data) {
-                        process.stdout.write(data);
-                        // It's a hack -.-
-                        if (data.toString().indexOf('.pvk:') !== -1) {
-                            console.log('Entering password');
-                            signInstall.stdin.write(buildConf.certPassword + '\n');
-                        }
-
-                    });
-                    signInstall.stderr.pipe(process.stdout);
-                    signInstall.on('close', function() {
-                        console.log('Installer signed');
-                        // Clear tmp and return
-                        del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
-                    });
+                    // Clear tmp and return
+                    del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
+                    // NO CODESIGNING, because certificate expired
+                    //// Sign installer
+                    //var signInstall = childProcess.spawn('signcode',
+                    //    [   '-spc', 'res/cert.spc',
+                    //        '-v', 'res/cert.pvk',
+                    //        '-a', 'sha1', '-$', 'individual',
+                    //        '-i', 'https://github.com/cgrossde/Pullover',
+                    //        '-t', 'http://timestamp.verisign.com/scripts/timstamp.dll',
+                    //        '-tr', '10',
+                    //        'bin/deploy/' + filename
+                    //    ]);
+                    //signInstall.stdout.on('data', function(data) {
+                    //    process.stdout.write(data);
+                    //    // It's a hack -.-
+                    //    if (data.toString().indexOf('.pvk:') !== -1) {
+                    //        console.log('Entering password');
+                    //        signInstall.stdin.write(buildConf.certPassword + '\n');
+                    //    }
+                    //
+                    //});
+                    //signInstall.stderr.pipe(process.stdout);
+                    //signInstall.on('close', function() {
+                    //    console.log('Installer signed');
+                    //    // Clear tmp and return
+                    //    del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
+                    //});
                 });
             });
         });

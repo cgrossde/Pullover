@@ -1,0 +1,58 @@
+div.titlebar {
+	background-color: #02A3EF;
+	-webkit-app-region: drag;
+	position: relative;
+	cursor: pointer;
+	height: 44px;
+
+	img.logo {
+		margin: 7px;
+		height: 30px;
+	}
+
+	.close-button, .status-button, .about-button, .settings-button {
+		position: absolute;
+		top: 7px;
+		font-size: 25px;
+		-webkit-app-region: no-drag;
+
+		a span {
+			color: #333;
+			cursor: pointer;
+		}
+
+		a.active {
+			border-bottom: 3px solid #FFF;
+  			padding-bottom: 2px;
+		}
+	}
+
+	.close-button {
+		right: 7px;
+		border: 0;
+		padding: 0;
+		background: transparent;
+	}
+
+	.settings-button {
+		right: 43px;
+	}
+
+	.about-button {
+		position: absolute;
+		right: 83px;
+	}
+
+	.status-button {
+		position: absolute;
+		right: 123px;
+	}
+
+	a span.glyphicon-signal {
+		color: #12EA3B;
+	}
+
+	a span.glyphicon-flash {
+		color: #FF0000;
+	}
+}
