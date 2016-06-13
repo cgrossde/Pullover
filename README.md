@@ -15,13 +15,15 @@
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
-**BETA RELEASE (complete rewrite)** - Please report all bugs you encounter
+Please report all bugs you encounter
 
 
-* **Linux x64 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_linux64.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_linux64.zip/download)
-* **Linux x32 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_linux32.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_linux32.zip/download)
-* **Windows x32 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_Installer.exe](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_Installer.exe/download)
-* **Mac OS 10.8+ x64 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3.dmg](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3.dmg/download)
+* **Linux x64 (v1.0.0):** [Pullover_1.0.0_linux64.zip](https://sourceforge.net/projects/pullover/files/1.0.0/Pullover_1.0.0_linux64.zip/download)
+* **Linux x32 (v1.0.0):** [Pullover_1.0.0_linux32.zip](https://sourceforge.net/projects/pullover/files/1.0.0/Pullover_1.0.0_linux32.zip/download)
+* **Windows x32 (v1.0.0):** [Pullover_1.0.0_Installer.exe](https://sourceforge.net/projects/pullover/files/1.0.0/Pullover_1.0.0_Installer.exe/download)
+* **Mac OS 10.8+ x64 (v1.0.0):** [Pullover_1.0.0.dmg](https://sourceforge.net/projects/pullover/files/1.0.0/Pullover_1.0.0.dmg/download)
+
+**Installation on Linux:** Please refer to this wiki article [wiki/Installing-on-Linux](https://github.com/cgrossde/Pullover/wiki/Installing-on-Linux)
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
@@ -34,16 +36,18 @@ You can create builds for all platforms with Mac OS, take a look at [CROSSPLATFO
 
 1. Install build dependencies: `npm install`
 2. Install dependencies of Pullover: `cd src && npm install`
-3. Rename `config/buildConf.json.sample` to `config/buildConf.json`
-4. Open `config/buildConf.json` and adapt `platforms:` to your preference
-5. Return to root dir and build binaries with: `./builder build`
-6. If the build process was successful, you can find the binaries in `bin/pullover/[platform]`
-7. If you want to package them (`.zip`/`.dmg`/`.exe`), execute `./builder createDist`
-8. The distributables will be placed in `bin/deploy`
+3. Compile Pullover src: `./node_modules/webpack/bin/webpack.js`
+4. Rename `config/buildConf.json.sample` to `config/buildConf.json`
+5. Open `config/buildConf.json` and adapt `platforms:` to your preference
+6. Return to root dir and build binaries with: `./builder build`
+7. If the build process was successful, you can find the binaries in `bin/pullover/[platform]`
+8. If you want to package them (`.zip`/`.dmg`/`.exe`), execute `./builder createDist`
+9. The distributables will be placed in `bin/deploy`
 
 ### Development
 
-There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install the node dependencies in the root folder and in source with `npm install` and run the `builder` script. Make sure to copy `config/buildConf.json.sample` to `config/buildConf.json` first
+There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install the node dependencies in the root folder and in source with `npm install`, compile the src folder (`./node_modules/webpack/bin/webpack.js`) and run the `./builder run` command. Make sure to copy `config/buildConf.json.sample` to `config/buildConf.json` first
+
 
 ```Shell
     cp `config/buildConf.json.sample` `config/buildConf.json`
@@ -70,7 +74,7 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 
 ## Changelog
 
-**1.0.0-beta.3:**
+**1.0.0 (1.0.0-beta.3):**
 
 * Fixes #52, catch JSON parse errors
 
