@@ -15,13 +15,13 @@
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
-**BETA RELEASE (complete rewrite)** - Please report all bugs you encounter
+**ALPHA RELEASE** - Please report all bugs you encounter
 
 
-* **Linux x64 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_linux64.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_linux64.zip/download)
-* **Linux x32 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_linux32.zip](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_linux32.zip/download)
-* **Windows x32 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3_Installer.exe](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3_Installer.exe/download)
-* **Mac OS 10.8+ x64 (v1.0.0-beta.3):** [Pullover_1.0.0-beta.3.dmg](https://sourceforge.net/projects/pullover/files/1.0.0-beta.3/Pullover_1.0.0-beta.3.dmg/download)
+* **Linux x64 (v1.1.0-alpha.1):** [Pullover_1.1.0-alpha.1_linux64.zip](https://sourceforge.net/projects/pullover/files/1.1.0-alpha.1/Pullover_1.1.0-alpha.1_linux64.zip/download)
+* **Linux x32 (v1.1.0-alpha.1):** [Pullover_1.1.0-alpha.1_linux32.zip](https://sourceforge.net/projects/pullover/files/1.1.0-alpha.1/Pullover_1.1.0-alpha.1_linux32.zip/download)
+* **Windows x32 (v1.1.0-alpha.1):** [Pullover_1.1.0-alpha.1_Installer.exe](https://sourceforge.net/projects/pullover/files/1.1.0-alpha.1/Pullover_1.1.0-alpha.1_Installer.exe/download)
+* **Mac OS 10.8+ x64 (v1.1.0-alpha.1):** [Pullover_1.1.0-alpha.1.dmg](https://sourceforge.net/projects/pullover/files/1.1.0-alpha.1/Pullover_1.1.0-alpha.1.dmg/download)
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
@@ -70,7 +70,11 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 
 ## Changelog
 
-**1.0.0-beta.3:**
+**1.1.0-alpha.1:**
+
+* Implements #59, disable/change default notification sound
+
+**1.0.0 (1.0.0-beta.3):**
 
 * Fixes #52, catch JSON parse errors
 

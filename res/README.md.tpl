@@ -15,7 +15,7 @@
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
-**BETA RELEASE (complete rewrite)** - Please report all bugs you encounter
+**ALPHA RELEASE** - Please report all bugs you encounter
 
 {% for download in downloads %}
 * **{{download.platformName}} (v{{version}}):** [{{download.fileName}}]({{download.url}}){% endfor %}
@@ -67,7 +67,11 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 
 ## Changelog
 
-**1.0.0-beta.3:**
+**1.1.0-alpha.1:**
+
+* Implements #59, disable/change default notification sound
+
+**1.0.0 (1.0.0-beta.3):**
 
 * Fixes #52, catch JSON parse errors
 
