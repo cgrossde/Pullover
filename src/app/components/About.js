@@ -63,10 +63,17 @@ const About = React.createClass({
       .then((count) => {
         this.setState({ count })
       })
-    NotificationDB.on('newCount', (count) => {
-      this.setState({ count })
-    })
+    NotificationDB.on('newCount', this.updateCount)
+  },
+
+  updateCount(count) {
+    this.setState({ count })
+  },
+
+  componentWillUnmount() {
+    NotificationDB.removeListener('newCount', this.updateCount)
   }
 })
+
 
 export default About
