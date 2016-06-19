@@ -1,8 +1,9 @@
 import React from 'react'
-import { Row, Col, Table, Input } from 'react-bootstrap'
+import {Row, Col, Table, Input} from 'react-bootstrap'
 
-import Window, { showItemInFolder } from '../nw/Window'
+import Window, {showItemInFolder} from '../nw/Window'
 import Settings from '../services/Settings'
+import SoundCache from '../services/SoundCache'
 import InfoBox from './InfoBox'
 
 import Debug from '../lib/debug'
@@ -23,9 +24,15 @@ const SettingsComponent = React.createClass({
   componentDidMount() {
     Settings.on('change', this.updateState)
   },
+  // Resize window
+  componentWillMount() {
+    Window.resizeTo(Settings.get('windowWidth'), 400)
+  },
   // Unsubscribe before unmounting component
   componentWillUnmount() {
     Settings.removeListener('change', this.updateState)
+    // Revert to old size
+    Window.resizeTo(Settings.get('windowWidth'), Settings.get('windowHeight'))
   },
   // Update state
   updateState(event) {
@@ -53,7 +60,7 @@ const SettingsComponent = React.createClass({
     }
     // DisplayTime is only for nw-notify, native notifications handle by OS
     let displayTimeInput = ''
-    if (! this.state.nativeNotifications) {
+    if (!this.state.nativeNotifications) {
       const formDisplayTimeClasses = (this.state.displayTime === '') ? 'form-group has-feedback has-error' : 'form-group'
 
       displayTimeInput = (
@@ -63,7 +70,7 @@ const SettingsComponent = React.createClass({
             <Col xs={2}>
               <div className={formDisplayTimeClasses}>
                 <input type="input" maxLength="2" className="form-control smallInput"
-                  ref="displayTime" value={this.state.displayTime} onChange={this.updateDisplayTime}/>
+                       ref="displayTime" value={this.state.displayTime} onChange={this.updateDisplayTime}/>
                 <span className="glyphicon glyphicon-remove form-control-feedback"></span>
               </div>
             </Col>
@@ -76,6 +83,13 @@ const SettingsComponent = React.createClass({
     // Max notification queue
     const formMaxNotificationClasses = (this.state.maxNotificationAmount === '')
       ? 'form-group has-feedback has-error' : 'form-group'
+
+    // Default sound
+    const defaultSoundOptions = SoundCache.getSoundList().map((element, index) => {
+      return (
+        <option value={element[0]} key={index}>{element[1]}</option>
+      )
+    })
 
     return (
       <div>
@@ -108,6 +122,18 @@ const SettingsComponent = React.createClass({
                              ref="maxNotificationAmount" value={this.state.maxNotificationAmount}
                              onChange={this.updateMaxNotificationQueue}/>
                       <span className="glyphicon glyphicon-remove form-control-feedback"></span>
+                    </div>
+                  </Col>
+                </Row>
+                <hr />
+                <Row>
+                  <Col xs={7}><b>Default sound</b></Col>
+                  <Col xs={5}>
+                    <div className="default-class">
+                      <select ref="defaultSound" className="form-control" value={this.state.defaultSound}
+                              onChange={this.updateDefaultSound}>
+                        {defaultSoundOptions}
+                      </select>
                     </div>
                   </Col>
                 </Row>
@@ -153,14 +179,14 @@ const SettingsComponent = React.createClass({
     // Only update if a number, greater zero and different
     // from the current state
     const newDisplayTime = parseInt(this.refs.displayTime.value)
-    if (! isNaN(newDisplayTime)
+    if (!isNaN(newDisplayTime)
       && newDisplayTime > 0
       && newDisplayTime !== this.state.displayTime) {
       Settings.set('displayTime', newDisplayTime)
     }
     // Allow an empty field for usability
-    else if (this.refs.displayTime.value === ''){
-      this.setState({ displayTime: '' })
+    else if (this.refs.displayTime.value === '') {
+      this.setState({displayTime: ''})
     }
   },
 
@@ -168,15 +194,20 @@ const SettingsComponent = React.createClass({
     // Only update if a number, greater zero and different
     // from the current state
     const newMaxNotificationAmount = parseInt(this.refs.maxNotificationAmount.value)
-    if (! isNaN(newMaxNotificationAmount)
+    if (!isNaN(newMaxNotificationAmount)
       && newMaxNotificationAmount > 0
       && newMaxNotificationAmount !== this.state.maxNotificationAmount) {
       Settings.set('maxNotificationAmount', newMaxNotificationAmount)
     }
     // Allow an empty field for usability
-    else if (this.refs.maxNotificationAmount.value === ''){
-      this.setState({ maxNotificationAmount: '' })
+    else if (this.refs.maxNotificationAmount.value === '') {
+      this.setState({maxNotificationAmount: ''})
     }
+  },
+
+  updateDefaultSound() {
+    const defaultSound = this.refs.defaultSound.value
+    Settings.set('defaultSound', defaultSound)
   },
 
   showLogsFolder() {

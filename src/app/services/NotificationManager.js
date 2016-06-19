@@ -36,7 +36,7 @@ import notificationDB from './NotificationDB'
 const debug = Debug('NotificationManager')
 
 import Settings from '../services/Settings'
-import { notify } from './Notifier'
+import {notify} from './Notifier'
 import Pushover from './Pushover'
 
 // Limit notifications shown to one per X ms
@@ -53,7 +53,7 @@ debug.log('maxNotificationAmount', maxNotificationAmount)
 const notificationArrayStream = new Rx.Subject();
 export function processNotifications(notificationArray) {
   // Add notificationArray to notificationArrayStream
-  if(notificationArray.length > 0)
+  if (notificationArray.length > 0)
     notificationArrayStream.onNext(notificationArray)
 }
 
@@ -67,17 +67,17 @@ const singleNotificationStream = notificationArrayStream
 //
 // Stream with the last notification of each notificationArray to acknowledge the reception
 const latestNotificationStream = notificationArrayStream
-  .map((x) => x[x.length-1])
+  .map((x) => x[x.length - 1])
 
 // Stream that only contains notifications which should be presented to the user
 let notifyStream = notificationArrayStream
-  // Only present the 'maxNotificationAmount' most recent notifications, to avoid flooding
+// Only present the 'maxNotificationAmount' most recent notifications, to avoid flooding
   .map((x) => {
-    if(x.length > maxNotificationAmount) {
+    if (x.length > maxNotificationAmount) {
       const omittedNotifications = x.length - maxNotificationAmount
       x = x.slice(-maxNotificationAmount)
       x.push({
-        title: 'Omitted '+omittedNotifications+' notifications',
+        title: 'Omitted ' + omittedNotifications + ' notifications',
         message: 'Change with setting "max notification queue"',
         sound: 'po',
         priority: 0
@@ -93,9 +93,12 @@ let notifyStream = notificationArrayStream
   })
 
   // Set default sound if none was set
+  // Delete sound of 'no' (for none) was selected
   .map((x) => {
-    if(! x.sound)
-      x.sound = 'po'
+    if (!x.sound)
+      x.sound = Settings.get('defaultSound')
+    if (x.sound === 'no')
+      delete x.sound
     return x
   })
 
@@ -107,7 +110,7 @@ if (Settings.get('nativeNotifications') === true)
 
 // Continue processing...
 notifyStream = notifyStream
-  // Only play sound if it wasn't played in the last X seconds
+// Only play sound if it wasn't played in the last X seconds
   .groupBy(
     (x) => x.sound,
     (x) => x
@@ -121,7 +124,7 @@ notifyStream = notifyStream
 
   // Don't play sound if priority === -1 or playSound !== true
   .map((x) => {
-    if(x.priority === -1 || ! x.playSound)
+    if (x.priority === -1 || !x.playSound)
       delete x.sound
     return x
   })
@@ -153,14 +156,14 @@ singleNotificationStream
 // Acknowledge last notification in received notificationArray
 latestNotificationStream
   .subscribe((lastNotification) => {
-    Pushover.acknowledgeNotification({ lastNotificationId: lastNotification.id })
-      .catch(function(err) {
+    Pushover.acknowledgeNotification({lastNotificationId: lastNotification.id})
+      .catch(function (err) {
         debug.log('Failed to acknowledge reception of notifications. lastNotificationId: '
-         + lastNotificationId.id, err)
+          + lastNotificationId.id, err)
       })
       .done()
   })
 
 // Present notifications to the user
 notifyStream
- .subscribe(notify)
+  .subscribe(notify)
