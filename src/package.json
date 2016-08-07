@@ -43,7 +43,7 @@
     "react-router": "^2.0.0-rc5",
     "react-router-redux": "^3.0.0",
     "redux": "^3.2.1",
-    "request": "^2.65.0",
+    "request": "^2.74.0",
     "reselect": "^1.1.0",
     "rx": "^4.1.0",
     "semver": "^5.1.0",
