@@ -8,7 +8,7 @@ var appdmg = require('appdmg');
 var program = require('commander');
 var Promise = require('promise');
 var archiver = require('archiver');
-var NwBuilder = require('node-webkit-builder');
+var NwBuilder = require('nw-builder');
 var Connection = require('ssh2');
 var packageInfo = require('./src/package');
 var childProcess = require('child_process');
@@ -87,7 +87,7 @@ function runApp() {
     // Enable output to console
     nw.on('stdout', function(data) {process.stdout.write(data.toString()); });
     nw.on('stderr', function(data) {process.stdout.write(data.toString()); });
-    nw.on('error', console.log);
+    nw.on('log', console.log);
     return nw.run();
 }
 
@@ -100,13 +100,13 @@ function build() {
         var nw = new NwBuilder(buildConf.nwbuild);
         console.log('BUILD...');
         // Log stuff you want
-        nw.on('error', console.log);
+        nw.on('log', console.log);
 
         /**
          * @todo  Still needed?
          */
         // Delete src/node_modules/ws/build to make it cross platform (there are fallbacks)
-        del(['src/node_modules/ws/build'], function() {
+        del(['src/node_modules/ws/build']).then(function() {
             // Build returns a promise
             nw.build().then(function () {
                 console.log('Build done.');
@@ -116,8 +116,8 @@ function build() {
                 console.error(error);
                 reject();
             });
-        });
-    });
+        })
+    })
 }
 
 /**
@@ -132,7 +132,7 @@ function createDistributables() {
         var deploymentPath = buildConf.deployDir;
         var version = packageInfo.version;
         // Clear deploy folder
-        del([buildConf.deployDir], function clearDeployDir() {
+        del([buildConf.deployDir]).then(function clearDeployDir() {
             // Create deploy folder
             fs.mkdirSync(deploymentPath);
             console.log('Start packaging for distribution ...');
