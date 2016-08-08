@@ -11,7 +11,8 @@
 var _ = require('lodash')
 var os = require('os')
 var util = require('util')
-var debug = require('./debug')('PushoverRESTClient')
+import Debug from '../lib/debug'
+var debug = Debug('PushoverRESTClient')
 var Promise = require('promise')
 var EventEmitter = require('events').EventEmitter
 
