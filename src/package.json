@@ -34,7 +34,7 @@
     "mkdirp": "^0.5.1",
     "moment": "^2.10.6",
     "nedb": "^1.8.0",
-    "nw-notify": "^1.0.2",
+    "nw-notify": "^1.0.3",
     "promise": "^7.0.3",
     "react": "^0.14.7",
     "react-bootstrap": "^0.27.3",
