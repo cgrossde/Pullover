@@ -28,7 +28,7 @@ div.titlebar {
 		height: 30px;
 	}
 
-	.close-button, .status-button, .about-button, .settings-button {
+	.close-button, .status-button, .about-button, .settings-button, .notifications-button {
 		position: absolute;
 		top: 7px;
 		font-size: 25px;
@@ -61,9 +61,14 @@ div.titlebar {
 		right: 83px;
 	}
 
-	.status-button {
+	.notifications-button {
 		position: absolute;
 		right: 123px;
+	}
+
+	.status-button {
+		position: absolute;
+		right: 163px;
 	}
 
 	a span.glyphicon-signal {

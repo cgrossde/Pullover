@@ -85,6 +85,11 @@ class NotificationDB extends EventEmitter {
     })
   }
 
+  getDBInstance() {
+    return this.notificationDB
+  }
+  
+
 }
 
 

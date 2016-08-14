@@ -26,6 +26,9 @@ const Navbar = React.createClass({
           <div className="about-button">
             <Link activeClassName="active" to="/about"><span className="glyphicon glyphicon-info-sign"></span></Link>
           </div>
+          <div className="notifications-button">
+            <Link activeClassName="active" to="/notifications"><span className="glyphicon glyphicon-list"></span></Link>
+          </div>
           <div className="status-button">
             <Link activeClassName="active" to="/status"><span className={iconClass}></span></Link>
           </div>
