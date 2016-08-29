@@ -144,7 +144,7 @@ singleNotificationStream
       })
       .catch((err) => {
         if (err.message === 'notificationExists') {
-          debug.log('Notification with id ' + notification.id + ' exists already in DB.')
+          debug.log('Notification with id ' + notification.umid + ' exists already in DB.')
         }
         else {
           debug.log('Failed saving notification', err, notification)
