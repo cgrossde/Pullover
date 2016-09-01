@@ -23,6 +23,8 @@ Please report all bugs you encounter
 * **Windows x32 (v1.0.0):** [Pullover_1.0.0_Installer.exe](https://sourceforge.net/projects/pullover/files/1.0.0/Pullover_1.0.0_Installer.exe/download)
 * **Mac OS 10.8+ x64 (v1.0.0):** [Pullover_1.0.0.dmg](https://sourceforge.net/projects/pullover/files/1.0.0/Pullover_1.0.0.dmg/download)
 
+[**Try the new 1.2.0 alpha version**. It features a **notification history** and customizable notification sounds.](https://github.com/cgrossde/Pullover/tree/develop#installation--download)
+
 **Installation on Linux:** Please refer to this wiki article [wiki/Installing-on-Linux](https://github.com/cgrossde/Pullover/wiki/Installing-on-Linux)
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
@@ -74,6 +76,17 @@ If you encounter a bug or Pullover crashes, please go to the following directory
 If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I open-sourced this App with the hope that others contribute to it. Especially for Windows and Linux since I rarely use those systems.
 
 ## Changelog
+
+**1.2.0-alpha.1:**
+
+* Implements #11, finally implemented a notification history
+* Upgraded dependencies to their latest version and adapted to API changes
+* Added windows code signing again, thanks to joeyrs, Kevin Riggle and TheReiner
+* Give feedback to user after update check
+
+**1.1.0-alpha.1:**
+
+* Implements #59, disable/change default notification sound
 
 **1.0.0 (1.0.0-beta.3):**
 
