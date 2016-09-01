@@ -3,7 +3,7 @@
  *
  * Example JSON:
  *
- * [ { id: 2,
+ * [ { id: 2, // ID unique to this device
     message: 'This message confirms that you are now able to receive messages on this device',
     app: 'Pushover',
     aid: 1,
@@ -11,7 +11,7 @@
     date: 1448839221,
     priority: 0,
     acked: 0,
-    umid: 6298,
+    umid: 6298, // Unique ID over all devices
     title: 'Welcome to Pushover!' } ]
  */
 import path from 'path'
@@ -39,7 +39,7 @@ class NotificationDB extends EventEmitter {
 
   add(notification) {
     return new Promise((resolve, reject) => {
-      // Store the original id, but make clear it's
+      // Store the original id(unique to this device only!!), but make clear it's
       // not the identifier (nedb will generate one for us: _id)
       notification.originalId = notification.id
       delete notification.id
@@ -47,10 +47,10 @@ class NotificationDB extends EventEmitter {
       this.notificationDB.insert(notification, (err, newDoc) => {
         if(err) {
           debug.log('Error in addNotifications', err)
-          throw {
+          reject({
             name: 'dbfailure',
             message: (err && err.message) ? err.message : 'Unkown error'
-          }
+          })
         }
         this.updateCount();
         resolve(newDoc)
@@ -60,7 +60,7 @@ class NotificationDB extends EventEmitter {
 
   isNew(notification) {
     return new Promise((resolve, reject) => {
-      this.notificationDB.findOne({originalId: notification.id}, (err, res) => {
+      this.notificationDB.findOne({umid: notification.umid}, (err, res) => {
         if (err || res !== null) {
           reject(new Error('notificationExists'))
         }
@@ -84,6 +84,11 @@ class NotificationDB extends EventEmitter {
       this.emit('newCount', count)
     })
   }
+
+  getDBInstance() {
+    return this.notificationDB
+  }
+  
 
 }
 

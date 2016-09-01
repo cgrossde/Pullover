@@ -11,7 +11,8 @@ module.exports = {
     app: './app/Index',
     vendors: [ 'autorun','nedb','nw-notify','promise','react','react-bootstrap','react-dom',
       'react-redux','react-router','react-router-redux','redux','request',
-      'lodash', 'ws', 'moment', 'semver', 'striptags', 'rx']
+      'lodash', 'ws', 'moment', 'semver', 'striptags', 'rx','react-addons-shallow-compare',
+      'react-virtualized']
   },
   output: {
     path: path.join(__dirname, '..', 'dist'),
@@ -49,7 +50,11 @@ module.exports = {
 
       {
         test: /\.jsx?$/,
-        loaders: ['babel-loader?optional=runtime'],
+        loader: 'babel',
+        query: {
+          plugins: ['transform-object-assign'],
+          presets: ['es2015', 'react']
+        },
         include: path.join(__dirname, 'app')
       },
       {
