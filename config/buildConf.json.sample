@@ -23,6 +23,9 @@
 	},
 
 	"certPassword": "xyz",
+	"codeSigning": {
+		"win": false
+	},
 
 	"deployDir": "./bin/deploy"
 }
