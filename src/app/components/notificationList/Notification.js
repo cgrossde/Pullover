@@ -25,7 +25,6 @@ const Notification = React.createClass({
   getDefaultProps() {
     return {
       notification: null,
-      width: 450
     }
   },
 
@@ -41,7 +40,7 @@ const Notification = React.createClass({
     }
     const image = (notification.icon) ? (<img className="notification-icon" src={notification.icon} />) : null
     return (
-      <div className={this.getNotificationClassName(notification)} style={{width: this.props.width + 'px'}}>
+      <div className={this.getNotificationClassName(notification)}>
         {image}
         <div className="notification-content">
           <span className="notification-date" data-overlay={this.formatOverlay(notification.date)}>{this.formatDate(notification.date)}</span>

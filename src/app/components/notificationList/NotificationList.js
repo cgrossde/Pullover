@@ -101,13 +101,13 @@ const NotificationList = React.createClass({
               cellRenderer={this.cellRenderer}
               columnCount={1}
               rowCount={list.length}
-              width={this.windowWidth}>
+              >
               {(cellMeasurer) => {
                 return (
                   <VirtualScroll
                     ref={registerChild}
                     width={this.windowWidth}
-                    height={this.windowHeight - 44}
+                    height={this.windowHeight - 69}
                     onRowsRendered={onRowsRendered}
                     overscanRowCount={20}
                     rowCount={list.length}
@@ -124,7 +124,7 @@ const NotificationList = React.createClass({
   },
 
   rowRenderer({index}) {
-    return (<Notification notification={this.state.list[index]} width={this.windowWidth}/>)
+    return (<Notification notification={this.state.list[index]}/>)
   },
   // Parameter transformation of rowRenderer for CellMeasurer
   cellRenderer(params) {
