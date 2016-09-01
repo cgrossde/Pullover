@@ -47,10 +47,10 @@ class NotificationDB extends EventEmitter {
       this.notificationDB.insert(notification, (err, newDoc) => {
         if(err) {
           debug.log('Error in addNotifications', err)
-          throw {
+          reject({
             name: 'dbfailure',
             message: (err && err.message) ? err.message : 'Unkown error'
-          }
+          })
         }
         this.updateCount();
         resolve(newDoc)

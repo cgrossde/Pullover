@@ -1,3 +1,15 @@
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/variables';
+
+.refreshNotificationList {
+  background-color: $alert-info-bg;
+  padding: 3px;
+  a {
+    color: $alert-info-text;
+    cursor: pointer;
+  }
+}
+
+// Fix VirtualScroll layout
 .Grid__innerScrollContainer {
   position: relative;
 

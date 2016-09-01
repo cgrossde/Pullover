@@ -1,24 +1,28 @@
 import React from 'react'
 import Promise from 'promise'
+import {InfiniteLoader, VirtualScroll, CellMeasurer, CellSizeCache} from 'react-virtualized'
+import {Alert} from 'react-bootstrap'
 import Window from '../../nw/Window'
 import Settings from '../../services/Settings'
-import { InfiniteLoader, VirtualScroll, AutoSizer } from 'react-virtualized'
 import NotificationDB from '../../services/NotificationDB'
-import {Row, Col, Table} from 'react-bootstrap'
 import Debug from '../../lib/debug'
 var debug = Debug('NotificationList')
+
+import Notification from './Notification'
+import Spinner from '../Spinner'
 
 import './NotificationList.scss'
 
 const NotificationList = React.createClass({
   displayName: 'NotificationList',
+  windowHeight: 600,
+  windowWidth: 450,
+  _isMounted: false,
 
   getInitialState() {
     return {
-      list: [{
-        title: 'None',
-        placeholder: true
-      }],
+      list: [],
+      loading: true,
       rowCount: -1
     }
   },
@@ -29,22 +33,20 @@ const NotificationList = React.createClass({
   },
 
   loadMoreRows({startIndex, stopIndex}) {
-    // Refetch first list item to overwrite placeholder
-    if (startIndex === 1)
-      startIndex = 0
-    debug.log('Get ', startIndex, 'to', stopIndex)
-    return new Promise((resolve, reject) =>  {
+    return new Promise((resolve, reject) => {
       // Call to DB
       const notificationDB = NotificationDB.getDBInstance()
-      notificationDB.find({}).sort({date: 1}).skip(startIndex).limit(stopIndex - startIndex + 1).exec(function(err, docs) {
-        if(err)
+      notificationDB.find({}).sort({umid: -1}).skip(startIndex).limit(stopIndex - startIndex + 1).exec(function (err, docs) {
+        if (err)
           reject(err)
         var newList = this.state.list
+        var index = startIndex
         docs.forEach((notification) => {
-          debug.log(notification)
-          newList.push(notification)
+          newList[index] = notification
+          index++
         })
-        this.setState({ list: newList })
+        if (this._isMounted)
+          this.setState({list: newList})
         resolve()
       }.bind(this))
     })
@@ -56,8 +58,7 @@ const NotificationList = React.createClass({
       NotificationDB
         .count()
         .then((rowCount) => {
-          debug.log('Count DONE: ' + rowCount)
-          this.setState({ rowCount })
+          this.setState({rowCount})
         })
       return 1000
     }
@@ -66,43 +67,77 @@ const NotificationList = React.createClass({
 
   // Resize window
   componentWillMount() {
-    Window.resizeTo(Settings.get('windowWidth'), 600)
+    this._isMounted = true
+    Window.resizeTo(Settings.get('windowWidth'), this.windowHeight)
+    // Load first rows before rendering List
+    this.refresh();
   },
 
   // Revert to old size
   componentWillUnmount() {
+    this._isMounted = false
     Window.resizeTo(Settings.get('windowWidth'), Settings.get('windowHeight'))
   },
 
   render() {
     const list = this.state.list
+    // Loading?
+    if (this.state.loading)
+      return ( <Spinner active={true}/> )
+    // No notifications?
+    if (list.length === 0)
+      return ( <Alert bsStyle="info">No notifications received</Alert>)
+    // Show the list of notifications
     return (
-              <InfiniteLoader
-                isRowLoaded={this.isRowLoaded}
-                loadMoreRows={this.loadMoreRows}
-                rowCount={this.totalRowCount()}
-              >
-
-                {({onRowsRendered, registerChild}) => (
-                  <AutoSizer disableHeight>
-                    {({ width }) => (
-                      <VirtualScroll
-                        ref={registerChild}
-                        width={300}
-                        height={450}
-                        onRowsRendered={onRowsRendered}
-                        overscanRowCount={10}
-                        rowCount={list.length}
-                        rowHeight={20}
-                        rowRenderer={
-                          ({ index }) => "#" + (list[index].title || list[index].message) // Could also be a DOM element
-                        }
-                      />
-                    )}
-                  </AutoSizer>
-                )}
-              </InfiniteLoader>
+      <div>
+        <div className="refreshNotificationList"><a onClick={this.refresh}>Refresh</a></div>
+        <InfiniteLoader
+          isRowLoaded={this.isRowLoaded}
+          loadMoreRows={this.loadMoreRows}
+          rowCount={this.totalRowCount()}
+        >
+          {({onRowsRendered, registerChild}) => (
+            <CellMeasurer
+              cellRenderer={this.cellRenderer}
+              columnCount={1}
+              rowCount={list.length}
+              width={this.windowWidth}>
+              {(cellMeasurer) => {
+                return (
+                  <VirtualScroll
+                    ref={registerChild}
+                    width={this.windowWidth}
+                    height={this.windowHeight - 44}
+                    onRowsRendered={onRowsRendered}
+                    overscanRowCount={20}
+                    rowCount={list.length}
+                    rowHeight={cellMeasurer.getRowHeight}
+                    rowRenderer={this.rowRenderer}
+                  />
+                )
+              }}
+            </CellMeasurer>
+          )}
+        </InfiniteLoader>
+      </div>
     )
+  },
+
+  rowRenderer({index}) {
+    return (<Notification notification={this.state.list[index]} width={this.windowWidth}/>)
+  },
+  // Parameter transformation of rowRenderer for CellMeasurer
+  cellRenderer(params) {
+    return this.rowRenderer({index: params.rowIndex})
+  },
+  // Reset the list and load it from scratch
+  refresh() {
+    this.setState({list: [], loading: true})
+    this.loadMoreRows({startIndex: 0, stopIndex: 20})
+      .then(() => {
+        if (this._isMounted)
+          this.setState({loading: false});
+      })
   }
 })
 

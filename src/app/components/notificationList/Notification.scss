@@ -1,0 +1,58 @@
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/variables';
+
+.notification {
+  text-align: left;
+  padding: 5px;
+
+  .notification-date {
+    float: right;
+    color: #999999;
+    position: relative;
+
+    // Overlay with full date
+    &[data-overlay]:before {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background-color: #fff;
+      color: #999999;
+      padding-left: 7px;
+      height: 20px;
+      line-height: 20px;
+      content: attr(data-overlay);
+      white-space: nowrap;
+      display: none;
+    }
+
+    // Show overlay on hover
+    &[data-overlay]:hover:before {
+      display: block;
+    }
+  }
+
+  &.highPriority {
+    background-color: $alert-danger-bg;
+    .notification-date[data-overlay]:before {
+      background-color: $alert-danger-bg;
+    }
+  }
+
+  &.lowestPriority {
+    opacity: 0.6;
+  }
+
+  .notification-icon {
+    height: 36px;
+    width: 36px;
+    float: left;
+  }
+
+  .notification-content {
+    margin-left: 36px;
+    padding: 0 5px;
+
+    p {
+      margin-bottom: 5px;
+    }
+  }
+}
