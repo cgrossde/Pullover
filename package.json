@@ -18,7 +18,7 @@
     "eyes": "^0.1.8",
     "fs.extra": "^1.2.1",
     "install": "^0.8.1",
-    "nw-builder": "^2.2.6",
+    "nw-builder": "^3.0.0",
     "promise": "^7.1.1",
     "ssh2": "^0.5.0",
     "swig": "^1.4.2"
