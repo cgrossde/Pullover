@@ -27,7 +27,7 @@ let remotePackageInfoCache = null
 /**
  * Check for update and if found, show update info
  */
-export function check() {
+export function check(callback) {
   debug.log('Check for update')
   fetchRemotePackageInfo((err, remotePackageInfo) => {
     if(err)
@@ -38,8 +38,10 @@ export function check() {
       // Transition to show new version
       transitionTo('/updateAvailable')
       showWindow()
+      if (callback && typeof callback === "function") callback(true)
     } else {
       debug.log('No update available', remotePackageInfo.version)
+      if (callback && typeof callback === "function") callback(false)
     }
   })
 }
