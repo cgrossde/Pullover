@@ -21,6 +21,12 @@ itemStatus.on('click', function() {
   showWindow()
   transitionTo('/status')
 })
+// Show notification list
+var notifications = new Gui.MenuItem({ type: 'normal', label: 'Notifications' })
+notifications.on('click', function() {
+  showWindow()
+  transitionTo('/notifications')
+})
 // Quit app
 var itemQuit = new Gui.MenuItem({ type: 'normal', label: 'Quit Pullover' })
 itemQuit.on('click', quitApp)
@@ -28,6 +34,8 @@ itemQuit.on('click', quitApp)
 // Build tray click menu
 var menu = new Gui.Menu()
 menu.append(itemStatus)
+menu.append(notifications)
 menu.append(itemSeparator)
 menu.append(itemQuit)
 tray.menu = menu
+tray.on('click', showWindow)
