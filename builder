@@ -291,12 +291,13 @@ function createDMG() {
             console.log(targetPath + ' already existed. Deleting it.');
             fs.unlinkSync(targetPath);
         }
-        var ee = appdmg('config/dmgConf.json', targetPath);
+        var ee = appdmg({ source: 'config/dmgConf.json', target: targetPath});
         ee.on('finish', function () {
             console.log('Pullover_' + packageInfo.version + '.dmg done. ' + Math.floor(fs.statSync(targetPath).size / 1024 / 1024) + ' MB');
             resolve();
         });
-
+        // Debugging
+        // ee.on('progress', console.log)
         ee.on('error', function (err) {
             console.log('ERROR creating DMG', err);
             reject(err);
@@ -340,6 +341,7 @@ function createWindowsInstaller() {
 
         // Copy installer files
         fs.copyRecursive('./res/windowsInstaller', buildDir, function(err) {
+            if(err) console.log(err)
             // Write installer instructions
             fs.writeFile('./bin/tmp/installer.nsis', template(templateVars), function(err) {
                 if(err) reject(err);
