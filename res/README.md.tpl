@@ -1,4 +1,4 @@
-# Pullover - DEV
+# Pullover
 *The unofficial multi-platform Pushover desktop client.*
 
 ![Pullover Demo](https://raw.githubusercontent.com/cgrossde/Pullover/master/res/Demo.gif)
@@ -15,8 +15,6 @@
 ## Installation / Download
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
-
-**ALPHA RELEASE** - Please report all bugs you encounter
 
 {% for download in downloads %}
 * **{{download.platformName}} (v{{version}}):** [{{download.fileName}}]({{download.url}}){% endfor %}
@@ -70,7 +68,7 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 
 ## Changelog
 
-**1.2.0-alpha.1:**
+**1.2.0 (1.2.0-alpha.1):**
 
 * Implements #11, finally implemented a notification history
 * Upgraded dependencies to their latest version and adapted to API changes

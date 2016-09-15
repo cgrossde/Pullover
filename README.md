@@ -1,4 +1,4 @@
-# Pullover - DEV
+# Pullover
 *The unofficial multi-platform Pushover desktop client.*
 
 ![Pullover Demo](https://raw.githubusercontent.com/cgrossde/Pullover/master/res/Demo.gif)
@@ -16,13 +16,12 @@
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
-**ALPHA RELEASE** - Please report all bugs you encounter
 
-
-* **Linux x64 (v1.2.0-alpha.1):** [Pullover_1.2.0-alpha.1_linux64.zip](https://sourceforge.net/projects/pullover/files/1.2.0-alpha.1/Pullover_1.2.0-alpha.1_linux64.zip/download)
-* **Linux x32 (v1.2.0-alpha.1):** [Pullover_1.2.0-alpha.1_linux32.zip](https://sourceforge.net/projects/pullover/files/1.2.0-alpha.1/Pullover_1.2.0-alpha.1_linux32.zip/download)
-* **Windows x32 (v1.2.0-alpha.1):** [Pullover_1.2.0-alpha.1_Installer.exe](https://sourceforge.net/projects/pullover/files/1.2.0-alpha.1/Pullover_1.2.0-alpha.1_Installer.exe/download)
-* **Mac OS 10.8+ x64 (v1.2.0-alpha.1):** [Pullover_1.2.0-alpha.1.dmg](https://sourceforge.net/projects/pullover/files/1.2.0-alpha.1/Pullover_1.2.0-alpha.1.dmg/download)
+* **Linux x64 (v1.2.0):** [Pullover_1.2.0_linux64.zip](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0_linux64.zip/download)
+* **Linux x32 (v1.2.0):** [Pullover_1.2.0_linux32.zip](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0_linux32.zip/download)
+* **Windows x32 (v1.2.0):** [Pullover_1.2.0_Installer.exe](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0_Installer.exe/download)
+* **Mac OS 10.8+ x64 (v1.2.0):** [Pullover_1.2.0.dmg](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0.dmg/download)
+* **Unkown (v1.2.0):** [.DS_Store](https://sourceforge.net/projects/pullover/files/1.2.0/.DS_Store/download)
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
@@ -73,7 +72,7 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 
 ## Changelog
 
-**1.2.0-alpha.1:**
+**1.2.0 (1.2.0-alpha.1):**
 
 * Implements #11, finally implemented a notification history
 * Upgraded dependencies to their latest version and adapted to API changes
