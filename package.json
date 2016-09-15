@@ -9,19 +9,18 @@
   "author": "Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)",
   "license": "GPL",
   "dependencies": {
-    "appdmg": "^0.2.2",
-    "archiver": "^0.13.0",
-    "async": "^0.9.0",
+    "appdmg": "^0.4.5",
+    "archiver": "^1.0.1",
+    "async": "^2.0.1",
     "commander": "^2.5.0",
     "commander-tabtab": "^0.1.0",
-    "del": "^1.0.0",
+    "del": "^2.2.1",
     "eyes": "^0.1.8",
     "fs.extra": "^1.2.1",
-    "install": "^0.1.8",
-    "node-webkit-builder": "^1.0.4",
-    "npm": "^2.1.10",
-    "promise": "^6.0.1",
-    "ssh2": "^0.3.6",
+    "install": "^0.8.1",
+    "nw-builder": "^3.0.0",
+    "promise": "^7.1.1",
+    "ssh2": "^0.5.0",
     "swig": "^1.4.2"
   }
 }

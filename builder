@@ -8,7 +8,7 @@ var appdmg = require('appdmg');
 var program = require('commander');
 var Promise = require('promise');
 var archiver = require('archiver');
-var NwBuilder = require('node-webkit-builder');
+var NwBuilder = require('nw-builder');
 var Connection = require('ssh2');
 var packageInfo = require('./src/package');
 var childProcess = require('child_process');
@@ -87,7 +87,7 @@ function runApp() {
     // Enable output to console
     nw.on('stdout', function(data) {process.stdout.write(data.toString()); });
     nw.on('stderr', function(data) {process.stdout.write(data.toString()); });
-    nw.on('error', console.log);
+    nw.on('log', console.log);
     return nw.run();
 }
 
@@ -100,13 +100,13 @@ function build() {
         var nw = new NwBuilder(buildConf.nwbuild);
         console.log('BUILD...');
         // Log stuff you want
-        nw.on('error', console.log);
+        nw.on('log', console.log);
 
         /**
          * @todo  Still needed?
          */
         // Delete src/node_modules/ws/build to make it cross platform (there are fallbacks)
-        del(['src/node_modules/ws/build'], function() {
+        del(['src/node_modules/ws/build']).then(function() {
             // Build returns a promise
             nw.build().then(function () {
                 console.log('Build done.');
@@ -116,8 +116,8 @@ function build() {
                 console.error(error);
                 reject();
             });
-        });
-    });
+        })
+    })
 }
 
 /**
@@ -132,7 +132,7 @@ function createDistributables() {
         var deploymentPath = buildConf.deployDir;
         var version = packageInfo.version;
         // Clear deploy folder
-        del([buildConf.deployDir], function clearDeployDir() {
+        del([buildConf.deployDir]).then(function clearDeployDir() {
             // Create deploy folder
             fs.mkdirSync(deploymentPath);
             console.log('Start packaging for distribution ...');
@@ -291,12 +291,13 @@ function createDMG() {
             console.log(targetPath + ' already existed. Deleting it.');
             fs.unlinkSync(targetPath);
         }
-        var ee = appdmg('config/dmgConf.json', targetPath);
+        var ee = appdmg({ source: 'config/dmgConf.json', target: targetPath});
         ee.on('finish', function () {
             console.log('Pullover_' + packageInfo.version + '.dmg done. ' + Math.floor(fs.statSync(targetPath).size / 1024 / 1024) + ' MB');
             resolve();
         });
-
+        // Debugging
+        // ee.on('progress', console.log)
         ee.on('error', function (err) {
             console.log('ERROR creating DMG', err);
             reject(err);
@@ -340,6 +341,7 @@ function createWindowsInstaller() {
 
         // Copy installer files
         fs.copyRecursive('./res/windowsInstaller', buildDir, function(err) {
+            if(err) console.log(err)
             // Write installer instructions
             fs.writeFile('./bin/tmp/installer.nsis', template(templateVars), function(err) {
                 if(err) reject(err);
@@ -350,34 +352,37 @@ function createWindowsInstaller() {
                 nsis.stderr.pipe(process.stderr);
                 nsis.on('close', function () {
                     console.log("\nWindows installer created");
-                    // Clear tmp and return
-                    del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
-                    // NO CODESIGNING, because certificate expired
-                    //// Sign installer
-                    //var signInstall = childProcess.spawn('signcode',
-                    //    [   '-spc', 'res/cert.spc',
-                    //        '-v', 'res/cert.pvk',
-                    //        '-a', 'sha1', '-$', 'individual',
-                    //        '-i', 'https://github.com/cgrossde/Pullover',
-                    //        '-t', 'http://timestamp.verisign.com/scripts/timstamp.dll',
-                    //        '-tr', '10',
-                    //        'bin/deploy/' + filename
-                    //    ]);
-                    //signInstall.stdout.on('data', function(data) {
-                    //    process.stdout.write(data);
-                    //    // It's a hack -.-
-                    //    if (data.toString().indexOf('.pvk:') !== -1) {
-                    //        console.log('Entering password');
-                    //        signInstall.stdin.write(buildConf.certPassword + '\n');
-                    //    }
-                    //
-                    //});
-                    //signInstall.stderr.pipe(process.stdout);
-                    //signInstall.on('close', function() {
-                    //    console.log('Installer signed');
-                    //    // Clear tmp and return
-                    //    del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
-                    //});
+                    if (buildConf.codeSigning.win === true) {
+                        console.log('Codesigning windows installer')
+                        // Sign installer
+                        var signInstall = childProcess.spawn('signcode',
+                           [   '-spc', 'res/cert.spc',
+                               '-v', 'res/cert.pvk',
+                               '-a', 'sha1', '-$', 'individual',
+                               '-i', 'https://github.com/cgrossde/Pullover',
+                               '-t', 'http://timestamp.verisign.com/scripts/timstamp.dll',
+                               '-tr', '10',
+                               'bin/deploy/' + filename
+                           ]);
+                        signInstall.stdout.on('data', function(data) {
+                           process.stdout.write(data);
+                           // It's a hack -.-
+                           if (data.toString().indexOf('.pvk:') !== -1) {
+                               console.log('Entering password');
+                               signInstall.stdin.write(buildConf.certPassword + '\n');
+                           }
+
+                        });
+                        signInstall.stderr.pipe(process.stdout);
+                        signInstall.on('close', function() {
+                           console.log('Installer signed');
+                           // Clear tmp and return
+                           del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
+                        });
+                    } else {
+                        // Clear tmp and return
+                        del([buildDir, 'bin/deploy/' + filename + '.bak'], resolve);
+                    }
                 });
             });
         });

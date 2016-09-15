@@ -48,7 +48,7 @@ const About = React.createClass({
                 </tbody>
               </Table>
 
-              <a className="link" onClick={check}>Check for updates</a>
+              <a className="link" onClick={this.checkForUpdate}>Check for updates</a>
             </Col>
           </Row>
         </Col>
@@ -63,10 +63,24 @@ const About = React.createClass({
       .then((count) => {
         this.setState({ count })
       })
-    NotificationDB.on('newCount', (count) => {
-      this.setState({ count })
+    NotificationDB.on('newCount', this.updateCount)
+  },
+
+  updateCount(count) {
+    this.setState({ count })
+  },
+
+  componentWillUnmount() {
+    NotificationDB.removeListener('newCount', this.updateCount)
+  },
+
+  checkForUpdate() {
+    check((newUpdate) => {
+      if (!newUpdate)
+        alert('You have the lastest version')
     })
   }
 })
+
 
 export default About

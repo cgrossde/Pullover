@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import https from 'https'
-import mkdirp from 'mkdirp'
 
 import Paths from '../services/Paths'
 import Debug from '../lib/debug'
@@ -53,6 +52,39 @@ class SoundCache {
 
   getUrl(soundName) {
     return this.soundUrl + soundName + '.wav'
+  }
+
+  /**
+   * See https://pushover.net/api#sounds
+   *
+   * However the key is different for the client => manually send notifications
+   * with different sounds to compile list
+   */
+  getSoundList() {
+    return [
+      ["po", "Pushover (default)"],
+      ["bk", "Bike"],
+      ["bu", "Bugle"],
+      ["ch", "Cash Register"],
+      ["cl", "Classical"],
+      ["co", "Cosmic"],
+      ["fa", "Falling"],
+      ["gl", "Gamelan"],
+      ["ic", "Incoming"],
+      ["im", "Intermission"],
+      ["ma", "Magic"],
+      ["mc", "Mechanical"],
+      ["pn", "Piano Bar"],
+      ["si", "Siren"],
+      ["sp", "Space Alarm"],
+      ["tg", "Tug Boat"],
+      ["ln", "Alien Alarm (long)"],
+      ["mb", "Climb (long)"],
+      ["ps", "Persistent (long)"],
+      ["ec", "Pushover Echo (long)"],
+      ["ud", "Up Down (long)"],
+      ["no", "None (silent)"],
+    ]
   }
 }
 

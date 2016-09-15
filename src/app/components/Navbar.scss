@@ -1,3 +1,21 @@
+// Drag fix (top-fix + bottom-fix): https://github.com/nwjs/nw.js/issues/2375#issuecomment-73217446
+#top-fix,#bottom-fix{
+	-webkit-app-region: no-drag;
+	height:0px;
+	width:100%;
+	position:absolute;
+
+	left:0;
+	z-index:0;
+	background:red;
+}
+#top-fix{
+	top:0;
+}
+#bottom-fix{
+	bottom:0;
+}
+
 div.titlebar {
 	background-color: #02A3EF;
 	-webkit-app-region: drag;
@@ -10,7 +28,7 @@ div.titlebar {
 		height: 30px;
 	}
 
-	.close-button, .status-button, .about-button, .settings-button {
+	.close-button, .status-button, .about-button, .settings-button, .notifications-button {
 		position: absolute;
 		top: 7px;
 		font-size: 25px;
@@ -43,9 +61,14 @@ div.titlebar {
 		right: 83px;
 	}
 
-	.status-button {
+	.notifications-button {
 		position: absolute;
 		right: 123px;
+	}
+
+	.status-button {
+		position: absolute;
+		right: 163px;
 	}
 
 	a span.glyphicon-signal {

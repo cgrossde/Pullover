@@ -8,6 +8,7 @@ import Status from '../components/Status'
 import Settings from '../components/Settings'
 import ShowUpdate from '../components/ShowUpdate'
 import FatalError from '../components/FatalError'
+import NotificationList from '../components/notificationList/NotificationList'
 
 // Routing config
 const Routes = (
@@ -19,6 +20,7 @@ const Routes = (
       <Route path='settings' component={Settings}/>
       <Route path='error' component={FatalError}/>
       <Route path='updateAvailable' component={ShowUpdate}/>
+      <Route path='notifications' component={NotificationList}/>
     </Route>
   </Router>
 )

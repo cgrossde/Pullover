@@ -23,10 +23,13 @@ class Settings extends EventEmitter {
     super()
     // Setup defaults / retrieve settings from localStorage
     this.settings = {}
-    this.settings.displayTime = this.cast(localStorage.getItem('displayTime')) || 7,
-    this.settings.nativeNotifications = this.cast(localStorage.getItem('nativeNotifications')) || false,
-    this.settings.maxNotificationAmount = this.cast(localStorage.getItem('maxNotificationAmount')) || 20,
+    this.settings.windowWidth = 450
+    this.settings.windowHeight = 330
+    this.settings.displayTime = this.cast(localStorage.getItem('displayTime')) || 7
+    this.settings.nativeNotifications = this.cast(localStorage.getItem('nativeNotifications')) || false
+    this.settings.maxNotificationAmount = this.cast(localStorage.getItem('maxNotificationAmount')) || 20
     this.settings.runOnStartup = this.cast(localStorage.getItem('runOnStartup')) || false
+    this.settings.defaultSound = localStorage.getItem('defaultSound') || 'po'
     debug.log('Settings loaded', this.settings)
     // First or update run?
     if (localStorage.getItem('version') === null) {
