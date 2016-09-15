@@ -9,7 +9,7 @@
 * Show icon of the notifying app
 * Make notification with URLs clickable
 * Limit the max amount of notifications shown at once
-* Notification history
+* *Notification history* (1.2.0)
 * Run on startup
 
 ## Installation / Download
