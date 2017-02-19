@@ -22,7 +22,6 @@
     "no-shadow": 1,
     "quotes": [2, "single", "avoid-escape"],
     "semi": [2, "always"],
-    "space-after-keywords": [2, "always"],
     "space-in-brackets": 0,
     "space-unary-ops": 0
   }
