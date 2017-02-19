@@ -24,8 +24,9 @@ import SoundCache from './SoundCache'
 import Debug from '../lib/debug'
 var debug = Debug('Notifier')
 
+
 nwNotify.setConfig({
-  appIcon: path.join(path.resolve(path.dirname()), 'images', 'icon.png'),
+  appIcon: path.join(path.resolve(path.dirname(process.execPath)), 'images', 'icon.png'),
   displayTime: Settings.get('displayTime') * 1000
 })
 

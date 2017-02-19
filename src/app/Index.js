@@ -8,7 +8,7 @@ import Window, { showWindow } from './nw/Window'
 import './nw/Tray'
 
 // Include package.json for NW.js, also add global styles
-import '!!file?name=package.json!../package.json'
+import '!!file-loader?name=package.json!../package.json'
 import './styles/styles.scss'
 
 // React, Redux, ReduxRouter and routes
@@ -26,10 +26,15 @@ if (process.env.DEBUG === '1') {
   // Move App
   Window.moveTo(920, 23)
   // Show dev tools and arrange it next to app
-  var devWindow = Window.showDevTools()
-  devWindow.moveTo(0,23)
-  devWindow.resizeTo(900, 700)
-  devWindow.show()
+  Window.showDevTools();
+  // BUG: no reference of dev window is passed
+  // Window.showDevTools(function(devWindow) {
+  //   console.log('devWindow', devWindow)
+  //   devWindow.moveTo(0,23)
+  //   devWindow.resizeTo(900, 700)
+  //   devWindow.show()
+  // })
+
 }
 
 // Render App
@@ -47,7 +52,7 @@ const Root = React.createClass({
 })
 ReactDOM.render(<Root />, document.body)
 
-// Show App once it was rendered (only if it's the first start)
+// Show App once it was rendered (only if it's the first start or debug mode)
 if(window.firstRun || process.env.DEBUG === '1')
   showWindow()
 
