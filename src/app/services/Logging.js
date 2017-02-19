@@ -15,9 +15,13 @@ var inspect = Eyes.inspector({stream: null})
 // Catch all uncaught errors to log them to a file
 // and report an issue
 process.on('uncaughtException', function (error) {
+  // console.log may not work anymore, make sure error is at least logged to stdout
+  process.stdout.write('Uncaught error: ')
+  process.stdout.write(error.message + '\n')
+  process.stdout.write(error.stack + '\n')
   // Ignore non fatal error visionmedia/superagent#714
   // TODO: Remove once fixed
-  if(error.code && error.code === 'ENOTFOUND' && error.syscall && error.syscall === 'getaddrinfo') {
+  if (error.code && error.code === 'ENOTFOUND' && error.syscall && error.syscall === 'getaddrinfo') {
     debug.log('Surpressed uncaught exception related to visionmedia/superagent#714', error)
     return
   }
