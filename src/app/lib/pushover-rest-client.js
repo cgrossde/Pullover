@@ -57,7 +57,7 @@ var OpenClient = function(options) {
 // Inherit from events
 util.inherits(OpenClient, EventEmitter)
 // Export
-module.exports = OpenClient
+export default OpenClient
 
 OpenClient.prototype.log = function() {
 	if (this.options.debug) {
