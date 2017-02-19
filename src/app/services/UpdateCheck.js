@@ -30,7 +30,7 @@ let remotePackageInfoCache = null
 export function check(callback) {
   debug.log('Check for update')
   fetchRemotePackageInfo((err, remotePackageInfo) => {
-    if(err)
+    if (err)
       return
     // Compare versions
     if (semver.gt(remotePackageInfo.version, packageInfo.version)) {
@@ -38,10 +38,11 @@ export function check(callback) {
       // Transition to show new version
       transitionTo('/updateAvailable')
       showWindow()
-      if (callback && typeof callback === "function") callback(true)
-    } else {
+      if (callback && typeof callback === 'function') callback(true)
+    }
+ else {
       debug.log('No update available', remotePackageInfo.version)
-      if (callback && typeof callback === "function") callback(false)
+      if (callback && typeof callback === 'function') callback(false)
     }
   })
 }
@@ -58,11 +59,11 @@ export function getCachedRemotePackageInfo() {
  */
 function fetchRemotePackageInfo(callback) {
   // Use caching, no need to make the same request twice
-  if(remotePackageInfoCache !== null)
+  if (remotePackageInfoCache !== null)
     return callback(null, remotePackageInfoCache)
   // Determine if stable or develop
   let repoUrl = stableRepoUrl
-  if(packageInfo.version.match(/\-(alpha|beta|rc)\./) !== null)
+  if (packageInfo.version.match(/\-(alpha|beta|rc)\./) !== null)
     repoUrl = developRepoUrl
   // Run check and return promise
   request.get(repoUrl, (err, httpResponse, body) => {

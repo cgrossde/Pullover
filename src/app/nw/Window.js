@@ -1,7 +1,7 @@
 import Gui from 'nw.gui'
 
 // Get main window
-const win = nw.Window.get();
+const win = nw.Window.get()
 
 export default win
 

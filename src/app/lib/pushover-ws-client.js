@@ -93,7 +93,7 @@ class OpenClientWS extends EventEmitter {
   }
 
   disconnect() {
-    if(this.socket !== null) {
+    if (this.socket !== null) {
       this.socket.close()
       this.socket = null
     }

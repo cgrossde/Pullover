@@ -393,7 +393,8 @@ function validateResponse(body, resolve, reject) {
 	if (body !== undefined && body !== '') {
 		try {
 			var response = JSON.parse(body)
-		} catch (e) {
+		}
+ catch (e) {
 			// Server returned non-JSON response
 			debug.log('Invalid response from server', body)
 		}

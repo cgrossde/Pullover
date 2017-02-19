@@ -26,7 +26,7 @@ if (process.env.DEBUG === '1') {
   // Move App
   Window.moveTo(920, 23)
   // Show dev tools and arrange it next to app
-  Window.showDevTools();
+  Window.showDevTools()
   // BUG: no reference of dev window is passed
   // Window.showDevTools(function(devWindow) {
   //   console.log('devWindow', devWindow)
@@ -53,9 +53,9 @@ const Root = React.createClass({
 ReactDOM.render(<Root />, document.body)
 
 // Show App once it was rendered (only if it's the first start or debug mode)
-if(window.firstRun || process.env.DEBUG === '1')
+if (window.firstRun || process.env.DEBUG === '1')
   showWindow()
 
 // Update check
 import { check } from './services/UpdateCheck'
-check();
+check()

@@ -71,7 +71,7 @@ const SettingsComponent = React.createClass({
               <div className={formDisplayTimeClasses}>
                 <input type="input" maxLength="2" className="form-control smallInput"
                        ref="displayTime" value={this.state.displayTime} onChange={this.updateDisplayTime}/>
-                <span className="glyphicon glyphicon-remove form-control-feedback"></span>
+                <span className="glyphicon glyphicon-remove form-control-feedback" />
               </div>
             </Col>
           </Row>
@@ -114,14 +114,14 @@ const SettingsComponent = React.createClass({
                 <Row>
                   <Col xs={9}>
                     <b>Max. notifications queue</b> <span onClick={this.showInfoMaxNotificationQueue}
-                                                          className="infoboxIcon glyphicon glyphicon-question-sign"></span>
+                                                          className="infoboxIcon glyphicon glyphicon-question-sign" />
                   </Col>
                   <Col xs={2}>
                     <div className={formMaxNotificationClasses}>
                       <input type="input" maxLength="2" className="form-control smallInput"
                              ref="maxNotificationAmount" value={this.state.maxNotificationAmount}
                              onChange={this.updateMaxNotificationQueue}/>
-                      <span className="glyphicon glyphicon-remove form-control-feedback"></span>
+                      <span className="glyphicon glyphicon-remove form-control-feedback" />
                     </div>
                   </Col>
                 </Row>

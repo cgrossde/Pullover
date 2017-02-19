@@ -70,7 +70,7 @@ const NotificationList = React.createClass({
     this._isMounted = true
     Window.resizeTo(Settings.get('windowWidth'), this.windowHeight)
     // Load first rows before rendering List
-    this.refresh();
+    this.refresh()
   },
 
   // Revert to old size
@@ -83,7 +83,7 @@ const NotificationList = React.createClass({
     const list = this.state.list
     // Loading?
     if (this.state.loading)
-      return ( <Spinner active={true}/> )
+      return ( <Spinner active/> )
     // No notifications?
     if (list.length === 0)
       return ( <Alert bsStyle="info">No notifications received</Alert>)
@@ -136,7 +136,7 @@ const NotificationList = React.createClass({
     this.loadMoreRows({startIndex: 0, stopIndex: 20})
       .then(() => {
         if (this._isMounted)
-          this.setState({loading: false});
+          this.setState({loading: false})
       })
   }
 })

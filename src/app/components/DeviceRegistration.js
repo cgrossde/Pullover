@@ -89,7 +89,8 @@ const DeviceRegistration = React.createClass({
     // Now we are ready to connect to pushover
     try {
       connectToPushover()
-    } catch(e) {
+    }
+ catch (e) {
       console.log(e, e.stack)
     }
   },

@@ -31,7 +31,7 @@ const Notification = React.createClass({
   render() {
     const notification = this.props.notification
     if (notification === null)
-      return;
+      return
     const title = notification.title || notification.app
     // Some notifications are with, some without the URL part
     // TODO: Check why
@@ -45,18 +45,18 @@ const Notification = React.createClass({
         <div className="notification-content">
           <span className="notification-date" data-overlay={this.formatOverlay(notification.date)}>{this.formatDate(notification.date)}</span>
           <b>{title}</b><br />
-          <p dangerouslySetInnerHTML={this.createMessageMarkup(notification.message)}></p>
+          <p dangerouslySetInnerHTML={this.createMessageMarkup(notification.message)} />
         </div>
       </div>
     )
   },
 
   getNotificationClassName(notification) {
-    let classNames = "notification"
+    let classNames = 'notification'
     if (notification.priority >= 1)
-      classNames += " highPriority"
+      classNames += ' highPriority'
     else if (notification.priority === -2)
-      classNames += " lowestPriority"
+      classNames += ' lowestPriority'
     return classNames
   },
 

@@ -98,7 +98,7 @@ function fetchAndConnect() {
   // Fetch new notifications
   fetchNotifications()
   .done((success) => {
-    if(success !== false) {
+    if (success !== false) {
       debug.log('Connect to WebSocket')
       maxLoginFailsExceeded = false
       // Start WS
@@ -212,7 +212,7 @@ function fetchNotifications() {
       debug.log('Fetch failed - offline', error)
       offline()
     }
-    return false;
+    return false
   })
 }
 

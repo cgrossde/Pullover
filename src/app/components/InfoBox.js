@@ -17,7 +17,7 @@ const InfoBox = React.createClass({
     const infobox = (
       <div className="infobox">
         <div className="infobox-content">
-          <span className="infobox-close glyphicon glyphicon-remove" onClick={this.props.close}></span>
+          <span className="infobox-close glyphicon glyphicon-remove" onClick={this.props.close} />
           {title}
           {this.props.children}
         </div>

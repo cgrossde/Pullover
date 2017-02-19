@@ -19,9 +19,9 @@ const ShowUpdate = React.createClass({
   },
 
   render() {
-    if(this.state.remotePackageInfo === null)
+    if (this.state.remotePackageInfo === null)
       return (<h1>No Updates</h1>)
-    const releaseLink = "https://github.com/cgrossde/Pullover/releases/tag/" + this.state.remotePackageInfo.version
+    const releaseLink = 'https://github.com/cgrossde/Pullover/releases/tag/' + this.state.remotePackageInfo.version
     return (
       <Row>
         <Col md={8} mdOffset={2}>

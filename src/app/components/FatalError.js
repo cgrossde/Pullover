@@ -2,7 +2,6 @@ import React from 'react'
 import { Row, Col, Button } from 'react-bootstrap'
 
 import Debug from '../lib/debug'
-import Paths from '../services/Paths'
 import packageInfo from '../../package.json'
 import { externalLinkHandler, quitApp, showItemInFolder } from '../nw/Window'
 

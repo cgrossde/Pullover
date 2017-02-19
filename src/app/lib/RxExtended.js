@@ -11,9 +11,9 @@ import Rx from 'rx'
  */
 Rx.Observable.prototype.throttleMap = function (windowDuration, mapFunction, scheduler) {
   Rx.Scheduler.isScheduler(scheduler) || (scheduler = Rx.Scheduler.default)
-  var duration = +windowDuration || 0;
+  var duration = +windowDuration || 0
   if (duration <= 0) { throw new RangeError('windowDuration cannot be less or equal zero.') }
-  var source = this;
+  var source = this
   return new Rx.AnonymousObservable(function (o) {
     var lastOnNext = 0
     return source.subscribe(
@@ -27,9 +27,9 @@ Rx.Observable.prototype.throttleMap = function (windowDuration, mapFunction, sch
           o.onNext(x)
         }
       },function (e) { o.onError(e) }, function () { o.onCompleted() }
-    );
-  }, source);
-};
+    )
+  }, source)
+}
 
 /**
  * Limit the rate at wich elements are emitted. E.g. once every 500ms
@@ -50,7 +50,7 @@ Rx.Observable.prototype.limitRate = function(emitRate, scheduler) {
       disposable = null
     }
     const processQueueItem = function() {
-      if(queue.length === 0)
+      if (queue.length === 0)
         return end()
       // Emit next element
       o.onNext(queue.shift())
@@ -62,7 +62,7 @@ Rx.Observable.prototype.limitRate = function(emitRate, scheduler) {
       )
     }
     const run = function() {
-      if(running)
+      if (running)
         return
       running = true
       processQueueItem()
@@ -70,11 +70,11 @@ Rx.Observable.prototype.limitRate = function(emitRate, scheduler) {
     return source.subscribe(
       (x) => {
         queue.push(x)
-        if(! running)
+        if (! running)
           run()
       },
       (e) => {
-        if(disposable !== null)
+        if (disposable !== null)
           disposable.dispose()
         o.onError(e)
       },

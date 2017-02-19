@@ -149,9 +149,10 @@ class Settings extends EventEmitter {
   firstRun() {
     debug.log('First run')
     // Check if version 0.x.x was installed?
-    if(localStorage.secret || localStorage.id) {
+    if (localStorage.secret || localStorage.id) {
       this.updateFrom_0_x_x()
-    } else {
+    }
+ else {
       this.set('runOnStartup', true)
       // Use mac notification center by default
       if (os.platform() === 'darwin') {
@@ -172,12 +173,12 @@ class Settings extends EventEmitter {
   updateFrom_0_x_x() {
     debug.log('Upgrade from 0.x.x')
     // Native notifications?
-    if(localStorage.newNotifier)
+    if (localStorage.newNotifier)
       this.set('nativeNotifications', false)
     else
       this.set('nativeNotifications', true)
     // Reset login data
-    if(localStorage.secret || localStorage.id) {
+    if (localStorage.secret || localStorage.id) {
       // Let them login again (we store the email now to let
       // the user check which account is logged in)
       store.dispatch(setUserData({

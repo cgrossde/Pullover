@@ -50,7 +50,7 @@ const maxNotificationAmount = Settings.get('maxNotificationAmount')
 debug.log('maxNotificationAmount', maxNotificationAmount)
 
 // The observer and observable, which reacts on calls to processNotifications from the ConnectionManager
-const notificationArrayStream = new Rx.Subject();
+const notificationArrayStream = new Rx.Subject()
 export function processNotifications(notificationArray) {
   // Add notificationArray to notificationArrayStream
   if (notificationArray.length > 0)
