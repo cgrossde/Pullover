@@ -83,12 +83,22 @@ commanderTabTab.init(program, './builder');
 program.parse(process.argv);
 
 function runApp() {
-    var nw = new NwBuilder(buildConf.nwbuild);
+    const nw = new NwBuilder(buildConf.nwbuild);
     // Enable output to console
     nw.on('stdout', function(data) {process.stdout.write(data.toString()); });
     nw.on('stderr', function(data) {process.stdout.write(data.toString()); });
     nw.on('log', console.log);
-    return nw.run();
+    nw.run().catch((err) => {
+        if (err.code === 'ENOTFOUND') {
+            console.log('nwBuilder failed because there was no internet connection')
+            console.log('Trying to run it manually with a cached version...')
+            const nwjsPath = './cache/' + buildConf.nwbuild.version + '-sdk/osx64/nwjs.app/Contents/MacOS/nwjs'
+            const nwjs = childProcess.spawn(nwjsPath, ['./dist']);
+            nwjs.stdout.pipe(process.stdout);
+            nwjs.stderr.pipe(process.stderr);
+        }
+    })
+
 }
 
 /**
