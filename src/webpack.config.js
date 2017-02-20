@@ -51,7 +51,7 @@ module.exports = {
       // JSON
       {
         test: /\.json/,
-        loader: "json-loader"
+        loader: 'json-loader'
       },
 
       {
@@ -60,10 +60,10 @@ module.exports = {
         options: {
           plugins: ['transform-object-assign'],
           presets: [
-            ["env", {
-              "chrome": 56,
-              "modules": false
-            }], "react"
+            ['env', {
+              'chrome': 56,
+              'modules': false
+            }], 'react'
           ]
         },
         include: path.join(__dirname, 'app')

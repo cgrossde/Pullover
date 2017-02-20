@@ -16,7 +16,7 @@
 
 import path from 'path'
 import nwNotify from 'nw-notify'
-import striptags from 'striptags'
+import 'striptags'
 
 import { openExternalLink } from '../nw/Window'
 import Settings from '../services/Settings'
