@@ -166,4 +166,5 @@ latestNotificationStream
 
 // Present notifications to the user
 notifyStream
-  .subscribe(notify)
+  .subscribe(debug.catchErrorWrapper(notify))
+

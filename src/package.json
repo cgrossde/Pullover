@@ -2,9 +2,24 @@
   "name": "pullover",
   "version": "1.2.0",
   "description": "A pushover desktop client",
-  "main": "index.html",
   "author": "Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)",
   "license": "GPL",
+
+  "main": "index.html",
+  "chromium-args": "--mixed-context",
+  "window": {
+    "title": "Pullover",
+    "icon": "images/icon_big.png",
+    "toolbar": false,
+    "frame": false,
+    "width": 450,
+    "height": 330,
+    "show": false
+  },
+  "browser": {
+    "bindings": false
+  },
+
   "scripts": {
     "compile": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack --watch"
@@ -42,6 +57,7 @@
     "is-reachable": "^2.2.0",
     "jodid25519": "^1.0.2",
     "jsbn": "^1.1.0",
+    "linkifyjs": "^2.1.4",
     "mkdirp": "^0.5.1",
     "moment": "^2.14.1",
     "nedb": "^1.8.0",
@@ -62,17 +78,5 @@
     "semver": "^5.3.0",
     "striptags": "^3.0.0",
     "ws": "^2.0.0"
-  },
-  "window": {
-    "title": "Pullover",
-    "icon": "images/icon_big.png",
-    "toolbar": false,
-    "frame": false,
-    "width": 450,
-    "height": 330,
-    "show": false
-  },
-  "browser": {
-    "bindings": false
   }
 }

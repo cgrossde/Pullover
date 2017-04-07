@@ -16,10 +16,11 @@
 
 import path from 'path'
 import nwNotify from 'nw-notify'
-import 'striptags'
+import linkifyHtml from 'linkifyjs/html'
 
 import { openExternalLink } from '../nw/Window'
 import Settings from '../services/Settings'
+import striptags from '../lib/striptags'
 import SoundCache from './SoundCache'
 import Debug from '../lib/debug'
 var debug = Debug('Notifier')
@@ -42,6 +43,7 @@ Settings.on('change', (event) => {
 // Notification function
 // Usage: notify('NFL-Release', 'Pats vs Broncos 720p usw', 'http://google.com', 'images/nfl3.png');
 export function notify(notification) {
+  debug.log("notify")
   // Set icon path
   notification.icon = (notification.icon) ? 'https://api.pushover.net/icons/' + notification.icon + '.png' : undefined
   // Sounds
@@ -50,7 +52,11 @@ export function notify(notification) {
 
   // Show app name if no title was supplied
   notification.title = notification.title || notification.app
-
+  debug.log("notify - preLinkify")
+  // Linkify notification text
+  if (!! notification.message)
+    notification.message = linkifyHtml(notification.message)
+  debug.log("notify - postLinkify")
 
   if (Settings.get('nativeNotifications') === true) {
     nativeNotify(notification.title, notification.message, notification.url, notification.icon, notification.sound)
