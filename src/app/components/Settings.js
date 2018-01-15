@@ -1,15 +1,15 @@
 import React from 'react'
-import {Row, Col, Table, Input} from 'react-bootstrap'
+import { Col, Input, Row } from 'react-bootstrap'
 
-import Window, {showItemInFolder} from '../nw/Window'
+import Window, { showItemInFolder } from '../nw/Window'
 import Settings from '../services/Settings'
 import SoundCache from '../services/SoundCache'
 import InfoBox from './InfoBox'
 
 import Debug from '../lib/debug'
-var debug = Debug('SettingsComponent')
-
 import './Settings.scss'
+
+var debug = Debug('SettingsComponent')
 
 const SettingsComponent = React.createClass({
   displayName: 'Settings',
@@ -58,27 +58,6 @@ const SettingsComponent = React.createClass({
         </div>
       )
     }
-    // DisplayTime is only for nw-notify, native notifications handle by OS
-    let displayTimeInput = ''
-    if (!this.state.nativeNotifications) {
-      const formDisplayTimeClasses = (this.state.displayTime === '') ? 'form-group has-feedback has-error' : 'form-group'
-
-      displayTimeInput = (
-        <div>
-          <Row>
-            <Col xs={9}><b>Display time (in sec)</b></Col>
-            <Col xs={2}>
-              <div className={formDisplayTimeClasses}>
-                <input type="input" maxLength="2" className="form-control smallInput"
-                       ref="displayTime" value={this.state.displayTime} onChange={this.updateDisplayTime}/>
-                <span className="glyphicon glyphicon-remove form-control-feedback" />
-              </div>
-            </Col>
-          </Row>
-          <hr />
-        </div>
-      )
-    }
 
     // Max notification queue
     const formMaxNotificationClasses = (this.state.maxNotificationAmount === '')
@@ -100,17 +79,6 @@ const SettingsComponent = React.createClass({
               <Col xs={10} xsOffset={1}>
                 <hr />
                 {runOnStartup}
-                <Row>
-                  <Col xs={8}>
-                    <b className="link" onClick={this.toggleNativeNotifications}>Use native Notifications</b>
-                  </Col>
-                  <Col xs={4}>
-                    <input type="checkbox" readOnly checked={this.state.nativeNotifications}
-                           onClick={this.toggleNativeNotifications}/>
-                  </Col>
-                </Row>
-                <hr />
-                {displayTimeInput}
                 <Row>
                   <Col xs={9}>
                     <b>Max. notifications queue</b> <span onClick={this.showInfoMaxNotificationQueue}
@@ -165,10 +133,6 @@ const SettingsComponent = React.createClass({
 
   showInfoMaxNotificationQueue() {
     this.setState({infoMaxNotificationQueue: true})
-  },
-
-  toggleNativeNotifications() {
-    Settings.set('nativeNotifications', !this.state.nativeNotifications)
   },
 
   toggleRunOnStartup() {

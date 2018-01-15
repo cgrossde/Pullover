@@ -1,14 +1,9 @@
-
-import os from 'os'
 import Autorun from 'autorun'
 import { EventEmitter } from 'events'
 import Debug from '../lib/debug'
 import packageInfo from '../../package.json'
 import store from './Store'
-import {
-  setUserData,
-  setDeviceData
-} from '../actions/Pushover'
+import { setDeviceData, setUserData } from '../actions/Pushover'
 
 var autorun = new Autorun('Pullover')
 var debug = Debug('Settings')
@@ -26,7 +21,6 @@ class Settings extends EventEmitter {
     this.settings.windowWidth = 450
     this.settings.windowHeight = 330
     this.settings.displayTime = this.cast(localStorage.getItem('displayTime')) || 7
-    this.settings.nativeNotifications = this.cast(localStorage.getItem('nativeNotifications')) || false
     this.settings.maxNotificationAmount = this.cast(localStorage.getItem('maxNotificationAmount')) || 20
     this.settings.runOnStartup = this.cast(localStorage.getItem('runOnStartup')) || false
     this.settings.defaultSound = localStorage.getItem('defaultSound') || 'po'
@@ -88,7 +82,7 @@ class Settings extends EventEmitter {
       key: key,
       value: value
     })
-    debug.log('Changed \'' + key + '\'',value)
+    debug.log('Changed \'' + key + '\'', value)
   }
 
   cast(value) {
@@ -98,7 +92,7 @@ class Settings extends EventEmitter {
     else if (value === 'false') {
       return false
     }
-    else if (! isNaN(parseInt(value))) {
+    else if (!isNaN(parseInt(value))) {
       return parseInt(value)
     }
 
@@ -108,26 +102,26 @@ class Settings extends EventEmitter {
   enableRunOnStartup() {
     if (autorun.isPlatformSupported()) {
       autorun.enable()
-      .then(() => {
-        debug.log('Enabled autorun')
-      })
-      .catch((err) => {
-        debug.log('Failed to enabled autorun.', err)
-        this.updateRunOnStartupStatus()
-      })
+        .then(() => {
+          debug.log('Enabled autorun')
+        })
+        .catch((err) => {
+          debug.log('Failed to enabled autorun.', err)
+          this.updateRunOnStartupStatus()
+        })
     }
   }
 
   disableRunOnStartup() {
     if (autorun.isPlatformSupported()) {
       autorun.disable()
-      .then(() => {
-        debug.log('Disabled autorun')
-      })
-      .catch(() => {
-        debug.log('Failed to disable autorun', err)
-        this.updateRunOnStartupStatus()
-      })
+        .then(() => {
+          debug.log('Disabled autorun')
+        })
+        .catch(() => {
+          debug.log('Failed to disable autorun', err)
+          this.updateRunOnStartupStatus()
+        })
     }
   }
 
@@ -152,12 +146,8 @@ class Settings extends EventEmitter {
     if (localStorage.secret || localStorage.id) {
       this.updateFrom_0_x_x()
     }
- else {
+    else {
       this.set('runOnStartup', true)
-      // Use mac notification center by default
-      if (os.platform() === 'darwin') {
-        this.settings.nativeNotifications = true
-      }
     }
     localStorage.setItem('version', packageInfo.version)
   }

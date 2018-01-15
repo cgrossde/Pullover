@@ -11,8 +11,8 @@ module.exports = {
     app: './app/Index',
     react: ['react', 'react-bootstrap', 'react-dom', 'react-redux', 'react-router', 'react-router-redux',
       'redux', 'react-addons-shallow-compare', 'react-virtualized'],
-    vendors: ['autorun', 'is-reachable', 'is-online', 'eyes', 'lodash', 'moment', 'nedb', 'nw-notify', 'promise', 'request', 'reselect',
-      'rx', 'semver', 'striptags', 'ws']
+    vendors: ['autorun', 'is-reachable', 'is-online', 'eyes', 'lodash', 'moment', 'nedb', 'promise', 'request', 'reselect',
+      'rx', 'semver', 'striptags', 'ws', 'linkifyjs']
   },
   output: {
     path: path.join(__dirname, '..', 'dist'),
@@ -21,6 +21,7 @@ module.exports = {
     pathinfo: true
   },
   plugins: [
+    new webpack.IgnorePlugin(/^electron|bufferutil|utf\-8\-validate$/),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.optimize.CommonsChunkPlugin({name: ['react','vendors']}),
     new HtmlWebpackPlugin({

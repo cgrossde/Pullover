@@ -1,8 +1,9 @@
 import React from 'react'
 import moment from 'moment'
 import Debug from '../../lib/debug'
-var debug = Debug('Notification')
 import './Notification.scss'
+
+var debug = Debug('Notification')
 
 /**
  * { message: 'Some notification',
@@ -19,14 +20,10 @@ import './Notification.scss'
   _id: 'y6QFIMpXV0wlP93a' }
  */
 
-const Notification = React.createClass({
-  displayName: 'Notification',
-
-  getDefaultProps() {
-    return {
+class Notification extends React.Component {
+  static defaultProps = {
       notification: null,
-    }
-  },
+  }
 
   render() {
     const notification = this.props.notification
@@ -49,7 +46,7 @@ const Notification = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   getNotificationClassName(notification) {
     let classNames = 'notification'
@@ -58,12 +55,12 @@ const Notification = React.createClass({
     else if (notification.priority === -2)
       classNames += ' lowestPriority'
     return classNames
-  },
+  }
 
   createMessageMarkup(message) {
     // TODO: Maybe do some sanitizing?
     return { __html: message }
-  },
+  }
 
   // Short date / time since notification
   formatDate(timestamp) {
@@ -71,7 +68,7 @@ const Notification = React.createClass({
     if (! date)
       return ''
     return date.fromNow()
-  },
+  }
 
   // Full date and time
   formatOverlay(timestamp) {
@@ -79,7 +76,7 @@ const Notification = React.createClass({
     if (! date)
       return ''
     return date.format('YYYY-MM-DD HH:mm:ss')
-  },
+  }
 
   parseDate(timestamp) {
     const date = moment(timestamp * 1000, 'x')
@@ -87,6 +84,6 @@ const Notification = React.createClass({
       return date
     return false
   }
-})
+}
 
 export default Notification

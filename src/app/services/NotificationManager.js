@@ -33,11 +33,11 @@
 import Rx from '../lib/RxExtended'
 import Debug from '../lib/debug'
 import notificationDB from './NotificationDB'
-const debug = Debug('NotificationManager')
-
 import Settings from '../services/Settings'
-import {notify} from './Notifier'
+import { notify } from './Notifier'
 import Pushover from './Pushover'
+
+const debug = Debug('NotificationManager')
 
 // Limit notifications shown to one per X ms
 // This is needed because OS X shows every notification at once and
@@ -105,8 +105,7 @@ let notifyStream = notificationArrayStream
 // Only emit one notification every X ms if client uses native notifications
 // Those are usually emitted at once (at least OS X 10.11.3) and the user would
 // not see all notifications if multiple are retrieved at the same time
-if (Settings.get('nativeNotifications') === true)
-  notifyStream = notifyStream.limitRate(notifyBufferingInMs)
+notifyStream = notifyStream.limitRate(notifyBufferingInMs)
 
 // Continue processing...
 notifyStream = notifyStream

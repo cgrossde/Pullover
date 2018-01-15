@@ -1,18 +1,17 @@
 import React from 'react'
-import { Row, Col, Table } from 'react-bootstrap'
+import { Col, Row, Table } from 'react-bootstrap'
 import { externalLinkHandler } from '../nw/Window'
 import packageInfo from '../../package.json'
 import { check } from '../services/UpdateCheck'
 import NotificationDB from '../services/NotificationDB'
 
-const About = React.createClass({
-  displayName: 'About',
-
-  getInitialState() {
-    return {
+class About extends React.Component {
+  constructor() {
+    super()
+    this.state = {
       count: 0
     }
-  },
+  }
 
   render() {
     return (
@@ -54,7 +53,7 @@ const About = React.createClass({
         </Col>
       </Row>
     )
-  },
+  }
 
   componentDidMount() {
     // Get count and keep it updated
@@ -64,15 +63,15 @@ const About = React.createClass({
         this.setState({ count })
       })
     NotificationDB.on('newCount', this.updateCount)
-  },
+  }
 
   updateCount(count) {
     this.setState({ count })
-  },
+  }
 
   componentWillUnmount() {
     NotificationDB.removeListener('newCount', this.updateCount)
-  },
+  }
 
   checkForUpdate() {
     check((newUpdate) => {
@@ -80,7 +79,7 @@ const About = React.createClass({
         alert('You have the lastest version')
     })
   }
-})
+}
 
 
 export default About

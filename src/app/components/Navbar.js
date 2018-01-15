@@ -1,13 +1,11 @@
 import React from 'react'
-import {Link} from 'react-router'
-import {connect} from 'react-redux'
-import {hideWindow} from '../nw/Window'
+import { Link } from 'react-router'
+import { connect } from 'react-redux'
+import { hideWindow } from '../nw/Window'
 
 import './Navbar.scss'
 
-const Navbar = React.createClass({
-  displayName: 'Navbar',
-
+class Navbar extends React.Component {
   render() {
     const icon = (this.props.status === 'ONLINE') ? 'signal' : 'flash'
     const iconClass = 'glyphicon glyphicon-' + icon
@@ -37,7 +35,7 @@ const Navbar = React.createClass({
       </div>
     )
   }
-})
+}
 
 function select(state) {
   return {

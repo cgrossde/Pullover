@@ -1,22 +1,15 @@
 import React from 'react'
-import { Row, Col, Button } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 
-import Debug from '../lib/debug'
-import Paths from '../services/Paths'
-import packageInfo from '../../package.json'
 import { externalLinkHandler } from '../nw/Window'
 import { getCachedRemotePackageInfo } from '../services/UpdateCheck'
 
-const debug = Debug('ShowUpdate')
-
-const ShowUpdate = React.createClass({
-  displayName: 'ShowUpdate',
-
+class ShowUpdate extends React.Component {
   getInitialState() {
     return {
       remotePackageInfo: null
     }
-  },
+  }
 
   render() {
     if (this.state.remotePackageInfo === null)
@@ -36,11 +29,11 @@ const ShowUpdate = React.createClass({
         </Col>
       </Row>
     )
-  },
+  }
 
   componentDidMount() {
     this.setState({ remotePackageInfo: getCachedRemotePackageInfo() })
   }
-})
+}
 
 export default ShowUpdate

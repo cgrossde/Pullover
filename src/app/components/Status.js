@@ -1,20 +1,19 @@
 import React from 'react'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import { Row, Col, Table } from 'react-bootstrap'
+import { Col, Row, Table } from 'react-bootstrap'
 
 import store from '../services/Store'
 import { logout } from '../actions/Pushover'
 import { pushoverStatusSelector } from '../selectors/PushoverSelectors'
 
-const Status = React.createClass({
-  displayName: 'Status',
-
-  getInitialState() {
-    return {
+class Status extends React.Component {
+  constructor() {
+    super()
+    this.state = {
       refreshInterval: null
     }
-  },
+  }
 
   componentDidMount() {
     // Rerender every 30 sec to update time since last sync
@@ -22,11 +21,11 @@ const Status = React.createClass({
     this.setState({
       refreshInterval: refreshInterval
     })
-  },
+  }
 
   componentWillUnmount() {
     clearInterval(this.state.refreshInterval)
-  },
+  }
 
   render() {
     let lastSync = 'never'
@@ -74,11 +73,11 @@ const Status = React.createClass({
         </Col>
       </Row>
     )
-  },
+  }
 
   logout() {
     store.dispatch(logout())
   }
-})
+}
 
 export default connect(pushoverStatusSelector)(Status)
