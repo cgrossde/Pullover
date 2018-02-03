@@ -1,7 +1,9 @@
+@import '../styles/variables';
+
 .spinner {
 	z-index: 1000;
 	position: fixed;
-	width: 450px;
+	width: $appWidth;
 	height: 100%;
 	background-color: rgba(0,0,0,0.8);
 

@@ -1,9 +1,11 @@
+@import '../styles/variables';
+
 .appContainer {
 	
 	.contentContainer {
 		overflow: hidden;
 		text-align: center;
-		width: 450px;
+		width: $appWidth;
 		position: relative;
 	}
 }
