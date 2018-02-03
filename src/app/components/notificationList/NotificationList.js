@@ -33,7 +33,7 @@ class NotificationList extends React.Component {
   }
 
   // Resize window
-  componentWillMount() {
+  componentDidMount() {
     this._isMounted = true
     Window.resizeTo(Settings.get('windowWidth'), this.windowHeight)
   }

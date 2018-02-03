@@ -28,10 +28,8 @@ class SettingsComponent extends React.Component {
   // Subscribe to Settings changes
   componentDidMount() {
     Settings.on('change', this.updateState)
-  }
 
-  // Resize window
-  componentWillMount() {
+    // Resize window
     Window.resizeTo(Settings.get('windowWidth'), 400)
   }
 
