@@ -10,7 +10,7 @@ module.exports = {
   entry: {
     app: './app/Index',
     react: ['react', 'react-bootstrap', 'react-dom', 'react-redux', 'react-router', 'react-router-redux',
-      'redux', 'react-addons-shallow-compare', 'react-virtualized'],
+      'redux', 'react-addons-shallow-compare'],
     vendors: ['autorun', 'is-reachable', 'is-online', 'eyes', 'lodash', 'moment', 'nedb', 'promise', 'request', 'reselect',
       'rx', 'semver', 'striptags', 'ws', 'linkifyjs']
   },

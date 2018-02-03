@@ -68,7 +68,6 @@
     "react-redux": "^5.0.2",
     "react-router": "^3.0.4",
     "react-router-redux": "^4.0.5",
-    "react-virtualized": "^9.17.1",
     "redux": "^3.5.2",
     "request": "^2.74.0",
     "reselect": "^3.0.0",

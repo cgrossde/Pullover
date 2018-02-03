@@ -21,8 +21,14 @@ var debug = Debug('Notification')
  */
 
 class Notification extends React.Component {
-  static defaultProps = {
-      notification: null,
+  constructor() {
+    super()
+  }
+
+  static get defaultProps() {
+    return {
+      notification: null
+    }
   }
 
   render() {
@@ -32,17 +38,18 @@ class Notification extends React.Component {
     const title = notification.title || notification.app
     // Some notifications are with, some without the URL part
     // TODO: Check why
-    if (notification.icon && ! notification.icon.match(/https:\/\//)) {
+    if (notification.icon && !notification.icon.match(/https:\/\//)) {
       notification.icon = 'https://api.pushover.net/icons/' + notification.icon + '.png'
     }
-    const image = (notification.icon) ? (<img className="notification-icon" src={notification.icon} />) : null
+    const image = (notification.icon) ? (<img className="notification-icon" src={notification.icon}/>) : null
     return (
       <div className={this.getNotificationClassName(notification)}>
         {image}
         <div className="notification-content">
-          <span className="notification-date" data-overlay={this.formatOverlay(notification.date)}>{this.formatDate(notification.date)}</span>
-          <b>{title}</b><br />
-          <p dangerouslySetInnerHTML={this.createMessageMarkup(notification.message)} />
+          <span className="notification-date"
+                data-overlay={this.formatOverlay(notification.date)}>{this.formatDate(notification.date)}</span>
+          <b>{title}</b><br/>
+          <p dangerouslySetInnerHTML={this.createMessageMarkup(notification.message)}/>
         </div>
       </div>
     )
@@ -65,7 +72,7 @@ class Notification extends React.Component {
   // Short date / time since notification
   formatDate(timestamp) {
     const date = this.parseDate(timestamp)
-    if (! date)
+    if (!date)
       return ''
     return date.fromNow()
   }
@@ -73,7 +80,7 @@ class Notification extends React.Component {
   // Full date and time
   formatOverlay(timestamp) {
     const date = this.parseDate(timestamp)
-    if (! date)
+    if (!date)
       return ''
     return date.format('YYYY-MM-DD HH:mm:ss')
   }
