@@ -1,8 +1,10 @@
 import PushoverRestClient from '../lib/pushover-rest-client'
 import PushoverWSClient from '../lib/pushover-ws-client'
 import store from './Store'
+import Debug from '../lib/debug'
 import { pushoverStatusSelector } from '../selectors/PushoverSelectors'
 
+const debug = Debug('Pushover')
 const state = store.getState()
 let pushoverState = pushoverStatusSelector(state)
 
@@ -23,6 +25,7 @@ export default restClient
 
 // Websocket
 let wsClient = null
+
 function initWSClient() {
   const currentState = store.getState()
   pushoverState = pushoverStatusSelector(currentState)
@@ -39,8 +42,8 @@ function initWSClient() {
 export function connectWS() {
   // Do we need to init the ws client?
   if (wsClient === null) {
-    if (! initWSClient()) {
-      console.log('Could not init Websocket, not logged in or no device registered')
+    if (!initWSClient()) {
+      debug.log('Could not init Websocket, not logged in or no device registered')
       return false
     }
   }
@@ -51,7 +54,11 @@ export function connectWS() {
 
 export function disconnectWS() {
   if (wsClient !== null) {
-    wsClient.disconnect()
+    try {
+      wsClient.disconnect()
+    } catch (e) {
+      debug.log('Error during disconnect.', e)
+    }
     wsClient = null
   }
 }
