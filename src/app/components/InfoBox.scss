@@ -1,8 +1,9 @@
+@import '../styles/variables';
 .infobox {
   z-index: 500;
-  position: absolute;
-  top: 0;
-  width: 450px;
+  position: fixed;
+  top: $navbarHeight;
+  width: 100%;
   height: 100%;
   background-color: rgba(0,0,0,0.8);
 
@@ -12,7 +13,7 @@
     margin: 20px auto;
     background-color: #ffffff;
     border-radius: 10px;
-    width: 350px;
+    width: $appWidth - 100;
     padding: 10px;
     text-align: left;
 
