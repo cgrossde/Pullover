@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)",
-  "license": "GPL",
+  "license": "GPL-3.0",
   "dependencies": {
     "appdmg": "^0.4.5",
     "archiver": "^1.0.1",
