@@ -17,21 +17,12 @@
 import linkifyHtml from 'linkifyjs/html'
 
 import { openExternalLink } from '../nw/Window'
-import Settings from '../services/Settings'
 import striptags from '../lib/striptags'
 import SoundCache from './SoundCache'
 import Debug from '../lib/debug'
 
 var debug = Debug('Notifier')
 
-// Autoupdate displayTime
-Settings.on('change', (event) => {
-  if (event.key === 'displayTime') {
-    nwNotify.setConfig({
-      displayTime: event.value * 1000
-    })
-  }
-})
 
 // Notification function
 // Usage: notify('NFL-Release', 'Pats vs Broncos 720p usw', 'http://google.com', 'images/nfl3.png');

@@ -11,35 +11,43 @@ import './Settings.scss'
 
 var debug = Debug('SettingsComponent')
 
-const SettingsComponent = React.createClass({
-  displayName: 'Settings',
-
-  getInitialState() {
-    let state = Settings.getAll()
-    state.infoMaxNotificationQueue = false
-    return state
-  },
+class SettingsComponent extends React.Component {
+  constructor() {
+    super()
+    this.state = Settings.getAll()
+    this.state.infoMaxNotificationQueue = false
+    // Bind to make clicks work
+    this.hideInfoMaxNotificationQueue = this.hideInfoMaxNotificationQueue.bind(this)
+    this.showInfoMaxNotificationQueue = this.showInfoMaxNotificationQueue.bind(this)
+    this.toggleDisableSounds = this.toggleDisableSounds.bind(this)
+    this.toggleRunOnStartup = this.toggleRunOnStartup.bind(this)
+    this.updateDefaultSound = this.updateDefaultSound.bind(this)
+    this.updateState = this.updateState.bind(this)
+  }
 
   // Subscribe to Settings changes
   componentDidMount() {
     Settings.on('change', this.updateState)
-  },
+  }
+
   // Resize window
   componentWillMount() {
     Window.resizeTo(Settings.get('windowWidth'), 400)
-  },
+  }
+
   // Unsubscribe before unmounting component
   componentWillUnmount() {
     Settings.removeListener('change', this.updateState)
     // Revert to old size
     Window.resizeTo(Settings.get('windowWidth'), Settings.get('windowHeight'))
-  },
+  }
+
   // Update state
   updateState(event) {
     const partialUpdate = {}
     partialUpdate[event.key] = event.value
     this.setState(partialUpdate)
-  },
+  }
 
   render() {
     let runOnStartup = ''
@@ -54,7 +62,7 @@ const SettingsComponent = React.createClass({
               <input type="checkbox" readOnly checked={this.state.runOnStartup} onClick={this.toggleRunOnStartup}/>
             </Col>
           </Row>
-          <hr />
+          <hr/>
         </div>
       )
     }
@@ -70,47 +78,69 @@ const SettingsComponent = React.createClass({
       )
     })
 
+    const soundsDisabled = Settings.get('defaultSound') === 'no'
+    let defaultSoundSetting = ''
+    if (!soundsDisabled) {
+      defaultSoundSetting = (
+        <div>
+          <hr/>
+          <Row>
+            <Col xs={6}><b>Default sound</b></Col>
+            <Col xs={6}>
+              <div className="default-class">
+                <select ref="defaultSound" className="form-control" value={this.state.defaultSound}
+                        onChange={this.updateDefaultSound}>
+                  {defaultSoundOptions}
+                </select>
+              </div>
+            </Col>
+          </Row>
+        </div>
+      )
+    }
+
     return (
       <div>
         <Row>
           <Col md={8} mdOffset={2}>
             <h1 className="center-block">Settings</h1>
-            <Row>
+            <Row className="Settings">
               <Col xs={10} xsOffset={1}>
-                <hr />
+                <hr/>
                 {runOnStartup}
                 <Row>
-                  <Col xs={9}>
+                  <Col xs={8}>
                     <b>Max. notifications queue</b> <span onClick={this.showInfoMaxNotificationQueue}
-                                                          className="infoboxIcon glyphicon glyphicon-question-sign" />
+                                                          className="infoboxIcon glyphicon glyphicon-question-sign"/>
                   </Col>
-                  <Col xs={2}>
+                  <Col xs={4}>
                     <div className={formMaxNotificationClasses}>
                       <input type="input" maxLength="2" className="form-control smallInput"
                              ref="maxNotificationAmount" value={this.state.maxNotificationAmount}
                              onChange={this.updateMaxNotificationQueue}/>
-                      <span className="glyphicon glyphicon-remove form-control-feedback" />
+                      <span className="glyphicon glyphicon-remove form-control-feedback"/>
                     </div>
                   </Col>
                 </Row>
-                <hr />
+                <hr/>
                 <Row>
-                  <Col xs={7}><b>Default sound</b></Col>
-                  <Col xs={5}>
+                  <Col xs={8}><b>Disable sounds</b></Col>
+                  <Col xs={4}>
                     <div className="default-class">
-                      <select ref="defaultSound" className="form-control" value={this.state.defaultSound}
-                              onChange={this.updateDefaultSound}>
-                        {defaultSoundOptions}
-                      </select>
+                      <input type="checkbox" readOnly checked={soundsDisabled}
+                             onClick={this.toggleDisableSounds}/>
                     </div>
                   </Col>
                 </Row>
-                <hr />
-                <span className="text-primary">
-                  <a className="link" onClick={this.showDevTools}>Show dev tools</a>
-                </span> | <span className="text-primary">
-                  <a className="link" onClick={this.showLogsFolder}>Open log file folder</a>
-                </span>
+                {defaultSoundSetting}
+                <hr/>
+                <div className="text-center">
+                  <span className="text-primary">
+                    <a className="link" onClick={this.showDevTools}>Show dev tools</a>
+                  </span> | <span className="text-primary">
+                    <a className="link" onClick={this.showLogsFolder}>Open log file folder</a>
+                  </span>
+                </div>
               </Col>
             </Row>
           </Col>
@@ -125,19 +155,19 @@ const SettingsComponent = React.createClass({
         </InfoBox>
       </div>
     )
-  },
+  }
 
   hideInfoMaxNotificationQueue() {
-    this.setState({infoMaxNotificationQueue: false})
-  },
+    this.setState({ infoMaxNotificationQueue: false })
+  }
 
   showInfoMaxNotificationQueue() {
-    this.setState({infoMaxNotificationQueue: true})
-  },
+    this.setState({ infoMaxNotificationQueue: true })
+  }
 
   toggleRunOnStartup() {
     Settings.set('runOnStartup', !this.state.runOnStartup)
-  },
+  }
 
   updateDisplayTime() {
     // Only update if a number, greater zero and different
@@ -150,9 +180,9 @@ const SettingsComponent = React.createClass({
     }
     // Allow an empty field for usability
     else if (this.refs.displayTime.value === '') {
-      this.setState({displayTime: ''})
+      this.setState({ displayTime: '' })
     }
-  },
+  }
 
   updateMaxNotificationQueue() {
     // Only update if a number, greater zero and different
@@ -165,23 +195,32 @@ const SettingsComponent = React.createClass({
     }
     // Allow an empty field for usability
     else if (this.refs.maxNotificationAmount.value === '') {
-      this.setState({maxNotificationAmount: ''})
+      this.setState({ maxNotificationAmount: '' })
     }
-  },
+  }
+
+  toggleDisableSounds() {
+    const soundsDisabled = Settings.get('defaultSound') === 'no'
+    if (soundsDisabled) {
+      Settings.set('defaultSound', 'po')
+    } else {
+      Settings.set('defaultSound', 'no')
+    }
+    // State will automatically update through settings change
+  }
 
   updateDefaultSound() {
     const defaultSound = this.refs.defaultSound.value
     Settings.set('defaultSound', defaultSound)
-  },
+  }
 
   showLogsFolder() {
     showItemInFolder(debug.getLogFilePath())
-  },
+  }
 
   showDevTools() {
     Window.showDevTools()
   }
-
-})
+}
 
 export default SettingsComponent

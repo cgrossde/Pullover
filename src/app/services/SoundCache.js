@@ -4,6 +4,7 @@ import https from 'https'
 
 import Paths from '../services/Paths'
 import Debug from '../lib/debug'
+
 const debug = Debug('SoundCache')
 
 class SoundCache {
@@ -83,7 +84,7 @@ class SoundCache {
       ['ps', 'Persistent (long)'],
       ['ec', 'Pushover Echo (long)'],
       ['ud', 'Up Down (long)'],
-      ['no', 'None (silent)'],
+      // ['no', 'None (silent)'],
     ]
   }
 }
