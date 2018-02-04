@@ -17,11 +17,7 @@ import pushover, { connectWS, disconnectWS } from '../services/Pushover'
 import { showWindow } from '../nw/Window'
 import wakeDetect from '../lib/wake-detect'
 import { processNotifications } from './NotificationManager'
-import {
-  updateConnectionState,
-  updateSyncDate,
-  logout as logoutPushover
-} from '../actions/Pushover'
+import { logout as logoutPushover, updateConnectionState, updateSyncDate } from '../actions/Pushover'
 
 var debug = Debug('ConnectionManager')
 
@@ -50,7 +46,7 @@ let maxLoginFailsExceeded = false
 // Reconnect on wake
 wakeDetect.on('wake', (sleepSecs) => {
   debug.log('Device woke up after ' + sleepSecs + 's of sleep')
-  if (! isStopped()) {
+  if (!isStopped()) {
     reconnect()
   }
 })
@@ -73,6 +69,7 @@ function start() {
   // Start listening for wake events
   wakeDetect.start()
 }
+
 let online = start // alias for start function
 
 function stop() {
@@ -97,14 +94,14 @@ function fetchAndConnect() {
   debug.log('fetchAndConnect')
   // Fetch new notifications
   fetchNotifications()
-  .done((success) => {
-    if (success !== false) {
-      debug.log('Connect to WebSocket')
-      maxLoginFailsExceeded = false
-      // Start WS
-      connectToWS()
-    }
-  })
+    .done((success) => {
+      if (success !== false) {
+        debug.log('Connect to WebSocket')
+        maxLoginFailsExceeded = false
+        // Start WS
+        connectToWS()
+      }
+    })
 
 }
 
@@ -146,28 +143,33 @@ function checkInternetConnection() {
   debug.log('Checking internet connection')
   // Don't run more than one check concurrently
   if (checkingInternet) {
+    debug.log('Online check is still running')
     return
   }
   else {
     checkingInternet = true
   }
   // Are we online?
-  isOnline(function(err, internetOnline) {
-    if (internetOnline) {
-      // Is pushover reachable
-      isReachable('api.pushover.net:443', function(error, reachable) {
-        if (reachable) {
-          debug.log('We are online again')
-          clearInterval(checkInternetInterval)
-          online()
-        }
+  isOnline()
+    .then(internetOnline => {
+      if (internetOnline) {
+        // Is pushover reachable
+        isReachable('api.pushover.net:443')
+          .then(reachable => {
+            if (reachable) {
+              debug.log('We are online again')
+              clearInterval(checkInternetInterval)
+              online()
+            }
+            checkingInternet = false
+          })
+          .catch(debug.log)
+      }
+      else {
         checkingInternet = false
-      })
-    }
-    else {
-      checkingInternet = false
-    }
-  })
+      }
+    })
+    .catch(debug.log)
 }
 
 function loginFailed(type) {
@@ -192,28 +194,28 @@ function loginFailed(type) {
 }
 
 function fetchNotifications() {
-  if (! pushover.ready()) {
+  if (!pushover.ready()) {
     debug.log('Pushover not ready, secret or device id missing')
     return
   }
 
   return pushover.fetchNotifications()
-  .then(function(notifications) {
-    store.dispatch(updateSyncDate())
-    loginFails = 0
-    debug.log('Received ' + notifications.length + ' notifications')
-    return processNotifications(notifications)
-  }, (error) => {
-    // Check if connection or auth error
-    if (error.name === 'InvalidCredentials') {
-      loginFailed('fetch')
-    }
-    else {
-      debug.log('Fetch failed - offline', error)
-      offline()
-    }
-    return false
-  })
+    .then(function (notifications) {
+      store.dispatch(updateSyncDate())
+      loginFails = 0
+      debug.log('Received ' + notifications.length + ' notifications')
+      return processNotifications(notifications)
+    }, (error) => {
+      // Check if connection or auth error
+      if (error.name === 'InvalidCredentials') {
+        loginFailed('fetch')
+      }
+      else {
+        debug.log('Fetch failed - offline', error)
+        offline()
+      }
+      return false
+    })
 }
 
 function maxLoginFailsReached() {
