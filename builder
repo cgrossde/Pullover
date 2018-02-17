@@ -186,9 +186,7 @@ function createDistributables() {
         throw err
       })
       archive.pipe(output)
-      archive.bulk([
-        { expand: true, cwd: path, src: ['**'], dest: '.' }
-      ])
+      archive.glob('**/*', { cwd: path })
       archive.finalize()
     }, err => {
       // All zipped
