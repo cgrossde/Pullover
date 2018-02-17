@@ -363,7 +363,7 @@ function createWindowsInstaller() {
         if (err) reject(err)
         // Note: NSIS have to be added to PATH!
         const nsis = childProcess.spawn('makensis', ['./bin/tmp/installer.nsis'])
-        //nsis.stdout.pipe(process.stdout);
+        nsis.stdout.pipe(process.stdout)
         nsis.stdout.on('data', () => {
           process.stdout.write('.')
         })
