@@ -155,12 +155,17 @@ singleNotificationStream
 // Acknowledge last notification in received notificationArray
 latestNotificationStream
   .subscribe((lastNotification) => {
-    Pushover.acknowledgeNotification({lastNotificationId: lastNotification.id})
-      .catch(function (err) {
-        debug.log('Failed to acknowledge reception of notifications. lastNotificationId: '
-          + lastNotificationId.id, err)
-      })
-      .done()
+    // Don't acknowledge notifications in debug mode
+    if (process.env.DEBUG === '1') {
+      debug.log('DEBUG MODE - will not acknowledge notifications')
+    } else {
+      Pushover.acknowledgeNotification({ lastNotificationId: lastNotification.id })
+        .catch(function (err) {
+          debug.log('Failed to acknowledge reception of notifications. lastNotificationId: '
+            + lastNotificationId.id, err)
+        })
+        .done()
+    }
   })
 
 // Present notifications to the user
