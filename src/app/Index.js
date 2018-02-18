@@ -2,7 +2,7 @@
 // Setup logging for fatal exits
 import './services/Logging'
 // Get window and setup tray
-import Window, { showWindow } from './nw/Window'
+import Window, { quitApp, showWindow } from './nw/Window'
 import './nw/Tray'
 // Include package.json for NW.js, also add global styles
 import '!!file-loader?name=package.json!../package.json'
@@ -26,6 +26,13 @@ if (process.env.DEBUG === '1') {
   // Show dev tools and arrange it next to app
   Window.showDevTools()
 }
+
+// Close SIGINT e.g. CTRL+C
+process.on('SIGINT', function () {
+  console.log('Caught interrupt signal - Closing Pullover')
+  quitApp()
+  setTimeout(process.exit, 500)
+})
 
 // Render App
 class Root extends React.Component {
