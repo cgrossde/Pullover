@@ -34,6 +34,12 @@ export function showItemInFolder(path) {
   Gui.Shell.showItemInFolder(path)
 }
 
+export function resizeApp(w, h) {
+  win.setResizable(true)
+  win.resizeTo(w, h)
+  win.setResizable(false)
+}
+
 // Get the minimize event
 win.on('minimize', hideWindow)
 

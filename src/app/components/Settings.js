@@ -1,7 +1,7 @@
 import React from 'react'
 import { Col, Input, Row } from 'react-bootstrap'
 
-import Window, { showItemInFolder } from '../nw/Window'
+import { resizeApp, showItemInFolder } from '../nw/Window'
 import Settings from '../services/Settings'
 import SoundCache from '../services/SoundCache'
 import InfoBox from './InfoBox'
@@ -31,14 +31,14 @@ class SettingsComponent extends React.Component {
     Analytics.page('Settings')
     Settings.on('change', this.updateState)
     // Resize window
-    Window.resizeTo(Settings.get('windowWidth'), 330)
+    resizeApp(Settings.get('windowWidth'), 330)
   }
 
   // Unsubscribe before unmounting component
   componentWillUnmount() {
     Settings.removeListener('change', this.updateState)
     // Revert to old size
-    Window.resizeTo(Settings.get('windowWidth'), Settings.get('windowHeight'))
+    resizeApp(Settings.get('windowWidth'), Settings.get('windowHeight'))
   }
 
   // Update state

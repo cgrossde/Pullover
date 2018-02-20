@@ -1,7 +1,7 @@
 import React from 'react'
 import Promise from 'promise'
 import { Alert } from 'react-bootstrap'
-import Window from '../../nw/Window'
+import { resizeApp } from '../../nw/Window'
 import Settings from '../../services/Settings'
 import NotificationDB from '../../services/NotificationDB'
 import Debug from '../../lib/debug'
@@ -37,13 +37,13 @@ class NotificationList extends React.Component {
   componentDidMount() {
     Analytics.page('NotificationList')
     this._isMounted = true
-    Window.resizeTo(Settings.get('windowWidth'), this.windowHeight)
+    resizeApp(Settings.get('windowWidth'), this.windowHeight)
   }
 
   // Revert to old size
   componentWillUnmount() {
     this._isMounted = false
-    Window.resizeTo(Settings.get('windowWidth'), Settings.get('windowHeight'))
+    resizeApp(Settings.get('windowWidth'), Settings.get('windowHeight'))
   }
 
   componentWillUpdate() {
