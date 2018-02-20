@@ -1,23 +1,27 @@
 import React from 'react'
 import moment from 'moment'
 import { connect } from 'react-redux'
-import { Col, Row, Table } from 'react-bootstrap'
+import { Button, Col, Row, Table } from 'react-bootstrap'
 
 import store from '../services/Store'
 import { logout } from '../actions/Pushover'
 import { pushoverStatusSelector } from '../selectors/PushoverSelectors'
+import { randomNotification } from '../services/Notifier'
+import Analytics from '../services/Analytics'
 
 class Status extends React.Component {
   constructor() {
     super()
     this.state = {
-      refreshInterval: null
+      refreshInterval: null,
+      debugMode: (process.env.DEBUG === '1')
     }
   }
 
   componentDidMount() {
+    Analytics.page('Status')
     // Rerender every 30 sec to update time since last sync
-    const refreshInterval = setInterval(this.render.bind(this), 1000*30)
+    const refreshInterval = setInterval(this.render.bind(this), 1000 * 30)
     this.setState({
       refreshInterval: refreshInterval
     })
@@ -37,6 +41,12 @@ class Status extends React.Component {
       lastSync = lastSync.fromNow()
     }
 
+    let triggerNotificationbutton = ''
+    if (this.state.debugMode) {
+      triggerNotificationbutton = (
+        <Button bsStyle="primary" onClick={randomNotification}>Trigger random notification</Button>)
+    }
+
     let connectionClass = (this.props.connectionStatus === 'ONLINE') ? 'text-success' : 'text-danger'
     return (
       <Row>
@@ -46,28 +56,30 @@ class Status extends React.Component {
             <Col xs={10} xsOffset={1}>
               <Table>
                 <tbody>
-                  <tr>
-                    <th>User</th>
-                    <td>
-                      <span className="text-info">{this.props.userEmail}</span> (<a href="#" onClick={this.logout} alt="Logout">Logout</a>)
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Device registered</th>
-                    <td>
-                      <span className="text-info">{this.props.deviceName}</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Last sync</th>
-                    <td><span className={lastSyncClass}>{lastSync}</span></td>
-                  </tr>
-                  <tr>
-                    <th>Status</th>
-                    <td><span className={connectionClass}>{this.props.connectionStatus}</span></td>
-                  </tr>
+                <tr>
+                  <th>User</th>
+                  <td>
+                    <span className="text-info">{this.props.userEmail}</span> (<a href="#" onClick={this.logout}
+                                                                                  alt="Logout">Logout</a>)
+                  </td>
+                </tr>
+                <tr>
+                  <th>Device registered</th>
+                  <td>
+                    <span className="text-info">{this.props.deviceName}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Last sync</th>
+                  <td><span className={lastSyncClass}>{lastSync}</span></td>
+                </tr>
+                <tr>
+                  <th>Status</th>
+                  <td><span className={connectionClass}>{this.props.connectionStatus}</span></td>
+                </tr>
                 </tbody>
               </Table>
+              {triggerNotificationbutton}
             </Col>
           </Row>
         </Col>

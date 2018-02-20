@@ -8,6 +8,7 @@ import Debug from '../../lib/debug'
 import Notification from './Notification'
 
 import './NotificationList.scss'
+import Analytics from '../../services/Analytics'
 
 var debug = Debug('NotificationList')
 
@@ -34,6 +35,7 @@ class NotificationList extends React.Component {
 
   // Resize window
   componentDidMount() {
+    Analytics.page('NotificationList')
     this._isMounted = true
     Window.resizeTo(Settings.get('windowWidth'), this.windowHeight)
   }

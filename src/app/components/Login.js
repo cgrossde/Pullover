@@ -1,10 +1,10 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { Col, Row } from 'react-bootstrap'
 
 import Spinner from './Spinner'
 import InfoBox from './InfoBox'
 import Debug from '../lib/debug'
+import Analytics from '../services/Analytics'
 import store from '../services/Store'
 import pushover from '../services/Pushover'
 import { externalLinkHandler, showWindow } from '../nw/Window'
@@ -20,8 +20,19 @@ class Login extends React.Component {
     super()
     this.state = {
       spinner: false,
-      error: false
+      error: false,
+      email: '',
+      password: ''
     }
+
+    this.closeMaxLoginFailInfo = this.closeMaxLoginFailInfo.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.onChangeEmail = this.onChangeEmail.bind(this)
+    this.onChangePassword = this.onChangePassword.bind(this)
+  }
+
+  componentDidMount() {
+    Analytics.page('Login')
   }
 
   render() {
@@ -41,15 +52,15 @@ class Login extends React.Component {
               <div className={formGroupClass}>
                 <Col xs={8} xsOffset={2}>
                   <label htmlFor="email" className="control-label hide">Email</label>
-                  <input type="email" className="form-control" id="email"
-                         placeholder="Email" ref="email"/>
+                  <input type="email" className="form-control" id="email" value={this.state.email}
+                         placeholder="Email" onChange={this.onChangeEmail}/>
                 </Col>
               </div>
               <div className={formGroupClass}>
                 <Col xs={8} xsOffset={2}>
                   <label htmlFor="password" className="control-label hide">Password</label>
-                  <input type="password" className="form-control" id="password"
-                         placeholder="Password" ref="password"/>
+                  <input type="password" className="form-control" id="password" value={this.state.password}
+                         placeholder="Password" onChange={this.onChangePassword}/>
                 </Col>
               </div>
               <div className="form-group">
@@ -75,6 +86,14 @@ class Login extends React.Component {
     )
   }
 
+  onChangePassword(event) {
+    this.setState({ password: event.target.value })
+  }
+
+  onChangeEmail(event) {
+    this.setState({ email: event.target.value })
+  }
+
   closeMaxLoginFailInfo() {
     resetMaxLoginFails()
     this.forceUpdate()
@@ -85,14 +104,12 @@ class Login extends React.Component {
     // Display loading overlay
     this.setState({ spinner: true })
     // Get login parameters
-    const email = this.refs.email.value.trim()
-    const password = this.refs.password.value.trim()
-    // Delete password, we don't want/need to keep it
-    ReactDOM.findDOMNode(this.refs.password).value = ''
+    const email = this.state.email
+    const password = this.state.password
     // Try login
     pushover.login({ email, password })
-      .then(this.loginSuccessful)
-      .catch(this.loginFailed)
+      .then(this.loginSuccessful.bind(this))
+      .catch(this.loginFailed.bind(this))
   }
 
   loginFailed(error) {
@@ -104,7 +121,8 @@ class Login extends React.Component {
   }
 
   loginSuccessful(response) {
-    const email = this.refs.email.value.trim()
+    Analytics.event('App', 'LoginSuccessful')
+    const email = this.state.email.trim()
     store.dispatch(setUserData({
       userKey: response.id,
       userEmail: email,

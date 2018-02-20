@@ -8,6 +8,7 @@ import pushover from '../services/Pushover'
 import store from '../services/Store'
 import { logout, setDeviceData } from '../actions/Pushover'
 import { connectToPushover } from '../services/ConnectionManager'
+import Analytics from '../services/Analytics'
 
 const debug = Debug('DeviceRegistration')
 
@@ -16,8 +17,15 @@ class DeviceRegistration extends React.Component {
     super()
     this.state = {
       spinner: false,
-      error: false
+      error: false,
+      deviceName: ''
     }
+    this.onChangeName = this.onChangeName.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  componentDidMount() {
+    Analytics.page('DeviceRegistration')
   }
 
   render() {
@@ -36,8 +44,8 @@ class DeviceRegistration extends React.Component {
               <div className={formGroupClass}>
                 <Col xs={8} xsOffset={2}>
                   <label htmlFor="devicename" className="control-label hide">Device name</label>
-                  <input type="text" className="form-control" id="devicename"
-                         placeholder="Device name" ref="devicename"/>
+                  <input type="text" className="form-control" id="devicename" value={this.state.deviceName}
+                         placeholder="Device name" onChange={this.onChangeName}/>
                 </Col>
               </div>
               <br/>
@@ -60,16 +68,22 @@ class DeviceRegistration extends React.Component {
     )
   }
 
+  onChangeName(event) {
+    this.setState({
+      deviceName: event.target.value
+    })
+  }
+
   handleSubmit(e) {
     e.preventDefault()
     // Display loading overlay
     this.setState({ spinner: true })
     // Get deviceName parameters
-    const deviceName = this.refs.devicename.value.trim()
+    const deviceName = this.state.deviceName.trim()
     // Try to register device
     pushover.registerDevice({ deviceName })
-      .then(this.registrationSuccessful)
-      .catch(this.registrationFailed)
+      .then(this.registrationSuccessful.bind(this))
+      .catch(this.registrationFailed.bind(this))
   }
 
   registrationFailed(error) {
@@ -81,8 +95,7 @@ class DeviceRegistration extends React.Component {
   }
 
   registrationSuccessful(response) {
-    const deviceName = this.refs.devicename.value.trim()
-    console.log(this.refs.runOnStartup)
+    const deviceName = this.state.deviceName.trim()
     store.dispatch(setDeviceData({
       deviceName,
       deviceId: response.id

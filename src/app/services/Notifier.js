@@ -79,3 +79,35 @@ function nativeNotify(title, text, url, iconPath, sound, retryOnError) {
     }
   }
 }
+
+// If started in DEBUG mode a button will show up on the Status page
+// Good for debugging / testing notifications (will not go through notification manager)
+export function randomNotification() {
+  const soundList = SoundCache.getSoundList()
+  const sound = soundList[randomIndex(soundList.length - 1)][0]
+  const randomNotification = {
+    title: randomSentence(2),
+    message: randomSentence(10) + '.',
+    icon: 'pushover',
+    sound
+  }
+  notify(randomNotification)
+}
+
+function randomSentence(numberOfWords) {
+  if (numberOfWords === 0)
+    return ''
+  return randomWord() + ' ' + randomSentence(numberOfWords - 1)
+}
+
+const randomWords = ['engine', 'culture', 'thinker', 'reach', 'thank', 'cower', 'manufacturer', 'concert', 'ban', 'wine', 'braid', 'transaction', 'plain', 'fish', 'electronics']
+
+function randomWord() {
+  const maxIndex = randomWords.length - 1
+  return randomWords[randomIndex(maxIndex)]
+}
+
+function randomIndex(maxIndex) {
+  return Math.floor(Math.random() * (maxIndex + 1))
+}
+

@@ -4,6 +4,7 @@ import { externalLinkHandler } from '../nw/Window'
 import packageInfo from '../../package.json'
 import { check } from '../services/UpdateCheck'
 import NotificationDB from '../services/NotificationDB'
+import Analytics from '../services/Analytics'
 
 class About extends React.Component {
   constructor() {
@@ -11,6 +12,10 @@ class About extends React.Component {
     this.state = {
       count: 0
     }
+  }
+
+  componentDidMount() {
+    Analytics.page('About')
   }
 
   render() {

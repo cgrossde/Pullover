@@ -8,6 +8,7 @@ import InfoBox from './InfoBox'
 
 import Debug from '../lib/debug'
 import './Settings.scss'
+import Analytics from '../services/Analytics'
 
 var debug = Debug('SettingsComponent')
 
@@ -27,10 +28,10 @@ class SettingsComponent extends React.Component {
 
   // Subscribe to Settings changes
   componentDidMount() {
+    Analytics.page('Settings')
     Settings.on('change', this.updateState)
-
     // Resize window
-    Window.resizeTo(Settings.get('windowWidth'), 400)
+    Window.resizeTo(Settings.get('windowWidth'), 330)
   }
 
   // Unsubscribe before unmounting component

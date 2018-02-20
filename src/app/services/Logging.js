@@ -3,6 +3,7 @@ import Debug from '../lib/debug'
 import { showWindow } from '../nw/Window'
 import packageInfo from '../../package.json'
 import { transitionTo } from './Navigator'
+import Analytics from './Analytics'
 
 var debug = Debug('Fatal')
 var inspect = Eyes.inspector({stream: null})
@@ -37,6 +38,8 @@ process.on('uncaughtException', function (error) {
   debug.log('=============== Error Object ===============')
   debug.log(inspect(error).replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '').replace('\\\\n', '\n'))
   debug.log(' - - - - - - - - UNCAUGHT EXCEPTION - - - - - - - - ')
+  // Track crashes with analytics
+  Analytics.exception(error.message)
   // Show modal to report error and restart pullover
   showWindow()
   transitionTo('/error')

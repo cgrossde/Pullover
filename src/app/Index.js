@@ -15,6 +15,7 @@ import routes from './services/Routes'
 import store from './services/Store'
 // Update check
 import { check } from './services/UpdateCheck'
+import Analytics from './services/Analytics'
 
 // Make it accessible for debugging
 window.store = store
@@ -25,6 +26,8 @@ if (process.env.DEBUG === '1') {
   Window.moveTo(920, 23)
   // Show dev tools and arrange it next to app
   Window.showDevTools()
+} else {
+  Analytics.event('App', 'Start')
 }
 
 // Close SIGINT e.g. CTRL+C
