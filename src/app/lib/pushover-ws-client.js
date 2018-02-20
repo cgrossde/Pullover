@@ -20,6 +20,7 @@ import { EventEmitter } from 'events'
 
 import Debug from '../lib/debug'
 import packageInfo from '../../package.json'
+
 const userAgent = 'Pullover/' + packageInfo.version + ' (' + os.platform() + ' '
   + os.arch() + ' ' + os.release() + ')'
 var debug = Debug('PushoverWSClient')
@@ -46,14 +47,22 @@ class OpenClientWS extends EventEmitter {
   }
 
   connect() {
-    this.socket = new WebSocket(this.options.webSocketEndpoint)
+    try {
+      this.socket = new WebSocket(this.options.webSocketEndpoint)
+    } catch (e) {
+      this.handleSocketError(e)
+      return
+    }
     // Timeout check
     this.lastInteraction = new Date()
     this.timeoutInterval = setInterval(this.checkTimeout.bind(this), this.timeoutSpan)
     // Login once socket opened
     this.socket.on('open', () => {
       debug.log('Connected')
-      this.socket.send('login:' + this.options.deviceId + ':' + this.options.userSecret)
+      this.socket.send('login:' + this.options.deviceId + ':' + this.options.userSecret, (err) => {
+        if (err)
+          this.handleSocketError(err)
+      })
     })
     // Handle incoming data
     this.socket.on('message', (data) => {
@@ -77,10 +86,7 @@ class OpenClientWS extends EventEmitter {
       debug.log('Socket closed')
     })
     // Notify of error
-    this.socket.on('error', (error) => {
-      this.emit('error', error)
-      debug.log('Socket error: ', error)
-    })
+    this.socket.on('error', this.handleSocketError)
   }
 
   checkTimeout() {
@@ -90,6 +96,11 @@ class OpenClientWS extends EventEmitter {
       debug.log('Socket timed out')
       this.emit('timeout')
     }
+  }
+
+  handleSocketError(err) {
+    this.emit('error', err)
+    debug.log('Socket error: ', err)
   }
 
   disconnect() {

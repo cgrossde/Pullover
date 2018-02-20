@@ -22,13 +22,16 @@ process.on('uncaughtException', function (error) {
   process.stdout.write(error.stack + '\n')
   // Ignore non fatal error visionmedia/superagent#714
   // TODO: Remove once fixed
-  if (isErrorOfType(error, 'ENOTFOUND', 'getaddrinfo')) {
+  if (isErrorOfType(error, 'ENOTFOUND', 'getaddrinfo') || isErrorOfType(error, 'ECONNRESET', 'read')) {
     debug.log('Surpressed uncaught exception related to visionmedia/superagent#714', error)
+    Analytics.exception('Supressed non critical ' + error.code + ' in ' + error.syscall)
     return
   }
   // Ignore occasional socket errors, Pullover can survive those
-  if (isErrorOfType(error, 'ECONNRESET') || isErrorOfType(error, 'ENETDOWN')) {
+  if (isErrorOfType(error, 'ECONNRESET') || isErrorOfType(error, 'ENETDOWN') ||
+    isErrorOfType(error, 'ETIMEDOUT', 'connect')) {
     debug.log('Surpress non critical network error (see https://github.com/cgrossde/Pullover/issues/63)', error)
+    Analytics.exception('Supressed non critical ' + error.code)
     return
   }
   debug.log(' - - - - - - - - UNCAUGHT EXCEPTION - - - - - - - - ')
