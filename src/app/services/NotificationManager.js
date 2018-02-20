@@ -162,7 +162,7 @@ latestNotificationStream
       Pushover.acknowledgeNotification({ lastNotificationId: lastNotification.id })
         .catch(function (err) {
           debug.log('Failed to acknowledge reception of notifications. lastNotificationId: '
-            + lastNotificationId.id, err)
+            + lastNotification.id, err)
         })
         .done()
     }
