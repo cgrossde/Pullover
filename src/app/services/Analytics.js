@@ -28,7 +28,6 @@ try {
 }
 
 function event(category, action, label) {
-  console.log('event', isEnabled(), category, action, label)
   try {
     if (isEnabled()) {
       if (label) {
@@ -42,9 +41,18 @@ function event(category, action, label) {
 }
 
 function exception(error, fatal) {
-  console.log('exception', isEnabled(), error, fatal)
   try {
     if (isEnabled()) {
+      // If it's an error object extract some more information (message, file and line)
+      if (typeof error === 'object' && error.stack) {
+        const message = error.stack.split('\n')[0]
+        const methodFileAndLine = /at (.*) \(chrome\-extension:\/\/.*\/(.*)\)/.exec(error.stack)
+        if (methodFileAndLine.length === 3) {
+          const method = methodFileAndLine[1]
+          const fileAndLine = methodFileAndLine[2]
+          error = `${message} # ${method} # ${fileAndLine}`
+        }
+      }
       visitor.exception(error, fatal, onError)
     }
   } catch (e) {
@@ -52,7 +60,6 @@ function exception(error, fatal) {
 }
 
 function page(pageName) {
-  console.log('page', isEnabled(), pageName)
   try {
     if (isEnabled()) {
       visitor.screenview(pageName, 'Pullover', onError)
@@ -62,7 +69,8 @@ function page(pageName) {
 }
 
 function onError(err) {
-  console.log('Analytics error', err)
+  if (err)
+    console.log('Analytics error', err)
 }
 
 function isEnabled() {
@@ -80,7 +88,6 @@ function getPlatform() {
 }
 
 function getClientId() {
-
   let clientId = localStorage.getItem('clientId')
   if (!clientId) {
     clientId = uuidv4()
