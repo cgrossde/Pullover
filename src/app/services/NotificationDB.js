@@ -21,6 +21,7 @@ import { EventEmitter } from 'events'
 
 import Paths from './Paths'
 import Debug from '../lib/debug'
+
 var debug = Debug('NotificationDB')
 
 
@@ -52,6 +53,7 @@ class NotificationDB extends EventEmitter {
             message: (err && err.message) ? err.message : 'Unkown error'
           })
         }
+        this.emit('newNotification', newDoc)
         this.updateCount()
         resolve(newDoc)
       })

@@ -20,7 +20,6 @@ class NotificationList extends React.Component {
     this.notificationList = null
     this.stepSize = 100 // How many more notifications to load once scrolled to bottom
     this.scrollTop = 0
-
     this.state = {
       list: [],
       totalNotifications: 0,
@@ -29,6 +28,18 @@ class NotificationList extends React.Component {
 
     this.loadMoreRows = this.loadMoreRows.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
+    this.refreshData = this.refreshData.bind(this)
+    this.determineTotalNotificationCount()
+    this.loadMoreRows()
+  }
+
+  refreshData() {
+    this.scrollTop = 0
+    this.setState({
+      list: [],
+      totalNotifications: 0,
+      lastIndex: 0
+    })
     this.determineTotalNotificationCount()
     this.loadMoreRows()
   }
@@ -38,12 +49,14 @@ class NotificationList extends React.Component {
     Analytics.page('NotificationList')
     this._isMounted = true
     resizeApp(Settings.get('windowWidth'), this.windowHeight)
+    NotificationDB.on('newNotification', this.refreshData)
   }
 
   // Revert to old size
   componentWillUnmount() {
     this._isMounted = false
     resizeApp(Settings.get('windowWidth'), Settings.get('windowHeight'))
+    NotificationDB.removeListener('newNotification', this.refreshData)
   }
 
   componentWillUpdate() {
