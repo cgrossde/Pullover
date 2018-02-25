@@ -44,12 +44,15 @@ class OpenClientWS extends EventEmitter {
     this.timeoutInterval = null
     this.timeoutSpan = 1000 * 70
     this.lastInteraction = null
+    // Otherwise we run into a loop with this.socket.on('error', handleSocketError)
+    this.handleSocketError = this.handleSocketError.bind(this)
   }
 
   connect() {
     try {
       this.socket = new WebSocket(this.options.webSocketEndpoint)
     } catch (e) {
+      debug.log('Caught WS error on connect', e)
       this.handleSocketError(e)
       return
     }
@@ -59,10 +62,17 @@ class OpenClientWS extends EventEmitter {
     // Login once socket opened
     this.socket.on('open', () => {
       debug.log('Connected')
-      this.socket.send('login:' + this.options.deviceId + ':' + this.options.userSecret, (err) => {
-        if (err)
-          this.handleSocketError(err)
-      })
+      try {
+        this.socket.send('login:' + this.options.deviceId + ':' + this.options.userSecret, (err) => {
+          if (err) {
+            debug.log('Callback returned WS error on send', err)
+            this.handleSocketError(err)
+          }
+        })
+      } catch (e) {
+        debug.log('Caught WS error on send', e)
+        this.handleSocketError(e)
+      }
     })
     // Handle incoming data
     this.socket.on('message', (data) => {
