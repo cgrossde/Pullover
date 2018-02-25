@@ -22,7 +22,7 @@ try {
 
   }
   if (window.updateRun) {
-    visitor.event('App', 'Updated', packageInfo.version)
+    event('App', 'Updated', packageInfo.version)
   }
 } catch (e) {
 }

@@ -29,20 +29,18 @@ process.on('uncaughtException', function (error) {
   }
   // Ignore occasional socket errors, Pullover can survive those
   if (isErrorOfType(error, 'ECONNRESET') || isErrorOfType(error, 'ENETDOWN') ||
-    isErrorOfType(error, 'ETIMEDOUT', 'connect')) {
+    isErrorOfType(error, 'ETIMEDOUT')) {
     debug.log('Surpress non critical network error (see https://github.com/cgrossde/Pullover/issues/63)', error)
     Analytics.exception('Supressed non critical ' + error.code)
     return
   }
   debug.log(' - - - - - - - - UNCAUGHT EXCEPTION - - - - - - - - ')
   debug.log('Pullover v' + packageInfo.version)
-  debug.log('=============== STACK ===============')
-  debug.log(error.stack)
-  debug.log('=============== Error Object ===============')
+  debug.log('====================== Error =======================')
   debug.log(inspect(error).replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '').replace('\\\\n', '\n'))
   debug.log(' - - - - - - - - UNCAUGHT EXCEPTION - - - - - - - - ')
   // Track crashes with analytics
-  Analytics.exception(error.message)
+  Analytics.exception(error)
   // Show modal to report error and restart pullover
   showWindow()
   transitionTo('/error')
