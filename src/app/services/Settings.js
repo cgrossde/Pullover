@@ -24,7 +24,7 @@ class Settings extends EventEmitter {
     this.settings.maxNotificationAmount = this.cast(localStorage.getItem('maxNotificationAmount')) || 20
     this.settings.runOnStartup = this.cast(localStorage.getItem('runOnStartup')) || false
     this.settings.defaultSound = localStorage.getItem('defaultSound') || 'po'
-    this.settings.collectAnonymousData = localStorage.getItem('collectAnonymousData') || true
+    this.settings.collectAnonymousData = localStorage.getItem('collectAnonymousData')
     debug.log('Settings loaded', this.settings)
     // First or update run?
     if (localStorage.getItem('version') === null) {
@@ -143,6 +143,7 @@ class Settings extends EventEmitter {
    */
   firstRun() {
     debug.log('First run')
+    this.set('collectAnonymousData', true)
     // Check if version 0.x.x was installed?
     if (localStorage.secret || localStorage.id) {
       this.updateFrom_0_x_x()

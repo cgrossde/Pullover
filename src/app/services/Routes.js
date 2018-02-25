@@ -1,11 +1,10 @@
 import React from 'react'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router'
-
+import { hashHistory, IndexRoute, Route, Router } from 'react-router'
 // Import App and main components
 import App from '../components/App'
 import About from '../components/About'
 import Status from '../components/Status'
-import Settings from '../components/Settings'
+import Settings from '../components/settings/Settings'
 import ShowUpdate from '../components/ShowUpdate'
 import FatalError from '../components/FatalError'
 import NotificationList from '../components/notificationList/NotificationList'
