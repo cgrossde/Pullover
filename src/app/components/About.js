@@ -16,6 +16,17 @@ class About extends React.Component {
 
   componentDidMount() {
     Analytics.page('About')
+    // Get count and keep it updated
+    NotificationDB
+      .count()
+      .then((count) => {
+        this.setState({ count })
+      })
+    NotificationDB.on('newCount', this.updateCount)
+  }
+
+  componentWillUnmount() {
+    NotificationDB.removeListener('newCount', this.updateCount)
   }
 
   render() {
@@ -28,27 +39,27 @@ class About extends React.Component {
             <Col xs={10} xsOffset={1}>
               <Table>
                 <tbody>
-                  <tr>
-                    <th>Version</th>
-                    <td className="info-version">{packageInfo.version}</td>
-                  </tr>
-                  <tr>
-                    <th>Homepage</th>
-                    <td>
-                      <a className="github-link" href="https://github.com/cgrossde/Pullover"
-                        onClick={externalLinkHandler}>Github cgrossde/pullover</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Found a bug?</th>
-                    <td><a className="github-issue-link"
-                      href="https://github.com/cgrossde/Pullover/issues"
-                      onClick={externalLinkHandler}>Report it here</a></td>
-                  </tr>
-                  <tr>
-                    <th>Messages received</th>
-                    <td className="messages-received">{this.state.count}</td>
-                  </tr>
+                <tr>
+                  <th>Version</th>
+                  <td className="info-version">{packageInfo.version}</td>
+                </tr>
+                <tr>
+                  <th>Homepage</th>
+                  <td>
+                    <a className="github-link" href="https://github.com/cgrossde/Pullover"
+                       onClick={externalLinkHandler}>Github cgrossde/pullover</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Found a bug?</th>
+                  <td><a className="github-issue-link"
+                         href="https://github.com/cgrossde/Pullover/issues"
+                         onClick={externalLinkHandler}>Report it here</a></td>
+                </tr>
+                <tr>
+                  <th>Messages received</th>
+                  <td className="messages-received">{this.state.count}</td>
+                </tr>
                 </tbody>
               </Table>
 
@@ -60,22 +71,8 @@ class About extends React.Component {
     )
   }
 
-  componentDidMount() {
-    // Get count and keep it updated
-    NotificationDB
-      .count()
-      .then((count) => {
-        this.setState({ count })
-      })
-    NotificationDB.on('newCount', this.updateCount)
-  }
-
   updateCount(count) {
     this.setState({ count })
-  }
-
-  componentWillUnmount() {
-    NotificationDB.removeListener('newCount', this.updateCount)
   }
 
   checkForUpdate() {
@@ -85,6 +82,5 @@ class About extends React.Component {
     })
   }
 }
-
 
 export default About
