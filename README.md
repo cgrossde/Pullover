@@ -7,7 +7,6 @@
 
 * Native Pushover Client for Windows, Mac and Linux
 * Show icon of the notifying app
-* Make notification with URLs clickable
 * Limit the max amount of notifications shown at once
 * Notification history
 * Run on startup
@@ -17,41 +16,36 @@
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
 
 
-* **Linux x64 (v1.2.0):** [Pullover_1.2.0_linux64.zip](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0_linux64.zip/download)
-* **Linux x32 (v1.2.0):** [Pullover_1.2.0_linux32.zip](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0_linux32.zip/download)
-* **Windows x32 (v1.2.0):** [Pullover_1.2.0_Installer.exe](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0_Installer.exe/download)
-* **Mac OS 10.8+ x64 (v1.2.0):** [Pullover_1.2.0.dmg](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0.dmg/download)
-* **Unkown (v1.2.0):** [.DS_Store](https://sourceforge.net/projects/pullover/files/1.2.0/.DS_Store/download)
+* **Linux x64 (v1.3.0-alpha.1):** [Pullover_1.3.0-alpha.1_linux64.zip](https://sourceforge.net/projects/pullover/files/1.3.0-alpha.1/Pullover_1.3.0-alpha.1_linux64.zip/download)
+* **Linux x32 (v1.3.0-alpha.1):** [Pullover_1.3.0-alpha.1_linux32.zip](https://sourceforge.net/projects/pullover/files/1.3.0-alpha.1/Pullover_1.3.0-alpha.1_linux32.zip/download)
+* **Windows x32 (v1.3.0-alpha.1):** [Pullover_1.3.0-alpha.1_Installer.exe](https://sourceforge.net/projects/pullover/files/1.3.0-alpha.1/Pullover_1.3.0-alpha.1_Installer.exe/download)
+* **Mac OS 10.8+ x64 (v1.3.0-alpha.1):** [Pullover_1.3.0-alpha.1.dmg](https://sourceforge.net/projects/pullover/files/1.3.0-alpha.1/Pullover_1.3.0-alpha.1.dmg/download)
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
-
-**Donate for code signing:**
-Thanks to joeyrs, Kevin Riggle and TheReiner the windows installer is code signed again. I would also like to sign the Mac version but that requires a (paid) Apple Developer Account.
-If you would like to support this project, consider making a donation for code signing: [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U3RY7599D8G2J)
-All donations are listed in the [wiki](https://github.com/cgrossde/Pullover/wiki/Donations).
 
 ## Build your own
 You can create builds for all platforms with Mac OS, take a look at [CROSSPLATFORM.md](CROSSPLATFORM.md) to find out about necessary dependencies.
 
 1. Install build dependencies: `npm install`
 2. Install dependencies of Pullover: `cd src && npm install`
-3. Compile src with webpack: ``./node_modules/webpack/bin/webpack.js`
-4. Rename `config/buildConf.json.sample` to `config/buildConf.json`
-5. Open `config/buildConf.json` and adapt `platforms:` to your preference
-6. Return to root dir and build binaries with: `./builder build`
-7. If the build process was successful, you can find the binaries in `bin/pullover/[platform]`
-8. If you want to package them (`.zip`/`.dmg`/`.exe`), execute `./builder createDist`
-9. The distributables will be placed in `bin/deploy`
+3. Compile src with webpack: `npm run compile`
+4. Return to root dir: `cd ..`
+5. Rename `config/buildConf.json.sample` to `config/buildConf.json`
+6. Open `config/buildConf.json` and adapt `platforms:` to your preference
+7. Build binaries with: `./builder build`
+8. If the build process was successful, you can find the binaries in `bin/pullover/[platform]`
+9. If you want to package them (`.zip`/`.dmg`/`.exe`), execute `./builder createDist`
+10. The distributables will be placed in `bin/deploy`
 
 ### Development
 
 There is no need to always build packaged binaries if you want to dive into the source of Pullover and try out some changes. Instead install the node dependencies in the root folder and in source with `npm install` and run the `builder` script. Make sure to copy `config/buildConf.json.sample` to `config/buildConf.json` first
 
 ```Shell
-    cp `config/buildConf.json.sample` `config/buildConf.json`
+    cp config/buildConf.json.sample config/buildConf.json
     npm install
     cd src && npm install
-    ./node_modules/webpack/bin/webpack.js --watch
+    npm run watch
     # In another shell go back to Pullovers root folder and run the app
     cd ..
     ./builder run
@@ -71,6 +65,19 @@ If you encounter a bug or Pullover crashes, please go to the following directory
 If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I open-sourced this App with the hope that others contribute to it. Especially for Windows and Linux since I rarely use those systems.
 
 ## Changelog
+
+**1.3.0-alpha.1** (maintenance release):
+
+* Updated from NW.js 0.12 to v0.28.2 (#65)
+* Updated dependencies
+* Reimplemented notification list (broken because of updated dependencies)
+  * Enhancement #86, refresh notification list when new notifications arrive
+* Removed nw-notify (broken because of updated dependencies)
+  * NW.js/Chrome notifications are now used always
+  * Fixes #110, notifications on Win10 after the creators update
+* Add analytics to get a feel for the frequency of bugs and usage of the app (can be disabled in settings)
+* Fixes #96, #106, #107, more resilient to network errors
+* Added option to disable sounds
 
 **1.2.0 (1.2.0-alpha.1):**
 
