@@ -4,6 +4,12 @@
   text-align: left;
   padding: 5px;
 
+  .notification-url {
+    margin-top: -5px;
+    font-size: 90%;
+    color: #666;
+  }
+
   .notification-date {
     float: right;
     color: #999999;

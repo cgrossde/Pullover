@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import Debug from '../../lib/debug'
+import { openExternalLink } from '../../nw/Window'
 import './Notification.scss'
 
 var debug = Debug('Notification')
@@ -41,6 +42,8 @@ class Notification extends React.Component {
     if (notification.icon && !notification.icon.match(/https:\/\//)) {
       notification.icon = 'https://api.pushover.net/icons/' + notification.icon + '.png'
     }
+    let url = this.createUrlMarkup(notification.url)
+
     const image = (notification.icon) ? (<img className="notification-icon" src={notification.icon}/>) : null
     return (
       <div className={this.getNotificationClassName(notification)}>
@@ -50,6 +53,7 @@ class Notification extends React.Component {
                 data-overlay={this.formatOverlay(notification.date)}>{this.formatDate(notification.date)}</span>
           <b>{title}</b><br/>
           <p dangerouslySetInnerHTML={this.createMessageMarkup(notification.message)}/>
+          {url}
         </div>
       </div>
     )
@@ -90,6 +94,21 @@ class Notification extends React.Component {
     if (date.isValid())
       return date
     return false
+  }
+
+  createUrlMarkup(url) {
+    if (url) {
+      const title = (url.length > 50) ? url.slice(0, 50) + '...' : url
+      // Make sure URL has an http(s) prefix for openExternalLink
+      if (!/^http/.test(url)) {
+        url = 'http://' + url
+      }
+      const openUrl = () => openExternalLink(url)
+      return (<div className='notification-url'>
+        URL: <a href="javascript:void(0)" onClick={openUrl}>{title}</a>
+      </div>)
+    }
+    return ''
   }
 }
 
