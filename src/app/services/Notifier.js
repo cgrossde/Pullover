@@ -14,8 +14,6 @@
  title: 'Welcome to Pushover!'
  */
 
-import linkifyHtml from 'linkifyjs/html'
-
 import { openExternalLink } from '../nw/Window'
 import striptags from '../lib/striptags'
 import SoundCache from './SoundCache'
@@ -34,9 +32,6 @@ export function notify(notification) {
 
   // Show app name if no title was supplied
   notification.title = notification.title || notification.app
-  // Linkify notification text
-  if (!!notification.message)
-    notification.message = linkifyHtml(notification.message)
 
   // Add different notification mechanisms here => currently only the
   // nw.js native notifications are support => chrome notifications
