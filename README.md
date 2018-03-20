@@ -21,7 +21,8 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 * **Linux x32 (v1.2.0):** [Pullover_1.2.0_linux32.zip](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0_linux32.zip/download)
 * **Windows x32 (v1.2.0):** [Pullover_1.2.0_Installer.exe](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0_Installer.exe/download)
 * **Mac OS 10.8+ x64 (v1.2.0):** [Pullover_1.2.0.dmg](https://sourceforge.net/projects/pullover/files/1.2.0/Pullover_1.2.0.dmg/download)
-* **Unkown (v1.2.0):** [.DS_Store](https://sourceforge.net/projects/pullover/files/1.2.0/.DS_Store/download)
+
+*Checkout the new beta version:* [Pullover 1.3.0.alpha-1](https://github.com/cgrossde/Pullover/releases/tag/1.3.0-alpha.1)
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
