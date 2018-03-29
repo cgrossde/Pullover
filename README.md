@@ -26,11 +26,6 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 
 **Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
-**Donate for code signing:**
-Thanks to joeyrs, Kevin Riggle and TheReiner the windows installer is code signed again. I would also like to sign the Mac version but that requires a (paid) Apple Developer Account.
-If you would like to support this project, consider making a donation for code signing: [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=U3RY7599D8G2J)
-All donations are listed in the [wiki](https://github.com/cgrossde/Pullover/wiki/Donations).
-
 ## Build your own
 You can create builds for all platforms with Mac OS, take a look at [CROSSPLATFORM.md](CROSSPLATFORM.md) to find out about necessary dependencies.
 
