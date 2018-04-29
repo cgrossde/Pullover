@@ -33,11 +33,11 @@
 import Rx from '../lib/RxExtended'
 import Debug from '../lib/debug'
 import notificationDB from './NotificationDB'
-const debug = Debug('NotificationManager')
-
 import Settings from '../services/Settings'
-import {notify} from './Notifier'
+import { notify } from './Notifier'
 import Pushover from './Pushover'
+
+const debug = Debug('NotificationManager')
 
 // Limit notifications shown to one per X ms
 // This is needed because OS X shows every notification at once and
@@ -50,7 +50,7 @@ const maxNotificationAmount = Settings.get('maxNotificationAmount')
 debug.log('maxNotificationAmount', maxNotificationAmount)
 
 // The observer and observable, which reacts on calls to processNotifications from the ConnectionManager
-const notificationArrayStream = new Rx.Subject();
+const notificationArrayStream = new Rx.Subject()
 export function processNotifications(notificationArray) {
   // Add notificationArray to notificationArrayStream
   if (notificationArray.length > 0)
@@ -105,8 +105,7 @@ let notifyStream = notificationArrayStream
 // Only emit one notification every X ms if client uses native notifications
 // Those are usually emitted at once (at least OS X 10.11.3) and the user would
 // not see all notifications if multiple are retrieved at the same time
-if (Settings.get('nativeNotifications') === true)
-  notifyStream = notifyStream.limitRate(notifyBufferingInMs)
+notifyStream = notifyStream.limitRate(notifyBufferingInMs)
 
 // Continue processing...
 notifyStream = notifyStream
@@ -156,14 +155,20 @@ singleNotificationStream
 // Acknowledge last notification in received notificationArray
 latestNotificationStream
   .subscribe((lastNotification) => {
-    Pushover.acknowledgeNotification({lastNotificationId: lastNotification.id})
-      .catch(function (err) {
-        debug.log('Failed to acknowledge reception of notifications. lastNotificationId: '
-          + lastNotificationId.id, err)
-      })
-      .done()
+    // Don't acknowledge notifications in debug mode
+    if (process.env.DEBUG === '1') {
+      debug.log('DEBUG MODE - will not acknowledge notifications')
+    } else {
+      Pushover.acknowledgeNotification({ lastNotificationId: lastNotification.id })
+        .catch(function (err) {
+          debug.log('Failed to acknowledge reception of notifications. lastNotificationId: '
+            + lastNotification.id, err)
+        })
+        .done()
+    }
   })
 
 // Present notifications to the user
 notifyStream
-  .subscribe(notify)
+  .subscribe(debug.catchErrorWrapper(notify))
+

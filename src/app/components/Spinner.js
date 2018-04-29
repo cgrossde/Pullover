@@ -2,9 +2,7 @@ import React from 'react'
 
 import './Spinner.scss'
 
-const Spinner = React.createClass({
-  displayName: 'Spinner',
-
+class Spinner extends React.Component {
   render() {
     var spinner = (
       <div className="spinner">
@@ -13,6 +11,6 @@ const Spinner = React.createClass({
     )
     return (this.props.active) ? spinner : null
   }
-})
+}
 
 export default Spinner

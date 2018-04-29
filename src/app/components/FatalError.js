@@ -1,8 +1,7 @@
 import React from 'react'
-import { Row, Col, Button } from 'react-bootstrap'
+import { Button, Col, Row } from 'react-bootstrap'
 
 import Debug from '../lib/debug'
-import Paths from '../services/Paths'
 import packageInfo from '../../package.json'
 import { externalLinkHandler, quitApp, showItemInFolder } from '../nw/Window'
 
@@ -10,9 +9,7 @@ import './FatalError.scss'
 
 const debug = Debug('FatalError')
 
-const FatalError = React.createClass({
-  displayName: 'FatalError',
-
+class FatalError extends React.Component {
   render() {
     return (
       <div className="fatalError">
@@ -33,17 +30,16 @@ const FatalError = React.createClass({
         </Row>
       </div>
     )
-  },
+  }
 
   showLogsFolder() {
     showItemInFolder(debug.getLogFilePath())
-  },
+  }
 
   exit() {
     quitApp()
     process.exit(1)
   }
-
-})
+}
 
 export default FatalError

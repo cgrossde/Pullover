@@ -1,22 +1,21 @@
 'use strict'
-
 // Setup logging for fatal exits
 import './services/Logging'
-
 // Get window and setup tray
-import Window, { showWindow } from './nw/Window'
+import Window, { quitApp, showWindow } from './nw/Window'
 import './nw/Tray'
-
 // Include package.json for NW.js, also add global styles
-import '!!file?name=package.json!../package.json'
+import '!!file-loader?name=package.json!../package.json'
 import './styles/styles.scss'
-
 // React, Redux, ReduxRouter and routes
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import routes from './services/Routes'
 import store from './services/Store'
+// Update check
+import { check } from './services/UpdateCheck'
+import Analytics from './services/Analytics'
 
 // Make it accessible for debugging
 window.store = store
@@ -26,15 +25,20 @@ if (process.env.DEBUG === '1') {
   // Move App
   Window.moveTo(920, 23)
   // Show dev tools and arrange it next to app
-  var devWindow = Window.showDevTools()
-  devWindow.moveTo(0,23)
-  devWindow.resizeTo(900, 700)
-  devWindow.show()
+  Window.showDevTools()
+} else {
+  Analytics.event('App', 'Start')
 }
 
+// Close SIGINT e.g. CTRL+C
+process.on('SIGINT', function () {
+  console.log('Caught interrupt signal - Closing Pullover')
+  quitApp()
+  setTimeout(process.exit, 500)
+})
+
 // Render App
-const Root = React.createClass({
-  displayName: 'Root',
+class Root extends React.Component {
   render() {
     return (
       <div>
@@ -44,13 +48,11 @@ const Root = React.createClass({
       </div>
     )
   }
-})
+}
 ReactDOM.render(<Root />, document.body)
 
-// Show App once it was rendered (only if it's the first start)
-if(window.firstRun || process.env.DEBUG === '1')
+// Show App once it was rendered (only if it's the first start or debug mode)
+if (window.firstRun || process.env.DEBUG === '1')
   showWindow()
 
-// Update check
-import { check } from './services/UpdateCheck'
-check();
+check()

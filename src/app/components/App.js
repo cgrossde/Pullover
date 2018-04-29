@@ -8,9 +8,7 @@ import DeviceRegistration from './DeviceRegistration'
 import { pushoverStatusSelector } from '../selectors/PushoverSelectors'
 import { connectToPushover } from '../services/ConnectionManager'
 
-const App = React.createClass({
-  displayName: 'App',
-
+class App extends React.Component {
   render() {
     // Default: Show children which are managed by the router
     // and automatically set depending on the route
@@ -37,7 +35,7 @@ const App = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   componentDidMount() {
     const {isLoggedIn, isDeviceRegistered} = this.props
@@ -46,7 +44,7 @@ const App = React.createClass({
       connectToPushover()
     }
   }
-})
+}
 
 // Connect to redux
 export default connect(pushoverStatusSelector)(App)

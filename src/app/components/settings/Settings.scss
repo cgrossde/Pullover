@@ -1,0 +1,33 @@
+.Settings {
+  text-align: left;
+  .has-feedback .form-control {
+    padding-right: 0
+  }
+
+  /** Allows 2 chars */
+  .smallInput {
+    width: 35px;
+    height: 30px;
+    padding: 5px 8px;
+  }
+
+  /** Hide icon by default */
+  .form-control-feedback {
+    display: none;
+    width: 26px;
+  }
+  /** Show icon when feedback enabled */
+  .has-feedback .form-control-feedback {
+    display: block;
+    line-height: 30px;
+    height: 30px;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+
+  .infoboxIcon {
+    cursor: pointer;
+  }
+}

@@ -1,7 +1,7 @@
 import Gui from 'nw.gui'
 
 // Get main window
-var win = Gui.Window.get()
+const win = nw.Window.get()
 
 export default win
 
@@ -32,6 +32,12 @@ export function externalLinkHandler(event) {
 
 export function showItemInFolder(path) {
   Gui.Shell.showItemInFolder(path)
+}
+
+export function resizeApp(w, h) {
+  win.setResizable(true)
+  win.resizeTo(w, h)
+  win.setResizable(false)
 }
 
 // Get the minimize event

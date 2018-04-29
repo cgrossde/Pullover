@@ -1,19 +1,16 @@
 @import '~bootstrap-sass/assets/stylesheets/bootstrap/variables';
+@import '../../styles/variables';
 
-.refreshNotificationList {
-  background-color: $alert-info-bg;
-  padding: 3px;
-  a {
-    color: $alert-info-text;
-    cursor: pointer;
-  }
-}
+.notificationList {
+  height: 600px - $navbarHeight;
+  overflow-y: scroll;
 
-// Fix VirtualScroll layout
-.Grid__innerScrollContainer {
-  position: relative;
-
-  .Grid__cell {
-    position: absolute;
+  .loadMoreNotificationButton {
+    background-color: $alert-info-bg;
+    padding: 3px;
+    a {
+      color: $alert-info-text;
+      cursor: pointer;
+    }
   }
 }

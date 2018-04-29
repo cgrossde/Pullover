@@ -58,10 +58,28 @@ function getLogFn(namespace) {
   }
 }
 
+/**
+ * Creates a function that can take a function fn and return a function that
+ * will call fn wrapped by try/catch and log errors with the logFn
+ */
+function catchErrorWrapper(logFn) {
+  return function (fn) {
+    return function () {
+      try {
+        fn.apply(this, arguments)
+      } catch (error) {
+        logFn(error)
+      }
+    }
+  }
+}
+
 
 export default function (namespace) {
+  var logFn = getLogFn(namespace)
   return {
-    log: getLogFn(namespace),
+    log: logFn,
+    catchErrorWrapper: catchErrorWrapper(logFn),
     getLogFilePath: getLogFilePath,
     getLogPath: getLogPath
   }

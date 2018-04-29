@@ -1,18 +1,33 @@
 import React from 'react'
-import { Row, Col, Table } from 'react-bootstrap'
+import { Col, Row, Table } from 'react-bootstrap'
 import { externalLinkHandler } from '../nw/Window'
 import packageInfo from '../../package.json'
 import { check } from '../services/UpdateCheck'
 import NotificationDB from '../services/NotificationDB'
+import Analytics from '../services/Analytics'
 
-const About = React.createClass({
-  displayName: 'About',
-
-  getInitialState() {
-    return {
+class About extends React.Component {
+  constructor() {
+    super()
+    this.state = {
       count: 0
     }
-  },
+  }
+
+  componentDidMount() {
+    Analytics.page('About')
+    // Get count and keep it updated
+    NotificationDB
+      .count()
+      .then((count) => {
+        this.setState({ count })
+      })
+    NotificationDB.on('newCount', this.updateCount)
+  }
+
+  componentWillUnmount() {
+    NotificationDB.removeListener('newCount', this.updateCount)
+  }
 
   render() {
     return (
@@ -24,27 +39,27 @@ const About = React.createClass({
             <Col xs={10} xsOffset={1}>
               <Table>
                 <tbody>
-                  <tr>
-                    <th>Version</th>
-                    <td className="info-version">{packageInfo.version}</td>
-                  </tr>
-                  <tr>
-                    <th>Homepage</th>
-                    <td>
-                      <a className="github-link" href="https://github.com/cgrossde/Pullover"
-                        onClick={externalLinkHandler}>Github cgrossde/pullover</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Found a bug?</th>
-                    <td><a className="github-issue-link"
-                      href="https://github.com/cgrossde/Pullover/issues"
-                      onClick={externalLinkHandler}>Report it here</a></td>
-                  </tr>
-                  <tr>
-                    <th>Messages received</th>
-                    <td className="messages-received">{this.state.count}</td>
-                  </tr>
+                <tr>
+                  <th>Version</th>
+                  <td className="info-version">{packageInfo.version}</td>
+                </tr>
+                <tr>
+                  <th>Homepage</th>
+                  <td>
+                    <a className="github-link" href="https://github.com/cgrossde/Pullover"
+                       onClick={externalLinkHandler}>Github cgrossde/pullover</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Found a bug?</th>
+                  <td><a className="github-issue-link"
+                         href="https://github.com/cgrossde/Pullover/issues"
+                         onClick={externalLinkHandler}>Report it here</a></td>
+                </tr>
+                <tr>
+                  <th>Messages received</th>
+                  <td className="messages-received">{this.state.count}</td>
+                </tr>
                 </tbody>
               </Table>
 
@@ -54,25 +69,11 @@ const About = React.createClass({
         </Col>
       </Row>
     )
-  },
-
-  componentDidMount() {
-    // Get count and keep it updated
-    NotificationDB
-      .count()
-      .then((count) => {
-        this.setState({ count })
-      })
-    NotificationDB.on('newCount', this.updateCount)
-  },
+  }
 
   updateCount(count) {
     this.setState({ count })
-  },
-
-  componentWillUnmount() {
-    NotificationDB.removeListener('newCount', this.updateCount)
-  },
+  }
 
   checkForUpdate() {
     check((newUpdate) => {
@@ -80,7 +81,6 @@ const About = React.createClass({
         alert('You have the lastest version')
     })
   }
-})
-
+}
 
 export default About

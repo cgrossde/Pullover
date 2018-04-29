@@ -21,6 +21,7 @@ import { EventEmitter } from 'events'
 
 import Paths from './Paths'
 import Debug from '../lib/debug'
+
 var debug = Debug('NotificationDB')
 
 
@@ -45,14 +46,15 @@ class NotificationDB extends EventEmitter {
       delete notification.id
       // Store notification
       this.notificationDB.insert(notification, (err, newDoc) => {
-        if(err) {
+        if (err) {
           debug.log('Error in addNotifications', err)
           reject({
             name: 'dbfailure',
             message: (err && err.message) ? err.message : 'Unkown error'
           })
         }
-        this.updateCount();
+        this.emit('newNotification', newDoc)
+        this.updateCount()
         resolve(newDoc)
       })
     })
@@ -64,7 +66,7 @@ class NotificationDB extends EventEmitter {
         if (err || res !== null) {
           reject(new Error('notificationExists'))
         }
-        resolve();
+        resolve()
       })
     })
   }
@@ -72,7 +74,7 @@ class NotificationDB extends EventEmitter {
   count() {
     return new Promise((resolve, reject) => {
       this.notificationDB.count({}, (err, count) => {
-        if(err)
+        if (err)
           reject(err)
         resolve(count)
       })
@@ -88,7 +90,7 @@ class NotificationDB extends EventEmitter {
   getDBInstance() {
     return this.notificationDB
   }
-  
+
 
 }
 

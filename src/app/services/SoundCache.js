@@ -4,6 +4,7 @@ import https from 'https'
 
 import Paths from '../services/Paths'
 import Debug from '../lib/debug'
+
 const debug = Debug('SoundCache')
 
 class SoundCache {
@@ -62,28 +63,28 @@ class SoundCache {
    */
   getSoundList() {
     return [
-      ["po", "Pushover (default)"],
-      ["bk", "Bike"],
-      ["bu", "Bugle"],
-      ["ch", "Cash Register"],
-      ["cl", "Classical"],
-      ["co", "Cosmic"],
-      ["fa", "Falling"],
-      ["gl", "Gamelan"],
-      ["ic", "Incoming"],
-      ["im", "Intermission"],
-      ["ma", "Magic"],
-      ["mc", "Mechanical"],
-      ["pn", "Piano Bar"],
-      ["si", "Siren"],
-      ["sp", "Space Alarm"],
-      ["tg", "Tug Boat"],
-      ["ln", "Alien Alarm (long)"],
-      ["mb", "Climb (long)"],
-      ["ps", "Persistent (long)"],
-      ["ec", "Pushover Echo (long)"],
-      ["ud", "Up Down (long)"],
-      ["no", "None (silent)"],
+      ['po', 'Pushover (default)'],
+      ['bk', 'Bike'],
+      ['bu', 'Bugle'],
+      ['ch', 'Cash Register'],
+      ['cl', 'Classical'],
+      ['co', 'Cosmic'],
+      ['fa', 'Falling'],
+      ['gl', 'Gamelan'],
+      ['ic', 'Incoming'],
+      ['im', 'Intermission'],
+      ['ma', 'Magic'],
+      ['mc', 'Mechanical'],
+      ['pn', 'Piano Bar'],
+      ['si', 'Siren'],
+      ['sp', 'Space Alarm'],
+      ['tg', 'Tug Boat'],
+      ['ln', 'Alien Alarm (long)'],
+      ['mb', 'Climb (long)'],
+      ['ps', 'Persistent (long)'],
+      ['ec', 'Pushover Echo (long)'],
+      ['ud', 'Up Down (long)'],
+      // ['no', 'None (silent)'],
     ]
   }
 }

@@ -1,22 +1,32 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 
 import Spinner from './Spinner'
+import Debug from '../lib/debug'
 import pushover from '../services/Pushover'
 import store from '../services/Store'
-import { setDeviceData, logout } from '../actions/Pushover'
+import { logout, setDeviceData } from '../actions/Pushover'
 import { connectToPushover } from '../services/ConnectionManager'
+import Analytics from '../services/Analytics'
 
-const DeviceRegistration = React.createClass({
-  displayName: 'DeviceRegistration',
+const debug = Debug('DeviceRegistration')
 
-  getInitialState() {
-    return {
+class DeviceRegistration extends React.Component {
+  constructor() {
+    super()
+    this.state = {
       spinner: false,
-      error: false
+      error: false,
+      deviceName: ''
     }
-  },
+    this.onChangeName = this.onChangeName.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  componentDidMount() {
+    Analytics.page('DeviceRegistration')
+  }
 
   render() {
     const formGroupClass = (this.state.error) ? 'form-group has-error' : 'form-group'
@@ -25,7 +35,7 @@ const DeviceRegistration = React.createClass({
 
     return (
       <div>
-        <Spinner active={this.state.spinner} />
+        <Spinner active={this.state.spinner}/>
         <Row>
           <Col md={8} mdOffset={2}>
             <h1 className="center-block">Register this device</h1>
@@ -34,51 +44,58 @@ const DeviceRegistration = React.createClass({
               <div className={formGroupClass}>
                 <Col xs={8} xsOffset={2}>
                   <label htmlFor="devicename" className="control-label hide">Device name</label>
-                  <input type="text" className="form-control" id="devicename"
-                    placeholder="Device name" ref="devicename" />
+                  <input type="text" className="form-control" id="devicename" value={this.state.deviceName}
+                         placeholder="Device name" onChange={this.onChangeName}/>
                 </Col>
               </div>
-              <br />
+              <br/>
               <div className="form-group">
                 <Col xs={8} xsOffset={2}>
                   <button type="submit" className="btn btn-primary"
-                    onClick={this.handleSubmit}>Register</button>
+                          onClick={this.handleSubmit}>Register
+                  </button>
                 </Col>
               </div>
             </form>
-            <br />
-            <br />
-            <span className="text-muted"><b>Current user:</b> {this.props.userEmail} (<a href="#" onClick={this.logout} alt="Logout">Logout</a>)
+            <br/>
+            <br/>
+            <span className="text-muted"><b>Current user:</b> {this.props.userEmail} (<a href="#" onClick={this.logout}
+                                                                                         alt="Logout">Logout</a>)
             </span>
           </Col>
         </Row>
       </div>
     )
-  },
+  }
+
+  onChangeName(event) {
+    this.setState({
+      deviceName: event.target.value
+    })
+  }
 
   handleSubmit(e) {
     e.preventDefault()
     // Display loading overlay
     this.setState({ spinner: true })
     // Get deviceName parameters
-    const deviceName = this.refs.devicename.value.trim()
+    const deviceName = this.state.deviceName.trim()
     // Try to register device
     pushover.registerDevice({ deviceName })
-      .then(this.registrationSuccessful)
-      .catch(this.registrationFailed)
-  },
+      .then(this.registrationSuccessful.bind(this))
+      .catch(this.registrationFailed.bind(this))
+  }
 
   registrationFailed(error) {
-    console.log('REGISTRATION-ERR', error)
+    debug.log('REGISTRATION-ERR', error)
     this.setState({
       error: error.message,
       spinner: false
     })
-  },
+  }
 
   registrationSuccessful(response) {
-    const deviceName = this.refs.devicename.value.trim()
-    console.log(this.refs.runOnStartup)
+    const deviceName = this.state.deviceName.trim()
     store.dispatch(setDeviceData({
       deviceName,
       deviceId: response.id
@@ -89,15 +106,16 @@ const DeviceRegistration = React.createClass({
     // Now we are ready to connect to pushover
     try {
       connectToPushover()
-    } catch(e) {
-      console.log(e, e.stack)
     }
-  },
+    catch (e) {
+      debug.log(e, e.stack)
+    }
+  }
 
   logout() {
     store.dispatch(logout())
   }
-})
+}
 
 // Which props should be injected from redux store?
 function select(state) {

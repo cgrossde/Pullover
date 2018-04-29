@@ -1,3 +1,5 @@
+@import '../styles/variables';
+
 // Drag fix (top-fix + bottom-fix): https://github.com/nwjs/nw.js/issues/2375#issuecomment-73217446
 #top-fix,#bottom-fix{
 	-webkit-app-region: no-drag;
@@ -21,7 +23,7 @@ div.titlebar {
 	-webkit-app-region: drag;
 	position: relative;
 	cursor: pointer;
-	height: 44px;
+	height: $navbarHeight;
 
 	img.logo {
 		margin: 7px;
