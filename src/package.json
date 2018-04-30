@@ -1,6 +1,6 @@
 {
   "name": "pullover",
-  "version": "1.3.0-alpha.1",
+  "version": "1.3.0",
   "description": "A pushover desktop client",
   "author": "Christoph Groß <gross@blubyte.de> (http://chris-labs.de/)",
   "license": "GPL-3.0",

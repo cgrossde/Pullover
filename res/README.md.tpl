@@ -63,7 +63,7 @@ If you miss a feature or fixed a bug, don't hesitate to create a pull-request. I
 
 ## Changelog
 
-**1.3.0-alpha.1** (maintenance release):
+**1.3.0 (1.3.0-alpha.1)**:
 
 * Updated from NW.js 0.12 to v0.28.2 (#65)
 * Updated dependencies
