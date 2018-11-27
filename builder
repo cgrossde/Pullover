@@ -263,7 +263,7 @@ function updateReadme(files) {
 
     function getPlatformName(file) {
       if (/\.exe/.test(file)) return 'Windows x32'
-      else if (/\.dmg/.test(file)) return 'Mac OS 10.8+ x64'
+      else if (/\.dmg/.test(file)) return 'Mac OS 10.9+ x64'
       else if (/_linux32/.test(file)) return 'Linux x32'
       else if (/_linux64/.test(file)) return 'Linux x64'
       else return 'Unkown'
