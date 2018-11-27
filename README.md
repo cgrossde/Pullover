@@ -17,7 +17,7 @@ Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (t
 
 
 * **Windows x32 (v1.3.0):** [Pullover_1.3.0_Installer.exe](https://sourceforge.net/projects/pullover/files/1.3.0/Pullover_1.3.0_Installer.exe/download)
-* **Mac OS 10.8+ x64 (v1.3.0):** [Pullover_1.3.0.dmg](https://sourceforge.net/projects/pullover/files/1.3.0/Pullover_1.3.0.dmg/download)
+* **Mac OS 10.9+ x64 (v1.3.0):** [Pullover_1.3.0.dmg](https://sourceforge.net/projects/pullover/files/1.3.0/Pullover_1.3.0.dmg/download)
 * **Linux x64 (v1.3.0):** [Pullover_1.3.0_linux64.zip](https://sourceforge.net/projects/pullover/files/1.3.0/Pullover_1.3.0_linux64.zip/download)
 * **Linux x32 (v1.3.0):** [Pullover_1.3.0_linux32.zip](https://sourceforge.net/projects/pullover/files/1.3.0/Pullover_1.3.0_linux32.zip/download)
 
