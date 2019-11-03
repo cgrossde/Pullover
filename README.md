@@ -1,5 +1,7 @@
-# Pullover
+# [UNMAINTAINED] Pullover
 *The unofficial multi-platform Pushover desktop client.*
+
+**THIS PROJECT IS NOT MAINTAINED ANYMORE! Feel free to fork.**
 
 ![Pullover Demo](https://raw.githubusercontent.com/cgrossde/Pullover/master/res/Demo.gif)
 
