@@ -70,7 +70,7 @@ class Notification extends React.Component {
 
   createMessageMarkup(message) {
     // TODO: Maybe do some sanitizing?
-    return { __html: message }
+    return { __html: message.replace(/(?:\r\n|\r|\n)/g, '<br>') }
   }
 
   // Short date / time since notification
